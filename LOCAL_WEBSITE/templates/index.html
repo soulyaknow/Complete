@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dynamic URL Sender</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .container {
+        width: 400px;
+        padding: 50px;
+      }
+
+      h3 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+      }
+
+      .input-field {
+        margin-bottom: 15px;
+      }
+
+      label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+        color: #555;
+      }
+
+      input {
+        width: 100%;
+        padding: 10px 3px 10px 5px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+      }
+
+      input::placeholder {
+        color: #888;
+      }
+
+      input:focus {
+        outline: none;
+        border-color: #4caf50;
+      }
+
+      button {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 12px;
+        width: 100%;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+
+      button:active {
+        background-color: #3e8e41;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h3>Send to AIBroker</h3>
+
+      <div class="input-field">
+        <label for="loginUrl">Login URL:</label>
+        <input
+          type="text"
+          id="loginUrl"
+          placeholder="https://example.com/authenticate"
+        />
+      </div>
+
+      <div class="input-field">
+        <label for="targetUrl">Target URL:</label>
+        <input
+          type="text"
+          id="targetUrl"
+          placeholder="https://example.com/target"
+        />
+      </div>
+
+      <div class="input-field">
+        <label for="username">Username:</label>
+        <input type="text" id="username" placeholder="Your username" />
+      </div>
+
+      <div class="input-field">
+        <label for="password">Password:</label>
+        <input type="password" id="password" placeholder="Your password" />
+      </div>
+
+      <button id="sendData">Send</button>
+    </div>
+
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <p>Processing, please wait...</p>
+      </div>
+    </div>
+    <script>
+      document.getElementById("sendData").addEventListener("click", async () => {
+          const loginUrl = document.getElementById("loginUrl").value;
+          const targetUrl = document.getElementById("targetUrl").value;
+          const username = document.getElementById("username").value;
+          const password = document.getElementById("password").value;
+
+          const modal = document.getElementById("modal");
+          modal.style.display = "flex";
+
+          try {
+              const response = await fetch("http://localhost:2500/process-url", { // Absolute URL
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ loginUrl, targetUrl, username, password }),
+              });
+
+              const result = await response.json();
+              alert(result.message);
+              
+          } catch (error) {
+              console.error("Error sending data:", error);
+              alert("Error sending data: " + error.message);
+          } finally {
+              modal.style.display = "none";
+          }
+      });
+    </script>
+  </body>
+</html>

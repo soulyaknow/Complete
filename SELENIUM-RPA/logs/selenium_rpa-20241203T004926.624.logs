@@ -1,0 +1,22 @@
+
+C:\Users\Hello World!\Desktop\COMPLETE\RPA>call python rpa.py 
+Error checking for updates: GitLab repository not reachable.
+Starting application normally...
+ * Serving Flask app 'rpa'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5213
+ * Running on http://192.168.1.12:5213
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 122-264-443
+127.0.0.1 - - [03/Dec/2024 08:37:32] "OPTIONS /execute-selenium-script HTTP/1.1" 200 -
+Error checking for updates: GitLab repository not reachable.
+Starting application normally...
+Received application data: {'recordId': 'rec550opjeLUG', 'createdAt': 1731046853000, 'updatedAt': 1731047640000, 'fields': {'Housing Expense': 4232, 'Loan Eligibility': 677770, 'Household Liabilities': 71615, 'License': [{'id': 'atccKdwyFxshQ', 'name': 'Karthik_Driver_License.pdf', 'size': 162715, 'mimeType': 'application/pdf', 'token': 'space/2024/11/05/d169ced8e1cd4e7fa09f24ca8822b4a8', 'width': 0, 'height': 0, 'preview': '/assets/space/2024/11/05/2346ed0a793040ef8cfb1465c84114f8?imageView2/0', 'url': 'assets/space/2024/11/05/d169ced8e1cd4e7fa09f24ca8822b4a8'}], 'Insurance Expense': 100, 'Healthcare Expense': 300, 'Household Income': 212000, 'Fact Find': [{'id': 'atcn1yTjRqic2', 'name': 'Karthik-Client Fact find.docx.pdf', 'size': 269062, 'mimeType': 'application/pdf', 'token': 'space/2024/11/05/5c22de2e8abe4ec8b24fe97f6565c81f', 'width': 0, 'height': 0, 'preview': '/assets/space/2024/11/05/11146496cd7d4b61beff1fd88a220960?imageView2/0', 'url': 'assets/space/2024/11/05/5c22de2e8abe4ec8b24fe97f6565c81f'}], 'Broker': ['recg5dEarNjrL'], 'App ID': 91, 'Status': ['New'], 'Education Expense': 400}}
+Received broker data: {'recordId': 'recg5dEarNjrL', 'thirdPartyAggregator': 'SFG', 'thirdPartyCRM': 'Salestrekker'}
+Navigating to https://dummycrm.korunaassist.com/
+Form filled and submitted successfully.
+Terminate batch job (Y/N)? 

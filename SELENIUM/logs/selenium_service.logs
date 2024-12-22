@@ -1,0 +1,98 @@
+
+C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM>call python app.py 
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://192.168.1.12:2500
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 122-264-443
+127.0.0.1 - - [11/Dec/2024 14:41:26] "OPTIONS /process-url HTTP/1.1" 200 -
+127.0.0.1 - - [11/Dec/2024 14:42:42] "POST /process-url HTTP/1.1" 200 -
+127.0.0.1 - - [11/Dec/2024 15:25:12] "OPTIONS /process-url HTTP/1.1" 200 -
+127.0.0.1 - - [11/Dec/2024 15:25:53] "POST /process-url HTTP/1.1" 200 -
+127.0.0.1 - - [11/Dec/2024 17:19:23] "OPTIONS /process-url HTTP/1.1" 200 -
+127.0.0.1 - - [11/Dec/2024 17:25:26] "POST /process-url HTTP/1.1" 200 -
+127.0.0.1 - - [11/Dec/2024 17:25:50] "OPTIONS /process-url HTTP/1.1" 200 -
+127.0.0.1 - - [11/Dec/2024 17:34:23] "POST /process-url HTTP/1.1" 200 -
+127.0.0.1 - - [11/Dec/2024 19:00:59] "OPTIONS /process-url HTTP/1.1" 200 -
+127.0.0.1 - - [11/Dec/2024 19:06:59] "POST /process-url HTTP/1.1" 200 -
+{'loginUrl': 'https://sfg.salestrekker.com/authenticate', 'targetUrl': 'https://sfg.salestrekker.com/deal/6e1f0fea-42df-4592-85b8-59fd49f78468/a249e0c8-8754-4e80-9959-5a20797ab4f4', 'username': 'sfgconnectdemo5@spfgroup.com.au', 'password': '2024August#$%'}
+Data for Alessandro Stagno successfully sent to the APITable!
+{'loginUrl': 'https://sfg.salestrekker.com/authenticate', 'targetUrl': 'https://sfg.salestrekker.com/deal/6e1f0fea-42df-4592-85b8-59fd49f78468/61d04b77-d2e1-4d07-8dab-4b2cef2fe2c2', 'username': 'sfgconnectdemo5@spfgroup.com.au', 'password': '2024August#$%'}
+Error getting lender data: Message: no such element: Unable to locate element: {"method":"xpath","selector":"//span[@ng-bind="::Model.currentLender.getName()"]"}
+  (Session info: chrome=131.0.6778.109); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x003534A3+25059]
+	(No symbol) [0x002DCEA4]
+	(No symbol) [0x001BBEC3]
+	(No symbol) [0x001FFD86]
+	(No symbol) [0x001FFFCB]
+	(No symbol) [0x0023D952]
+	(No symbol) [0x00221F44]
+	(No symbol) [0x0023B51E]
+	(No symbol) [0x00221C96]
+	(No symbol) [0x001F3FAC]
+	(No symbol) [0x001F4F3D]
+	GetHandleVerifier [0x00645613+3113811]
+	GetHandleVerifier [0x0065A2DA+3199002]
+	GetHandleVerifier [0x00652AB2+3168242]
+	GetHandleVerifier [0x003F3310+680016]
+	(No symbol) [0x002E57ED]
+	(No symbol) [0x002E2A98]
+	(No symbol) [0x002E2C35]
+	(No symbol) [0x002D5890]
+	BaseThreadInitThunk [0x75B3FCC9+25]
+	RtlGetAppContainerNamedObjectPath [0x7775809E+286]
+	RtlGetAppContainerNamedObjectPath [0x7775806E+238]
+
+Data for Test Only successfully sent to the APITable!
+{'loginUrl': 'https://sfg.salestrekker.com/authenticate', 'targetUrl': 'https://sfg.salestrekker.com/deal/6e1f0fea-42df-4592-85b8-59fd49f78468/a249e0c8-8754-4e80-9959-5a20797ab4f4', 'username': 'sfgconnectdemo5@spfgroup.com.au', 'password': '2024August#$%'}
+Data for Alessandro Stagno successfully sent to the APITable!
+{'loginUrl': 'https://sfg.salestrekker.com/authenticate', 'targetUrl': 'https://sfg.salestrekker.com/deal/6e1f0fea-42df-4592-85b8-59fd49f78468/7daaeeea-fc0f-4926-b4f8-8d7ba7858827', 'username': 'sfgconnectdemo5@spfgroup.com.au', 'password': '2024August#$%'}
+Data for Aden Marusco successfully sent to the APITable!
+Data for Taylah Hunter successfully sent to the APITable!
+{'loginUrl': 'https://sfg.salestrekker.com/authenticate', 'targetUrl': 'https://sfg.salestrekker.com/deal/6e1f0fea-42df-4592-85b8-59fd49f78468/61d04b77-d2e1-4d07-8dab-4b2cef2fe2c2', 'username': 'sfgconnectdemo5@spfgroup.com.au', 'password': '2024August#$%'}
+Error getting lender data: Message: no such element: Unable to locate element: {"method":"xpath","selector":"//span[@ng-bind="::Model.currentLender.getName()"]"}
+  (Session info: chrome=131.0.6778.109); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x006234A3+25059]
+	(No symbol) [0x005ACEA4]
+	(No symbol) [0x0048BEC3]
+	(No symbol) [0x004CFD86]
+	(No symbol) [0x004CFFCB]
+	(No symbol) [0x0050D952]
+	(No symbol) [0x004F1F44]
+	(No symbol) [0x0050B51E]
+	(No symbol) [0x004F1C96]
+	(No symbol) [0x004C3FAC]
+	(No symbol) [0x004C4F3D]
+	GetHandleVerifier [0x00915613+3113811]
+	GetHandleVerifier [0x0092A2DA+3199002]
+	GetHandleVerifier [0x00922AB2+3168242]
+	GetHandleVerifier [0x006C3310+680016]
+	(No symbol) [0x005B57ED]
+	(No symbol) [0x005B2A98]
+	(No symbol) [0x005B2C35]
+	(No symbol) [0x005A5890]
+	BaseThreadInitThunk [0x75B3FCC9+25]
+	RtlGetAppContainerNamedObjectPath [0x7775809E+286]
+	RtlGetAppContainerNamedObjectPath [0x7775806E+238]
+
+Data for Test Only successfully sent to the APITable!
+Terminate batch job (Y/N)? 
+C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM>call python app.py 
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://192.168.1.12:2500
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 122-264-443
+Terminate batch job (Y/N)? 

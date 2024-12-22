@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Send URL to Selenium",
+  "version": "1.0",
+  "description": "Send the current tab's URL to the Selenium app dynamically with user input.",
+  "permissions": ["activeTab", "scripting", "storage", "tabs"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "action": {
+    "default_title": "Send URL",
+    "default_popup": "popup.html"
+  }
+}

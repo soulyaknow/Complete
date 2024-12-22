@@ -1,0 +1,532 @@
+Starting application normally...
+Server running on http://localhost:5213
+Housing Expense: 20000
+Household Liabilities: 100000
+License: [
+  {
+    id: 'atc5VJnpCqwJA',
+    name: 'John & Snow Smith - Fact Find.pdf',
+    size: 170374,
+    mimeType: 'application/pdf',
+    token: 'space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81',
+    width: 0,
+    height: 0,
+    preview: '/assets/space/2024/10/16/e4ff3173b47848408cb1e12119850d86?imageView2/0',
+    url: 'assets/space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81'
+  }
+]
+Passport: [
+  {
+    id: 'atcDYf5mCLxJl',
+    name: 'John & Snow Smith - Fact Find.pdf',
+    size: 170374,
+    mimeType: 'application/pdf',
+    token: 'space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81',
+    width: 0,
+    height: 0,
+    preview: '/assets/space/2024/10/16/e4ff3173b47848408cb1e12119850d86?imageView2/0',
+    url: 'assets/space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81'
+  }
+]
+Insurance Expense: 1500
+Dependents: [ 'recmNaTEeEi7T', 'rec4D7aXVOcrE' ]
+Healthcare Expense: 2000
+Household Income: 35000
+Household Savings: 250000
+Applicants: [ 'rec5vZrPYHB53' ]
+Fact Find: [
+  {
+    id: 'atcDrW2tgK9wz',
+    name: 'John & Snow Smith - Fact Find.pdf',
+    size: 170374,
+    mimeType: 'application/pdf',
+    token: 'space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81',
+    width: 0,
+    height: 0,
+    preview: '/assets/space/2024/10/16/e4ff3173b47848408cb1e12119850d86?imageView2/0',
+    url: 'assets/space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81'
+  }
+]
+Broker IDs: [ 'recWjXbWQWdzU' ]
+Estimated Settlement Date: 1732896000000
+Loan Type: [
+  'Pre-Approval',
+  'Direct Purchase',
+  'Construction',
+  'Refinance',
+  'Cash Out'
+]
+Finance Due Date: 1733846400000
+Application ID: 8
+Status: [ 'New' ]
+Education Expense: 5000
+First Time Home Buyer: true
+Total Household Expenses: 18500
+Broker Record ID: recWjXbWQWdzU
+Third Party Aggregator: AFG
+Third Party CRM: Flex
+TagUI script executed successfully: 
+Housing Expense: 20000
+Household Liabilities: 100000
+License: [
+  {
+    id: 'atc5VJnpCqwJA',
+    name: 'John & Snow Smith - Fact Find.pdf',
+    size: 170374,
+    mimeType: 'application/pdf',
+    token: 'space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81',
+    width: 0,
+    height: 0,
+    preview: '/assets/space/2024/10/16/e4ff3173b47848408cb1e12119850d86?imageView2/0',
+    url: 'assets/space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81'
+  }
+]
+Passport: [
+  {
+    id: 'atcDYf5mCLxJl',
+    name: 'John & Snow Smith - Fact Find.pdf',
+    size: 170374,
+    mimeType: 'application/pdf',
+    token: 'space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81',
+    width: 0,
+    height: 0,
+    preview: '/assets/space/2024/10/16/e4ff3173b47848408cb1e12119850d86?imageView2/0',
+    url: 'assets/space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81'
+  }
+]
+Insurance Expense: 1500
+Dependents: [ 'recmNaTEeEi7T', 'rec4D7aXVOcrE' ]
+Healthcare Expense: 2000
+Household Income: 35000
+Household Savings: 250000
+Applicants: [ 'rec5vZrPYHB53' ]
+Fact Find: [
+  {
+    id: 'atcDrW2tgK9wz',
+    name: 'John & Snow Smith - Fact Find.pdf',
+    size: 170374,
+    mimeType: 'application/pdf',
+    token: 'space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81',
+    width: 0,
+    height: 0,
+    preview: '/assets/space/2024/10/16/e4ff3173b47848408cb1e12119850d86?imageView2/0',
+    url: 'assets/space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81'
+  }
+]
+Broker IDs: [ 'recWjXbWQWdzU' ]
+Estimated Settlement Date: 1732896000000
+Loan Type: [
+  'Pre-Approval',
+  'Direct Purchase',
+  'Construction',
+  'Refinance',
+  'Cash Out'
+]
+Finance Due Date: 1733846400000
+Application ID: 8
+Status: [ 'New' ]
+Education Expense: 5000
+First Time Home Buyer: true
+Total Household Expenses: 18500
+Broker Record ID: recWjXbWQWdzU
+Third Party Aggregator: AFG
+Third Party CRM: Flex
+TagUI script executed successfully: 
+Housing Expense: 20000
+Household Liabilities: 100000
+License: [
+  {
+    id: 'atc5VJnpCqwJA',
+    name: 'John & Snow Smith - Fact Find.pdf',
+    size: 170374,
+    mimeType: 'application/pdf',
+    token: 'space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81',
+    width: 0,
+    height: 0,
+    preview: '/assets/space/2024/10/16/e4ff3173b47848408cb1e12119850d86?imageView2/0',
+    url: 'assets/space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81'
+  }
+]
+Passport: [
+  {
+    id: 'atcDYf5mCLxJl',
+    name: 'John & Snow Smith - Fact Find.pdf',
+    size: 170374,
+    mimeType: 'application/pdf',
+    token: 'space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81',
+    width: 0,
+    height: 0,
+    preview: '/assets/space/2024/10/16/e4ff3173b47848408cb1e12119850d86?imageView2/0',
+    url: 'assets/space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81'
+  }
+]
+Insurance Expense: 1500
+Dependents: [ 'recmNaTEeEi7T', 'rec4D7aXVOcrE' ]
+Healthcare Expense: 2000
+Household Income: 35000
+Household Savings: 250000
+Applicants: [ 'rec5vZrPYHB53' ]
+Fact Find: [
+  {
+    id: 'atcDrW2tgK9wz',
+    name: 'John & Snow Smith - Fact Find.pdf',
+    size: 170374,
+    mimeType: 'application/pdf',
+    token: 'space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81',
+    width: 0,
+    height: 0,
+    preview: '/assets/space/2024/10/16/e4ff3173b47848408cb1e12119850d86?imageView2/0',
+    url: 'assets/space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81'
+  }
+]
+Broker IDs: [ 'recWjXbWQWdzU' ]
+Estimated Settlement Date: 1732896000000
+Loan Type: [
+  'Pre-Approval',
+  'Direct Purchase',
+  'Construction',
+  'Refinance',
+  'Cash Out'
+]
+Finance Due Date: 1733846400000
+Application ID: 8
+Status: [ 'New' ]
+Education Expense: 5000
+First Time Home Buyer: true
+Total Household Expenses: 18500
+Broker Record ID: recWjXbWQWdzU
+Third Party Aggregator: AFG
+Third Party CRM: Flex
+Housing Expense: 20000
+Household Liabilities: 100000
+License: [
+  {
+    id: 'atc5VJnpCqwJA',
+    name: 'John & Snow Smith - Fact Find.pdf',
+    size: 170374,
+    mimeType: 'application/pdf',
+    token: 'space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81',
+    width: 0,
+    height: 0,
+    preview: '/assets/space/2024/10/16/e4ff3173b47848408cb1e12119850d86?imageView2/0',
+    url: 'assets/space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81'
+  }
+]
+Passport: [
+  {
+    id: 'atcDYf5mCLxJl',
+    name: 'John & Snow Smith - Fact Find.pdf',
+    size: 170374,
+    mimeType: 'application/pdf',
+    token: 'space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81',
+    width: 0,
+    height: 0,
+    preview: '/assets/space/2024/10/16/e4ff3173b47848408cb1e12119850d86?imageView2/0',
+    url: 'assets/space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81'
+  }
+]
+Insurance Expense: 1500
+Dependents: [ 'recmNaTEeEi7T', 'rec4D7aXVOcrE' ]
+Healthcare Expense: 2000
+Household Income: 35000
+Household Savings: 250000
+Applicants: [ 'rec5vZrPYHB53' ]
+Fact Find: [
+  {
+    id: 'atcDrW2tgK9wz',
+    name: 'John & Snow Smith - Fact Find.pdf',
+    size: 170374,
+    mimeType: 'application/pdf',
+    token: 'space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81',
+    width: 0,
+    height: 0,
+    preview: '/assets/space/2024/10/16/e4ff3173b47848408cb1e12119850d86?imageView2/0',
+    url: 'assets/space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81'
+  }
+]
+Broker IDs: [ 'recWjXbWQWdzU' ]
+Estimated Settlement Date: 1732896000000
+Loan Type: [
+  'Pre-Approval',
+  'Direct Purchase',
+  'Construction',
+  'Refinance',
+  'Cash Out'
+]
+Finance Due Date: 1733846400000
+Application ID: 8
+Status: [ 'New' ]
+Education Expense: 5000
+First Time Home Buyer: true
+Total Household Expenses: 18500
+Broker Record ID: recWjXbWQWdzU
+Third Party Aggregator: AFG
+Third Party CRM: Flex
+TagUI script executed successfully: 
+TagUI script executed successfully: 
+Housing Expense: 20000
+Household Liabilities: 100000
+License: [
+  {
+    id: 'atc5VJnpCqwJA',
+    name: 'John & Snow Smith - Fact Find.pdf',
+    size: 170374,
+    mimeType: 'application/pdf',
+    token: 'space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81',
+    width: 0,
+    height: 0,
+    preview: '/assets/space/2024/10/16/e4ff3173b47848408cb1e12119850d86?imageView2/0',
+    url: 'assets/space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81'
+  }
+]
+Passport: [
+  {
+    id: 'atcDYf5mCLxJl',
+    name: 'John & Snow Smith - Fact Find.pdf',
+    size: 170374,
+    mimeType: 'application/pdf',
+    token: 'space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81',
+    width: 0,
+    height: 0,
+    preview: '/assets/space/2024/10/16/e4ff3173b47848408cb1e12119850d86?imageView2/0',
+    url: 'assets/space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81'
+  }
+]
+Insurance Expense: 1500
+Dependents: [ 'recmNaTEeEi7T', 'rec4D7aXVOcrE' ]
+Healthcare Expense: 2000
+Household Income: 35000
+Household Savings: 250000
+Applicants: [ 'rec5vZrPYHB53' ]
+Fact Find: [
+  {
+    id: 'atcDrW2tgK9wz',
+    name: 'John & Snow Smith - Fact Find.pdf',
+    size: 170374,
+    mimeType: 'application/pdf',
+    token: 'space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81',
+    width: 0,
+    height: 0,
+    preview: '/assets/space/2024/10/16/e4ff3173b47848408cb1e12119850d86?imageView2/0',
+    url: 'assets/space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81'
+  }
+]
+Broker IDs: [ 'recWjXbWQWdzU' ]
+Estimated Settlement Date: 1732896000000
+Loan Type: [
+  'Pre-Approval',
+  'Direct Purchase',
+  'Construction',
+  'Refinance',
+  'Cash Out'
+]
+Finance Due Date: 1733846400000
+Application ID: 8
+Status: [ 'New' ]
+Education Expense: 5000
+First Time Home Buyer: true
+Total Household Expenses: 18500
+Broker Record ID: recWjXbWQWdzU
+Third Party Aggregator: AFG
+Third Party CRM: Flex
+Housing Expense: 20000
+Household Liabilities: 100000
+License: [
+  {
+    id: 'atc5VJnpCqwJA',
+    name: 'John & Snow Smith - Fact Find.pdf',
+    size: 170374,
+    mimeType: 'application/pdf',
+    token: 'space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81',
+    width: 0,
+    height: 0,
+    preview: '/assets/space/2024/10/16/e4ff3173b47848408cb1e12119850d86?imageView2/0',
+    url: 'assets/space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81'
+  }
+]
+Passport: [
+  {
+    id: 'atcDYf5mCLxJl',
+    name: 'John & Snow Smith - Fact Find.pdf',
+    size: 170374,
+    mimeType: 'application/pdf',
+    token: 'space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81',
+    width: 0,
+    height: 0,
+    preview: '/assets/space/2024/10/16/e4ff3173b47848408cb1e12119850d86?imageView2/0',
+    url: 'assets/space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81'
+  }
+]
+Insurance Expense: 1500
+Dependents: [ 'recmNaTEeEi7T', 'rec4D7aXVOcrE' ]
+Healthcare Expense: 2000
+Household Income: 35000
+Household Savings: 250000
+Applicants: [ 'rec5vZrPYHB53' ]
+Fact Find: [
+  {
+    id: 'atcDrW2tgK9wz',
+    name: 'John & Snow Smith - Fact Find.pdf',
+    size: 170374,
+    mimeType: 'application/pdf',
+    token: 'space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81',
+    width: 0,
+    height: 0,
+    preview: '/assets/space/2024/10/16/e4ff3173b47848408cb1e12119850d86?imageView2/0',
+    url: 'assets/space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81'
+  }
+]
+Broker IDs: [ 'recWjXbWQWdzU' ]
+Estimated Settlement Date: 1732896000000
+Loan Type: [
+  'Pre-Approval',
+  'Direct Purchase',
+  'Construction',
+  'Refinance',
+  'Cash Out'
+]
+Finance Due Date: 1733846400000
+Application ID: 8
+Status: [ 'New' ]
+Education Expense: 5000
+First Time Home Buyer: true
+Total Household Expenses: 18500
+Broker Record ID: recWjXbWQWdzU
+Third Party Aggregator: AFG
+Third Party CRM: Flex
+TagUI script executed successfully: 
+TagUI script executed successfully: 
+Housing Expense: 20000
+Household Liabilities: 100000
+License: [
+  {
+    id: 'atc5VJnpCqwJA',
+    name: 'John & Snow Smith - Fact Find.pdf',
+    size: 170374,
+    mimeType: 'application/pdf',
+    token: 'space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81',
+    width: 0,
+    height: 0,
+    preview: '/assets/space/2024/10/16/e4ff3173b47848408cb1e12119850d86?imageView2/0',
+    url: 'assets/space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81'
+  }
+]
+Passport: [
+  {
+    id: 'atcDYf5mCLxJl',
+    name: 'John & Snow Smith - Fact Find.pdf',
+    size: 170374,
+    mimeType: 'application/pdf',
+    token: 'space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81',
+    width: 0,
+    height: 0,
+    preview: '/assets/space/2024/10/16/e4ff3173b47848408cb1e12119850d86?imageView2/0',
+    url: 'assets/space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81'
+  }
+]
+Insurance Expense: 1500
+Dependents: [ 'recmNaTEeEi7T', 'rec4D7aXVOcrE' ]
+Healthcare Expense: 2000
+Household Income: 35000
+Household Savings: 250000
+Applicants: [ 'rec5vZrPYHB53' ]
+Fact Find: [
+  {
+    id: 'atcDrW2tgK9wz',
+    name: 'John & Snow Smith - Fact Find.pdf',
+    size: 170374,
+    mimeType: 'application/pdf',
+    token: 'space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81',
+    width: 0,
+    height: 0,
+    preview: '/assets/space/2024/10/16/e4ff3173b47848408cb1e12119850d86?imageView2/0',
+    url: 'assets/space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81'
+  }
+]
+Broker IDs: [ 'recWjXbWQWdzU' ]
+Estimated Settlement Date: 1732896000000
+Loan Type: [
+  'Pre-Approval',
+  'Direct Purchase',
+  'Construction',
+  'Refinance',
+  'Cash Out'
+]
+Finance Due Date: 1733846400000
+Application ID: 8
+Status: [ 'New' ]
+Education Expense: 5000
+First Time Home Buyer: true
+Total Household Expenses: 18500
+Broker Record ID: recWjXbWQWdzU
+Third Party Aggregator: AFG
+Third Party CRM: Flex
+Housing Expense: 20000
+Household Liabilities: 100000
+License: [
+  {
+    id: 'atc5VJnpCqwJA',
+    name: 'John & Snow Smith - Fact Find.pdf',
+    size: 170374,
+    mimeType: 'application/pdf',
+    token: 'space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81',
+    width: 0,
+    height: 0,
+    preview: '/assets/space/2024/10/16/e4ff3173b47848408cb1e12119850d86?imageView2/0',
+    url: 'assets/space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81'
+  }
+]
+Passport: [
+  {
+    id: 'atcDYf5mCLxJl',
+    name: 'John & Snow Smith - Fact Find.pdf',
+    size: 170374,
+    mimeType: 'application/pdf',
+    token: 'space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81',
+    width: 0,
+    height: 0,
+    preview: '/assets/space/2024/10/16/e4ff3173b47848408cb1e12119850d86?imageView2/0',
+    url: 'assets/space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81'
+  }
+]
+Insurance Expense: 1500
+Dependents: [ 'recmNaTEeEi7T', 'rec4D7aXVOcrE' ]
+Healthcare Expense: 2000
+Household Income: 35000
+Household Savings: 250000
+Applicants: [ 'rec5vZrPYHB53' ]
+Fact Find: [
+  {
+    id: 'atcDrW2tgK9wz',
+    name: 'John & Snow Smith - Fact Find.pdf',
+    size: 170374,
+    mimeType: 'application/pdf',
+    token: 'space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81',
+    width: 0,
+    height: 0,
+    preview: '/assets/space/2024/10/16/e4ff3173b47848408cb1e12119850d86?imageView2/0',
+    url: 'assets/space/2024/10/16/3bfc9abe347f4b6f9e552eaf16252b81'
+  }
+]
+Broker IDs: [ 'recWjXbWQWdzU' ]
+Estimated Settlement Date: 1732896000000
+Loan Type: [
+  'Pre-Approval',
+  'Direct Purchase',
+  'Construction',
+  'Refinance',
+  'Cash Out'
+]
+Finance Due Date: 1733846400000
+Application ID: 8
+Status: [ 'New' ]
+Education Expense: 5000
+First Time Home Buyer: true
+Total Household Expenses: 18500
+Broker Record ID: recWjXbWQWdzU
+Third Party Aggregator: AFG
+Third Party CRM: Flex
+TagUI script executed successfully: 
+TagUI script executed successfully: 
+Starting application normally...
+Server running on http://localhost:5213
