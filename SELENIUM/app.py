@@ -23,6 +23,17 @@ chrome_options.add_argument("--disable-gpu")
 chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("--window-size=1920,1080")
 
+# Function to post data to APITable
+def post_to_apitable(api_url, headers, data, data_type):
+    try:
+        response = requests.post(api_url, headers=headers, json=data)
+        if response.status_code in (200, 201):
+            print(f"{data_type} data successfully posted.")
+        else:
+            print(f"Failed to post {data_type} data. Status: {response.status_code}, Response: {response.text}")
+    except requests.exceptions.RequestException as e:
+        print(f"Network error while posting {data_type} data: {str(e)}")
+
 @app.route('/', methods=['GET'])
 def home():
     print('service is running')
@@ -178,7 +189,7 @@ def process_url():
         # Loop over each applicant
         for applicant in applicants:
             # Create JSON structure for each applicant
-            output_data = {
+            applicant_data = {
                 "records": [
                     {
                         "fields": {
@@ -206,23 +217,35 @@ def process_url():
                 "fieldKey": "name"
             }
 
-            # POST the data to the API endpoint
-            api_url = "https://ai-broker.korunaassist.com/fusion/v1/datasheets/dst1vag1MekDBbrzoS/records"
+        for applicant in applicants:
+            # Create JSON structure for each applicant
+            lender_data = {
+                "records": [
+                    {
+                        "fields": {
+                            "Company Name": lender,
+                            "Contact": None,
+                            "Website": None,
+                            "Phone Number": None,
+                        }
+                    }
+                ],
+                "fieldKey": "name"
+            }
+
+
+            # POST the data to the apitable endpoint
+            applicant_url = "https://ai-broker.korunaassist.com/fusion/v1/datasheets/dst1vag1MekDBbrzoS/records"
+            lender_url = "https://ai-broker.korunaassist.com/fusion/v1/datasheets/dstGYdtqYD60Hk58UV/records"
             headers = {
                 "Content-Type": "application/json",
                 "Authorization": "Bearer usk5YzjFkoAuRfYFNcPCM0j"
             }
 
-            
+            post_to_apitable(applicant_url, headers, applicant_data, "Applicant Hub")
 
-            response = requests.post(api_url, headers=headers, json=output_data)
+            post_to_apitable(lender_url, headers, lender_data, "Lender Hub")
 
-            if response.status_code in (200, 201):
-                print(f"Data for {applicant['applicant_name']} successfully sent to the APITable!")
-            else:
-                print(f"Failed to send data for {applicant['applicant_name']}. Status Code: {response.status_code}")
-                print("Error Message:", response.text)
-            
         return jsonify({"message": "URL processed successfully!"}), 200
 
     except Exception as e:
