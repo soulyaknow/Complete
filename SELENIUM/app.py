@@ -186,6 +186,15 @@ def process_url():
         except Exception as e:
             print(f"Error getting deal owner data: {str(e)}")
 
+
+         # POST the data to the apitable endpoint
+        applicant_url = "https://ai-broker.korunaassist.com/fusion/v1/datasheets/dst1vag1MekDBbrzoS/records"
+        lender_url = "https://ai-broker.korunaassist.com/fusion/v1/datasheets/dstGYdtqYD60Hk58UV/records"
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer usk5YzjFkoAuRfYFNcPCM0j"
+        }
+
         # Loop over each applicant
         for applicant in applicants:
             # Create JSON structure for each applicant
@@ -217,34 +226,25 @@ def process_url():
                 "fieldKey": "name"
             }
 
-        for applicant in applicants:
-            # Create JSON structure for each applicant
-            lender_data = {
-                "records": [
-                    {
-                        "fields": {
-                            "Company Name": lender,
-                            "Contact": None,
-                            "Website": None,
-                            "Phone Number": None,
-                        }
-                    }
-                ],
-                "fieldKey": "name"
-            }
-
-
-            # POST the data to the apitable endpoint
-            applicant_url = "https://ai-broker.korunaassist.com/fusion/v1/datasheets/dst1vag1MekDBbrzoS/records"
-            lender_url = "https://ai-broker.korunaassist.com/fusion/v1/datasheets/dstGYdtqYD60Hk58UV/records"
-            headers = {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer usk5YzjFkoAuRfYFNcPCM0j"
-            }
-
             post_to_apitable(applicant_url, headers, applicant_data, "Applicant Hub")
 
-            post_to_apitable(lender_url, headers, lender_data, "Lender Hub")
+            # Post lender data only once
+            if lender:
+                lender_data = {
+                    "records": [
+                        {
+                            "fields": {
+                                "Company Name": lender,
+                                "Contact": None,
+                                "Website": None,
+                                "Phone Number": None,
+                            }
+                        }
+                    ],
+                    "fieldKey": "name"
+                }
+
+                post_to_apitable(lender_url, headers, lender_data, "Lender Hub")
 
         return jsonify({"message": "URL processed successfully!"}), 200
 
