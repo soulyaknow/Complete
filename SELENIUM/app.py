@@ -159,8 +159,14 @@ def process_url():
             deal_value_element = driver.find_element(By.XPATH, 
                 "//ticket-basic-info-value[@ng-bind='Model.currentTicket.values.onceOff.formatWithCurrency(CurrentCurrency(), 0)']")
             deal_value = deal_value_element.get_attribute("innerText").strip()
+
+            # Clean and convert the deal value to a float
+            if deal_value:
+                # Remove the dollar sign and commas, then convert to float
+                deal_value = float(deal_value.replace("$", "").replace(",", ""))
         except Exception as e:
             print(f"Error getting deal value data: {str(e)}")
+
 
         total_loan_amount = None
         try:
@@ -190,6 +196,7 @@ def process_url():
          # POST the data to the apitable endpoint
         applicant_url = "https://ai-broker.korunaassist.com/fusion/v1/datasheets/dst1vag1MekDBbrzoS/records"
         lender_url = "https://ai-broker.korunaassist.com/fusion/v1/datasheets/dstGYdtqYD60Hk58UV/records"
+        # deal_value_url = "https://ai-broker.korunaassist.com/fusion/v1/datasheets/dst0d3s5f4yY8a4Yxs/records"
         headers = {
             "Content-Type": "application/json",
             "Authorization": "Bearer usk5YzjFkoAuRfYFNcPCM0j"
@@ -245,6 +252,21 @@ def process_url():
                 }
 
                 post_to_apitable(lender_url, headers, lender_data, "Lender Hub")
+
+            # if deal_value:
+            #     deal_value_data = {
+            #         "records": [
+            #             {
+            #                 "fields": {
+            #                     "Offer": deal_value,
+            #                     "Application Hub": None,
+            #                 }
+            #             }
+            #         ],
+            #         "fieldKey": "name"
+            #     }
+
+            #     post_to_apitable(deal_value_url, headers, deal_value_data, "Loan Hub")
 
         return jsonify({"message": "URL processed successfully!"}), 200
 
