@@ -20,10 +20,10 @@ def check_for_updates():
             headers={"PRIVATE-TOKEN": GITLAB_TOKEN}
         )
         response.raise_for_status()
-        
+
         data = response.json()
         latest_commit = data[0].get("id")
-        
+
         if not latest_commit_hash or latest_commit != latest_commit_hash:
             print("New update found, pulling changes...")
             latest_commit_hash = latest_commit
@@ -145,18 +145,11 @@ def get_record_details(record_id):
                 <tr><th>Field</th><th>Value</th></tr>
                 {data_rows}
             </table>
-            <button onclick="showModal()" class="btn">Run</button>
+            <button type="button" onclick="executeTagUI()" class="btn">Run</button>
             <!-- Modal Structure -->
             <div id="modal-overlay" class="modal-overlay"></div>
             <div id="modal" class="modal">
-                <h2>Authentication</h2>
-                <form id="auth-form">
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" required>
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required>
-                    <button type="button" onclick="submitCredentials()">Submit</button>
-                </form>
+                <p>Processing please wait...</p>
             </div>
             <script>
                 const applicationData = {application_record};
@@ -168,24 +161,12 @@ def get_record_details(record_id):
                     document.getElementById('modal').classList.add('show');
                     document.getElementById('modal-overlay').style.display = 'block';
                 }}
-
                 function hideModal() {{
                     document.getElementById('modal').classList.remove('show');
                     document.getElementById('modal-overlay').style.display = 'none';
                 }}
-
-                function submitCredentials() {{
-                    const username = document.getElementById('username').value;
-                    const password = document.getElementById('password').value;
-
-                    if (username && password) {{
-                        executeTagUI(username, password);
-                        hideModal();
-                    }} else {{
-                        alert('Please enter both username and password.');
-                    }}
-                }}
-                function executeTagUI(username, password) {{
+                function executeTagUI() {{
+                    showModal();
                     fetch("http://localhost:5213/execute-selenium-script", {{
                         method: "POST",
                         headers: {{
@@ -194,16 +175,20 @@ def get_record_details(record_id):
                         body: JSON.stringify({{
                             applicationData: applicationData,
                             brokerData: brokerData,
-                            username: username,
-                            password: password
                         }})
                     }})
                     .then(response => response.json())
                     .then(data => {{
-                        console.log(data.success ? "TagUI script executed successfully!" : "Failed to execute TagUI script.");
+                        alert(data.success ? "Sript executed successfully!" : "Failed to execute script.");
                         console.log(data);
                     }})
-                    .catch(error => console.error("Error executing TagUI script:", error));
+                    .catch(error => {{
+                        console.error("Error executing script:", error);
+                        alert("An error occurred while executing the script.");
+                    }})
+                    .finally(() => {{
+                        hideModal();
+                    }});
                 }}
             </script>
         </body>

@@ -62,67 +62,167 @@ def check_for_updates():
         print("Starting application normally...")
 
 # Endpoint to execute Selenium automation
-@app.route("/execute-tagUI-script", methods=["POST", "OPTIONS"])
+@app.route("/execute-selenium-script", methods=["POST", "OPTIONS"])
 def execute_selenium_script():
     try:
-        # Ensure the request content-type is JSON
         if request.content_type != "application/json":
             return jsonify({"error": "Unsupported Media Type. Use 'application/json'"}), 415
 
+        # Parse JSON data
         data = request.json
-
-        # Extract applicationData and brokerData from the request
+        applicants_data = data.get("applicantRecords", [])
         application_data = data.get("applicationData", {})
         broker_data = data.get("brokerData", {})
 
-        print("Received application data:", application_data)
-        print("Received broker data:", broker_data)
+        if not applicants_data:
+            return jsonify({"error": "No applicant records provided"}), 400
 
-        # Set up Selenium WebDriver without headless mode
+        num_applicants = len(applicants_data)
+        print(f"Number of applicants: {num_applicants}")
+
+        # Set up Selenium WebDriver
         chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument("user-data-dir=C:\\Automation\\RPA")  
         chrome_options.add_argument("--start-maximized")
-
-        # Add options to disable automation banner
         chrome_options.add_argument("--disable-blink-features=AutomationControlled")
         chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
         chrome_options.add_experimental_option("useAutomationExtension", False)
 
-        # Install and set up the ChromeDriver
         driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chrome_options)
+
         try:
-            # Navigate to the URL
-            url = "https://dummycrm.korunaassist.com/"
+            url = "https://sfg.salestrekker.com/authenticate"
             print(f"Navigating to {url}")
             driver.get(url)
 
-            # Wait for specific elements to load (example: <h1> tag)
-            WebDriverWait(driver, 20).until(
-                EC.presence_of_element_located((By.TAG_NAME, "h1"))
+            WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.TAG_NAME, "a")))
+            print("Login page is loaded. Pausing for user to input credentials...")
+            time.sleep(30)
+
+            WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.TAG_NAME, "img")))
+            print("Login successful. Continuing automation...")
+
+            driver.get("https://sfg.salestrekker.com/board/6e1f0fea-42df-4592-85b8-59fd49f78468")
+            WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.TAG_NAME, "header-actions")))
+            print("Board page loaded. Ready to add new applications.")
+
+            add_new_button = WebDriverWait(driver, 30).until(
+                EC.presence_of_element_located((By.XPATH, "//strong[contains(text(), 'Add new')]"))
             )
+            add_new_button.click()
 
-            # Fill out fields dynamically
-            driver.find_element(By.XPATH, "//*[@ng-model='$mdAutocompleteCtrl.scope.searchText' and @aria-label='First name']").send_keys(application_data.get("fields", {}).get("Housing Expense", ""))
-            driver.find_element(By.XPATH, "//*[@ng-model='$ctrl.contact.familyName']").send_keys(application_data.get("fields", {}).get("Household Income", ""))
-            driver.find_element(By.XPATH, "//*[@ng-model='$ctrl.contact.phone']").send_keys("Loan Type", "")
-            driver.find_element(By.XPATH, "//*[@ng-model='$ctrl.contact.email']").send_keys(application_data.get("fields", {}).get("App ID", ""))
+            WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.TAG_NAME, "st-ticket-contact-edit")))
+            print("Form loaded successfully.")
 
-            # Locate and click the 'Next' button
-            next_button = driver.find_element(By.XPATH, "//button[@type='button' and contains(@ng-click, 'next(Model.activeSection)')]")
-            ActionChains(driver).move_to_element(next_button).perform()
+            # If there are 2 applicants, click "Add another contact" first
+            if num_applicants > 1:
+                try:
+                    add_another_contact_button = WebDriverWait(driver, 10).until(
+                        EC.presence_of_element_located((By.XPATH, "//strong[contains(text(), 'Add another contact')]"))
+                    )
+                    add_another_contact_button.click()
+                    print("Clicked 'Add another contact' button.")
+                    
+                    # Click the "Person" button to open modal for second applicant
+                    person_button = WebDriverWait(driver, 10).until(
+                        EC.presence_of_element_located((By.XPATH, "//button[@type='button' and contains(@ng-click, 'contactAdd(false)')]"))
+                    )
+                    person_button.click()
+                    print("Clicked 'Person' button to add second applicant.")
+                    
+                    WebDriverWait(driver, 10).until(
+                        EC.presence_of_element_located((By.XPATH, "//st-ticket-contact-edit"))
+                    )
+                except:
+                    print("No 'Add another contact' or 'Person' button found, proceeding...")
+
+            # Find all `st-ticket-contact-edit` elements
+            contact_forms = driver.find_elements(By.XPATH, "//st-ticket-contact-edit")
+            print(f"Found {len(contact_forms)} contact forms on the page.")
+
+            # Loop through each applicant and fill the forms
+            for idx, (contact_form, applicant) in enumerate(zip(contact_forms, applicants_data), start=1):
+                fields = applicant.get("fields", {})
+                first_name = fields.get("First Name", "")
+                last_name = fields.get("Last Name", "")
+                primary_contact = fields.get("Primary Contact Number", "")
+                email_address = fields.get("Email Address", "")
+
+                # Fill in the contact details
+                contact_form.find_element(By.XPATH, ".//*[@ng-model='$mdAutocompleteCtrl.scope.searchText' and @aria-label='First name']").send_keys(first_name)
+                contact_form.find_element(By.XPATH, ".//*[@ng-model='$ctrl.contact.familyName']").send_keys(last_name)
+                contact_form.find_element(By.XPATH, ".//*[@ng-model='$ctrl.contact.phone']").send_keys(primary_contact)
+                contact_form.find_element(By.XPATH, ".//*[@ng-model='$ctrl.contact.email']").send_keys(email_address)
+
+                print(f"Entered Applicant {idx}: {first_name} {last_name}, Phone: {primary_contact}, Email: {email_address}")
+
+            time.sleep(10)
+
+            next_button = WebDriverWait(driver, 30).until(
+                EC.presence_of_element_located((By.XPATH, "//button[@type='button' and contains(@ng-click, 'next(Model.activeSection)')]"))
+            )
             next_button.click()
+            print("Clicked 'Next' button to proceed.")
 
-            add_security_button = driver.find_element(By.XPATH, '//button[@type="button" and @ng-click="$ctrl.ticketLoanSecuritySplitAdd($event)"]')
-            ActionChains(driver).move_to_element(add_security_button).perform()
-            add_security_button.click()
+            # Locate this tag name
+            st_address_elements = driver.find_elements(By.XPATH, "//st-address")
+            if st_address_elements:
+                print(f"Found {len(st_address_elements)} 'st-address' elements.")
 
-            driver.find_element(By.XPATH, "//*[@ng-model='$mdAutocompleteCtrl.scope.searchText']").send_keys(broker_data.get("recordId", ""))
+                # Loop through each <st-address> and find the input box inside
+                for idx, (st_address, applicant) in enumerate(zip(st_address_elements, applicants_data), start=1):
+                    fields = applicant.get("fields", {})
+                    residential_address = fields.get("Residential Address", "")
+
+                    try:
+                        # Locate the input field
+                        security_address_input = st_address.find_element(By.XPATH, ".//md-input-container//input[@type='text']")
+                        
+                        security_address_input.click()
+
+                        security_address_input.send_keys(residential_address)
+
+                        print(f"Entered address: {residential_address} for st-address {idx}")
+
+                    except Exception as e:
+                        print(f"Error interacting with st-address {idx}: {e}")
+            else:
+                print("No 'st-address' elements found.")
+
+            # Locate the parent div
+            parent_divs = driver.find_elements(By.XPATH, "//div[@layout-gt-sm='row' and @layout='column' and @layout-wrap]")
+
+            if parent_divs:
+                try:
+                    # Locate the "Security value" label
+                    security_label = driver.find_element(By.XPATH, "//span[contains(text(), 'Security value')]")
+                    
+                    # Find the input field next to the label
+                    security_input = security_label.find_element(By.XPATH, ".//following::input[1]")
+
+                    # Get the loan value from the applicant data
+                    loan_value = applicant.get("fields", {}).get("Personal Loans", "")
+
+                    # Clear existing input and type the new value
+                    security_input.clear()
+                    security_input.send_keys(loan_value)
+
+                    print(f"Entered Security Value: {loan_value}")
+
+                except Exception as e:
+                    print(f"Error locating 'Security value' input field: {e}")
+
+            else:
+                print("No security sections found.")
+
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return jsonify({"message": "RPA automation failed", "success": False, "error": str(e)}), 500
 
         finally:
-            # Additional actions if needed
-            print("Form filled and submitted successfully.")
-            time.sleep(3600) 
-            return jsonify({"message": "Selenium automation executed successfully"}), 200  
-
+            print("RPA process successfully.")
+            return jsonify({"message": "RPA automation executed successfully", "success": True}), 200
+        
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({"error": str(e)}), 500

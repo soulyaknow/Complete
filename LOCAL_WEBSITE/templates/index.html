@@ -117,7 +117,7 @@
         />
       </div>
 
-      <div class="input-field">
+      <!-- <div class="input-field">
         <label for="username">Username:</label>
         <input type="text" id="username" placeholder="Your username" />
       </div>
@@ -125,7 +125,7 @@
       <div class="input-field">
         <label for="password">Password:</label>
         <input type="password" id="password" placeholder="Your password" />
-      </div>
+      </div> -->
 
       <button id="sendData">Send</button>
     </div>
@@ -139,21 +139,21 @@
       document.getElementById("sendData").addEventListener("click", async () => {
           const loginUrl = document.getElementById("loginUrl").value;
           const targetUrl = document.getElementById("targetUrl").value;
-          const username = document.getElementById("username").value;
-          const password = document.getElementById("password").value;
-
           const modal = document.getElementById("modal");
           modal.style.display = "flex";
 
           try {
-              const response = await fetch("http://localhost:2500/process-url", { // Absolute URL
+              const response = await fetch("http://localhost:2500/process-url", {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ loginUrl, targetUrl, username, password }),
+                  body: JSON.stringify({ loginUrl, targetUrl }),
               });
 
               const result = await response.json();
-              alert(result.message);
+
+              if (window.confirm(result.message)) {
+                  window.close();
+              }
               
           } catch (error) {
               console.error("Error sending data:", error);

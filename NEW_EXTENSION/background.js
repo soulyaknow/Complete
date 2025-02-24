@@ -25,10 +25,10 @@ chrome.action.onClicked.addListener(async (tab) => {
 
 // Listen for messages from the content script
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  const { loginUrl, username, password } = message;
+  const { loginUrl } = message;
 
-  if (loginUrl && username && password) {
-    chrome.storage.local.set({ loginUrl, username, password }, () => {
+  if (loginUrl) {
+    chrome.storage.local.set({ loginUrl }, () => {
       console.log("Data saved to Chrome storage:", message);
       sendResponse({ status: "success" });
     });
