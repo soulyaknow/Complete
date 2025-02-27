@@ -45,26 +45,51 @@ const upload = multer({ storage: storage });
 const bucketName = awsBucketName;
 
 const classifiedDocuments = {
-  drivers_license: ["license", "id", "driver"],
-  national_id: ["passport", "national", "citizen", "citizenship", "residency"],
-  utility_bill: ["bill", "utility"],
-  bank_statement: ["bank", "statement"],
-  application_form: ["application", "form"],
-  payslip: ["payslip", "salary", "payroll"],
+  bank_statement: ["bank", "statement", "transaction", "account", "banking"],
+  drivers_license: ["license", "driver", "driving", "licence"],
+  national_id: [
+    "passport",
+    "national",
+    "id",
+    "identification",
+    "citizen",
+    "citizenship",
+    "residency",
+  ],
+  utility_bill: [
+    "bill",
+    "utility",
+    "electric",
+    "water",
+    "gas",
+    "electricity",
+    "utilities",
+  ],
+  application_form: ["application", "form", "forms"],
+  payslip: ["payslip", "salary", "wage", "payment", "payroll", "pay"],
   insurance: ["insurance", "policy", "coverage", "premium"],
 };
 
+// Improve document type detection to handle numbers
 const getDocumentType = (fileName) => {
-  let normalizedFileName = fileName.toLowerCase().replace(/[^a-z0-9]/g, " ");
-  for (let docType in classifiedDocuments) {
-    if (
-      classifiedDocuments[docType].some((keyword) =>
-        new RegExp(`\\b${keyword}\\b`).test(normalizedFileName)
-      )
-    ) {
-      return docType;
+  console.log("Analyzing document type for:", fileName);
+  // Remove file extension and normalize
+  const normalizedFileName = fileName
+    .toLowerCase()
+    .replace(/\.[^/.]+$/, "")
+    .replace(/[^a-z0-9]/g, " ");
+
+  for (const [docType, keywords] of Object.entries(classifiedDocuments)) {
+    for (const keyword of keywords) {
+      // Use a more flexible pattern that works with numbers
+      if (normalizedFileName.includes(keyword)) {
+        console.log(`Matched keyword "${keyword}" for type "${docType}"`);
+        return docType;
+      }
     }
   }
+
+  console.log("No matching document type found, using unknown_document");
   return "unknown_document";
 };
 
@@ -327,6 +352,24 @@ const saveDataToDB = async (applicantsData) => {
       );
     `);
 
+    // Add processed column if it doesn't exist
+    await client.query(`
+      DO $$ 
+      BEGIN 
+        IF NOT EXISTS (
+          SELECT 1 
+          FROM information_schema.columns 
+          WHERE table_name = 'extracted_data' 
+          AND column_name = 'processed'
+        ) THEN 
+          ALTER TABLE extracted_data 
+          ADD COLUMN processed BOOLEAN DEFAULT false;
+        END IF;
+      END $$;
+    `);
+
+    let newlyInsertedIds = [];
+
     // Iterate over applicantsData
     console.log(applicantsData);
     for (const applicant of applicantsData) {
@@ -364,8 +407,6 @@ const saveDataToDB = async (applicantsData) => {
           const rows = dataItem.rows;
 
           if (rows && rows.length > 0) {
-            console.log("Processing rows:", rows);
-
             // Group rows by rowIndex
             const groupedRows = {};
 
@@ -409,10 +450,10 @@ const saveDataToDB = async (applicantsData) => {
               dbEntries.push(rowData);
             }
 
-            // Insert all entries into extracted_data table
+            // Insert all entries into extracted_data table and collect their IDs
             for (const entry of dbEntries) {
-              await client.query(
-                "INSERT INTO extracted_data (applicant_id, text, description, debit, credit, balance, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+              const result = await client.query(
+                "INSERT INTO extracted_data (applicant_id, text, description, debit, credit, balance, created_at, processed) VALUES ($1, $2, $3, $4, $5, $6, $7, false) RETURNING id",
                 [
                   entry.applicant_id,
                   entry.text,
@@ -423,6 +464,7 @@ const saveDataToDB = async (applicantsData) => {
                   entry.created_at,
                 ]
               );
+              newlyInsertedIds.push(result.rows[0].id);
             }
           } else {
             console.error("❌ No rows found for this dataItem:", dataItem);
@@ -439,9 +481,11 @@ const saveDataToDB = async (applicantsData) => {
 
     await client.query("COMMIT");
     console.log("✅ Data saved to PostgreSQL");
+    return newlyInsertedIds; // Return the IDs of newly inserted records
   } catch (err) {
     await client.query("ROLLBACK");
     console.error("❌ Error saving to PostgreSQL:", err);
+    return [];
   } finally {
     client.release();
   }
@@ -449,10 +493,7 @@ const saveDataToDB = async (applicantsData) => {
 
 const classification = async (applicantData) => {
   const client = await pool.connect();
-  console.log("Received Applicant Data:", applicantData);
-
   try {
-    // Use applicantData directly instead of parsing
     const applicants = applicantData;
 
     // Extract Applicant IDs
@@ -464,7 +505,7 @@ const classification = async (applicantData) => {
       };
     });
 
-    console.log("Extracted Applicant IDs:", applicantIds);
+    const dataStructure = {};
 
     // Iterate through all applicants and fetch details
     for (const applicant of applicantIds) {
@@ -486,17 +527,42 @@ const classification = async (applicantData) => {
       const applicantDbId = applicantRes.rows[0].id;
       console.log(`✅ Applicant '${name}' found with DB ID: ${applicantDbId}`);
 
+      // Only get unprocessed records
       const extractedDataRes = await client.query(
         `SELECT id, description, debit, credit
          FROM extracted_data
          WHERE applicant_id = $1
+         AND processed = false
          AND (debit ~ '^[0-9]' OR credit ~ '^[0-9]')
          AND description IS NOT NULL
          AND description <> ''`,
         [applicantDbId]
       );
 
-      sendToExpenditure(extractedDataRes.rows, applicantIds);
+      if (extractedDataRes.rows.length > 0) {
+        // Store results in the structured format
+        dataStructure[`applicant_${applicant_id}`] = {
+          applicant_name: name,
+          applicant_id: applicant_id,
+          extractData: {
+            extractedRows: extractedDataRes.rows,
+          },
+        };
+
+        // Mark these records as processed
+        const ids = extractedDataRes.rows.map((row) => row.id);
+        await client.query(
+          `UPDATE extracted_data 
+           SET processed = true 
+           WHERE id = ANY($1)`,
+          [ids]
+        );
+
+        // Only send if we have new data
+        await sendToExpenditure(extractedDataRes.rows, applicantIds);
+      } else {
+        console.log(`No new data to process for applicant ${name}`);
+      }
     }
   } catch (error) {
     console.error("❌ Error querying database:", error);
@@ -505,18 +571,28 @@ const classification = async (applicantData) => {
   }
 };
 
-// POST endpoint to accept a file
+// Upload endpoint
 app.post("/upload", upload.array("files", 10), async (req, res) => {
   if (!req.files || req.files.length === 0) {
     return res.status(400).send("No files uploaded.");
   }
 
-  console.log(req.body);
-
   let jobResults = [];
   let nonBankStatementFiles = [];
   const bankStatements = [];
-  const applicants = JSON.parse(req.body.applicants || "{}");
+
+  // Parse applicant data - handle both singular and plural forms
+  let applicants = {};
+  if (req.body.applicant) {
+    // Handle single applicant case
+    const applicantData = JSON.parse(req.body.applicant);
+    applicants = {
+      Applicant1: applicantData,
+    };
+  } else if (req.body.applicants) {
+    // Handle multiple applicants case
+    applicants = JSON.parse(req.body.applicants || "{}");
+  }
 
   try {
     for (const file of req.files) {
@@ -540,8 +616,12 @@ app.post("/upload", upload.array("files", 10), async (req, res) => {
 
       const s3Key = `uploads/${path.basename(filePath)}`;
       const fileBuffer = fs.readFileSync(filePath);
-      const docType = getDocumentType(file.originalname);
 
+      // Get document type from filename
+      const docType = getDocumentType(file.originalname);
+      console.log("Document Type:", docType);
+
+      // Upload to S3
       await s3
         .upload({
           Bucket: bucketName,
@@ -553,9 +633,8 @@ app.post("/upload", upload.array("files", 10), async (req, res) => {
 
       let textractResults;
 
-      console.log("Document Type:", docType);
-
       if (docType === "bank_statement") {
+        // Process bank statements
         const startExtraction = await textract
           .startDocumentAnalysis({
             DocumentLocation: { S3Object: { Bucket: bucketName, Name: s3Key } },
@@ -583,29 +662,32 @@ app.post("/upload", upload.array("files", 10), async (req, res) => {
           extractedData: textractResults,
         });
 
-        // 🔹 Assign bank statements to applicants
+        // Process bank statements with applicant data
         const formattedData = [];
         const applicantKeys = Object.keys(applicants);
-
         if (bankStatements.length > 0) {
           for (let i = 0; i < bankStatements.length; i++) {
             const applicantKey = applicantKeys[i] || applicantKeys[0];
             const applicantData = applicants[applicantKey];
-            const fullName = `${applicantData["First Name"]} ${applicantData["Last Name"]}`;
 
-            formattedData.push({
-              applicant_id: applicantData.Applicant_ID,
-              record_id: applicantData.recordId,
-              full_name: fullName,
-              extractedData: bankStatements[i].extractedData,
-            });
+            if (applicantData) {
+              formattedData.push({
+                applicant_id: applicantData.Applicant_ID,
+                record_id: applicantData.recordId,
+                full_name: `${applicantData["First Name"]} ${applicantData["Last Name"]}`,
+                extractedData: bankStatements[i].extractedData,
+              });
+            }
           }
 
-          await saveDataToDB(formattedData);
-          await classification(applicants);
+          if (formattedData.length > 0) {
+            await saveDataToDB(formattedData);
+            await classification(applicants);
+          }
         }
       } else {
-        console.log(`Skipping non-bank statement file: ${file.originalname}`);
+        // Process non-bank statement files
+        console.log(`Processing non-bank statement file: ${file.originalname}`);
         const startResponse = await textract
           .startDocumentAnalysis({
             DocumentLocation: { S3Object: { Bucket: bucketName, Name: s3Key } },
@@ -616,6 +698,7 @@ app.post("/upload", upload.array("files", 10), async (req, res) => {
         const jobId = startResponse.JobId;
         console.log(`Started Textract job for ${file.originalname}`);
         textractResults = await getTextractResults(jobId, false);
+
         nonBankStatementFiles.push({
           file: file.originalname,
           classified: docType,
@@ -624,20 +707,21 @@ app.post("/upload", upload.array("files", 10), async (req, res) => {
         });
       }
 
-      // Delete uploaded file to save storage
+      // Clean up: Delete uploaded file to save storage
       fs.unlinkSync(filePath);
     }
 
-    // If there are non-bank statement files, send them to n8n
+    // Process non-bank statement files with n8n
     if (nonBankStatementFiles.length > 0) {
       const applicant_data = {
-        applicants: req.body.applicants || [],
+        applicants: applicants,
         extract_data: nonBankStatementFiles,
       };
 
-      sendToN8N(applicant_data);
+      await sendToN8N(applicant_data);
     }
 
+    // Send success response
     res.status(200).send({
       message: "All files processed successfully.",
       results: {
