@@ -3,6 +3,12 @@ import time
 import json
 import requests
 import mimetypes
+import re
+import tkinter as tk
+import sys
+import threading
+import pythoncom
+from tkinter import ttk, messagebox
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from selenium import webdriver
@@ -15,7 +21,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from webdriver_manager.chrome import ChromeDriverManager
 from requests_toolbelt.multipart.encoder import MultipartEncoder
-
 
 
 # Initialize Flask app
@@ -54,36 +59,342 @@ prefs = {
 chrome_options.add_experimental_option("prefs", prefs)
 
 def process_applicants(applicant_details, lender_details, applicant_api_url, lender_api_url, headers):
-    # Fetch existing applicants from APITable
     existing_applicants = get_existing_applicants(applicant_api_url, headers)
-    
-    # Filter out applicants that already exist
     new_applicants = []
+    all_applicant_details = []
+
     for applicant in applicant_details:
-        is_existing = is_applicant_existing(applicant, existing_applicants)
+        matching_records, status_code = is_applicant_existing(applicant, existing_applicants)
         
-        if not is_existing:
+        if status_code == 200:
+            all_applicant_details.extend(matching_records)  # Include existing applicants
+        else:
             new_applicants.append(applicant)
-    
-    # If there are new applicants, post their data
+
+    # Process new applicants in APITable
     if new_applicants:
-        all_applicant_details = []
         for applicant_data in new_applicants:
             response_data = post_to_apitable(applicant_api_url, headers, applicant_data, "Applicant Hub")
             if response_data:
                 all_applicant_details.extend(response_data)
-        
-        # Post lender data only once for the new applicants
-        for lender_data in lender_details:
-            response_data = post_to_apitable(lender_api_url, headers, lender_data, "Lender Hub")
-        
-        # Send data with files if new applicants were added
-        if all_applicant_details:
-            send_applicant_data_with_files(all_applicant_details)
+
+    # Add Application_ID to group applicants (for both existing and new ones)
+    application_id = time.strftime("%Y%m%d%H%M%S")
+    for applicant in all_applicant_details:
+        applicant["Application_ID"] = application_id
+
+    # Process lender data
+    for lender_data in lender_details:
+        if lender_data:
+            post_to_apitable(lender_api_url, headers, lender_data, "Lender Hub")
+
+    # **Always launch the Tkinter GUI**
+    if all_applicant_details:  # Ensure there are applicants to process
+        root = tk.Tk()
+        app = FileSelectorApp(root, all_applicant_details)
+
+        if sys.platform.startswith('win'):
+            pythoncom.CoInitialize()
+            root.mainloop()
         else:
-            print("No valid applicant details to process.")
-    else:
-        print("No new applicants to process.")
+            root.mainloop()
+
+    return {
+        "status": "success",
+        "message": "Processing started",
+        "applicant_count": len(all_applicant_details)
+    }
+
+class FileSelectorApp:
+    def __init__(self, root, applicant_details):
+        self.root = root
+        self.root.title("Document Assignment Tool")
+        self.root.geometry("1000x700")
+        
+        # Store applicant details and initialize assignments
+        self.applicant_details = applicant_details
+        self.assignments = {}  # Dictionary to store file assignments
+        self.processed_files = {}  # Dictionary to track processed files per applicant
+        
+        # Create main container with grid
+        self.root.grid_columnconfigure(0, weight=1)
+        self.root.grid_columnconfigure(1, weight=1)
+        
+        # Left Frame: Available Files
+        left_frame = ttk.LabelFrame(self.root, text="Available Documents")
+        left_frame.grid(row=0, column=0, padx=10, pady=5, sticky="nsew")
+        
+        # File listbox with scrollbar
+        self.file_listbox = tk.Listbox(left_frame, selectmode=tk.SINGLE)
+        file_scrollbar = ttk.Scrollbar(left_frame, orient=tk.VERTICAL, command=self.file_listbox.yview)
+        self.file_listbox.configure(yscrollcommand=file_scrollbar.set)
+        
+        self.file_listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        file_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        
+        # Right Frame: Controls and Assigned Files
+        right_frame = ttk.Frame(self.root)
+        right_frame.grid(row=0, column=1, padx=10, pady=5, sticky="nsew")
+        
+        # Applicant selection
+        ttk.Label(right_frame, text="Select Applicant:").pack(pady=5)
+        self.applicant_var = tk.StringVar()
+        self.applicant_dropdown = ttk.Combobox(right_frame, textvariable=self.applicant_var)
+        self.applicant_dropdown.pack(pady=5)
+        
+        # Assigned files frame
+        assigned_frame = ttk.LabelFrame(right_frame, text="Assigned Documents")
+        assigned_frame.pack(fill=tk.BOTH, expand=True, pady=10)
+        
+        self.assigned_listbox = tk.Listbox(assigned_frame)
+        assigned_scrollbar = ttk.Scrollbar(assigned_frame, orient=tk.VERTICAL, command=self.assigned_listbox.yview)
+        self.assigned_listbox.configure(yscrollcommand=assigned_scrollbar.set)
+        
+        self.assigned_listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        assigned_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        
+        # Status frame
+        status_frame = ttk.LabelFrame(right_frame, text="Processing Status")
+        status_frame.pack(fill=tk.X, pady=10)
+        self.status_text = tk.Text(status_frame, height=4, wrap=tk.WORD)
+        self.status_text.pack(fill=tk.X, padx=5, pady=5)
+        
+        # Buttons
+        button_frame = ttk.Frame(right_frame)
+        button_frame.pack(fill=tk.X, pady=10)
+        
+        ttk.Button(button_frame, text="Assign Document", command=self.assign_document).pack(fill=tk.X, pady=2)
+        ttk.Button(button_frame, text="Remove Assignment", command=self.remove_assignment).pack(fill=tk.X, pady=2)
+        ttk.Button(button_frame, text="Submit to Textract", command=self.submit_to_textract).pack(fill=tk.X, pady=2)
+        ttk.Button(button_frame, text="Clear Status", command=self.clear_status).pack(fill=tk.X, pady=2)
+        
+        # Initialize the interface
+        self.load_applicants()
+        self.load_files()
+        
+        # Bind events
+        self.applicant_dropdown.bind('<<ComboboxSelected>>', self.on_applicant_selected)
+        
+        # Update status
+        self.update_status("Ready to process documents.")
+    
+    def get_folder_path(self):
+        """Get the folder path for the current applicant"""
+        # Find the first applicant in the same application
+        current_applicant = next(
+            (app for app in self.applicant_details 
+             if f"{app['First Name']} {app['Last Name']}" == self.applicant_var.get()),
+            None
+        )
+        
+        if not current_applicant:
+            return None
+            
+        # Use the first applicant's name as the folder name
+        first_applicant = self.applicant_details[0]  # Always use the first applicant's name for the folder
+        folder_name = f"{first_applicant['First Name']} {first_applicant['Last Name']}"
+        
+        # Debug information
+        print(f"First applicant: {first_applicant}")
+        print(f"Folder name: {folder_name}")
+
+        return os.path.join(DOWNLOAD_PATH, folder_name)
+    
+    def load_applicants(self):
+        """Load applicants into the dropdown"""
+        applicant_names = [
+            f"{app['First Name']} {app['Last Name']}"
+            for app in self.applicant_details
+        ]
+        self.applicant_dropdown['values'] = applicant_names
+        if applicant_names:
+            self.applicant_dropdown.set(applicant_names[0])
+            print(f"Loaded applicants: {applicant_names}")
+    
+    def load_files(self):
+        """Load available files for the selected applicant"""
+        self.file_listbox.delete(0, tk.END)
+        folder_path = self.get_folder_path()
+        
+        if not folder_path:
+            print("No folder path found")
+            return
+            
+        if os.path.exists(folder_path):
+            print(f"Loading files from: {folder_path}")
+            for file_name in os.listdir(folder_path):
+                file_path = os.path.join(folder_path, file_name)
+                if os.path.isfile(file_path):
+                    # Check if the file is not processed and not assigned
+                    current_applicant = self.applicant_var.get()
+                    if (file_name not in self.processed_files.get(current_applicant, set()) and 
+                        file_name not in self.assignments.get(current_applicant, [])):
+                        self.file_listbox.insert(tk.END, file_name)
+                        print(f"Added file to listbox: {file_name}")
+        else:
+            print(f"Folder does not exist: {folder_path}")
+    
+    def update_status(self, message):
+        """Update the status text with timestamp"""
+        timestamp = time.strftime("%H:%M:%S")
+        self.status_text.insert(tk.END, f"[{timestamp}] {message}\n")
+        self.status_text.see(tk.END)
+    
+    def clear_status(self):
+        """Clear the status text"""
+        self.status_text.delete(1.0, tk.END)
+        self.update_status("Status cleared.")
+    
+    def on_applicant_selected(self, event):
+        """Handle applicant selection change"""
+        self.load_files()
+        self.update_assigned_files()
+        self.update_status(f"Selected applicant: {self.applicant_var.get()}")
+    
+    def assign_document(self):
+        """Assign selected document to current applicant"""
+        selected_indices = self.file_listbox.curselection()
+        if not selected_indices:
+            messagebox.showwarning("Warning", "Please select a document to assign")
+            return
+        
+        selected_file = self.file_listbox.get(selected_indices[0])
+        selected_applicant = self.applicant_var.get()
+        
+        if selected_applicant not in self.assignments:
+            self.assignments[selected_applicant] = []
+        
+        self.assignments[selected_applicant].append(selected_file)
+        self.file_listbox.delete(selected_indices[0])
+        self.update_assigned_files()
+        self.update_status(f"Assigned '{selected_file}' to {selected_applicant}")
+    
+    def remove_assignment(self):
+        """Remove document assignment"""
+        selected_indices = self.assigned_listbox.curselection()
+        if not selected_indices:
+            messagebox.showwarning("Warning", "Please select a document to remove")
+            return
+        
+        selected_file = self.assigned_listbox.get(selected_indices[0])
+        selected_applicant = self.applicant_var.get()
+        
+        self.assignments[selected_applicant].remove(selected_file)
+        self.assigned_listbox.delete(selected_indices[0])
+        self.file_listbox.insert(tk.END, selected_file)
+        self.update_status(f"Removed '{selected_file}' from {selected_applicant}")
+    
+    def update_assigned_files(self):
+        """Update the assigned files listbox"""
+        self.assigned_listbox.delete(0, tk.END)
+        selected_applicant = self.applicant_var.get()
+        if selected_applicant in self.assignments:
+            for file_name in self.assignments[selected_applicant]:
+                self.assigned_listbox.insert(tk.END, file_name)
+    
+    def submit_to_textract(self):
+        """Submit assigned documents to Textract"""
+        if not any(self.assignments.values()):
+            messagebox.showwarning("Warning", "No documents have been assigned")
+            return
+        
+        # Start processing in a separate thread
+        processing_thread = threading.Thread(target=self._process_documents)
+        processing_thread.start()
+    
+    def _process_documents(self):
+        """Process documents in background thread"""
+        folder_path = self.get_folder_path()
+        if not folder_path:
+            self.root.after(0, self.update_status, "Error: Could not determine folder path")
+            return
+            
+        for applicant_name, files in self.assignments.items():
+            if not files:
+                continue
+            
+            # Find applicant details
+            applicant = next(
+                (app for app in self.applicant_details 
+                 if f"{app['First Name']} {app['Last Name']}" == applicant_name),
+                None
+            )
+            
+            if applicant and files:
+                files_to_upload = []
+                
+                for file_name in files:
+                    file_path = os.path.join(folder_path, file_name)
+                    if os.path.isfile(file_path):
+                        metadata = get_file_metadata(file_path)
+                        files_to_upload.append((file_name, open(file_path, "rb"), metadata["mime_type"]))
+                
+                if files_to_upload:
+                    try:
+                        self.root.after(0, self.update_status, f"Processing files for {applicant_name}...")
+                        
+                        # Prepare multipart form-data
+                        fields = [
+                            ("files", (file_name, file_obj, mime_type))
+                            for file_name, file_obj, mime_type in files_to_upload
+                        ]
+                        
+                        # Add applicant metadata
+                        fields.append(("applicant", json.dumps({
+                            "Applicant_ID": applicant["Applicant_ID"],
+                            "First Name": applicant["First Name"],
+                            "Last Name": applicant["Last Name"],
+                            "recordId": applicant["recordId"]
+                        })))
+                        
+                        multipart_data = MultipartEncoder(fields=dict(fields))
+                        
+                        # Send to Textract middleware
+                        response = requests.post(
+                            "http://localhost:3012/upload",
+                            data=multipart_data,
+                            headers={"Content-Type": multipart_data.content_type}
+                        )
+                        
+                        if response.status_code in (200, 201):
+                            # Mark files as processed for this applicant
+                            if applicant_name not in self.processed_files:
+                                self.processed_files[applicant_name] = set()
+                            for file_name, _, _ in files_to_upload:
+                                self.processed_files[applicant_name].add(file_name)
+                            
+                            self.root.after(0, self.update_status,
+                                          f"✅ Successfully processed files for {applicant_name}")
+                        else:
+                            self.root.after(0, self.update_status,
+                                          f"❌ Failed to process files for {applicant_name}")
+                    
+                    except Exception as e:
+                        self.root.after(0, self.update_status,
+                                      f"Error processing files for {applicant_name}: {str(e)}")
+                    
+                    finally:
+                        for _, file_obj, _ in files_to_upload:
+                            file_obj.close()
+        
+        # Clear assignments after processing
+        self.assignments = {}
+        
+        # Update UI in main thread
+        self.root.after(0, self._after_processing)
+    
+    def _after_processing(self):
+        """Update UI after processing completes"""
+        self.update_assigned_files()
+        self.load_files()
+        self.update_status("Processing complete. Ready for more documents.")
+        messagebox.showinfo("Success", "Documents have been submitted for processing")
+
+def get_file_metadata(file_path):
+    """Get file metadata including MIME type"""
+    file_name = os.path.basename(file_path)
+    mime_type = mimetypes.guess_type(file_path)[0] or "application/octet-stream"
+    return {"file_name": file_name, "mime_type": mime_type}
 
 def is_applicant_existing(applicant_data, existing_applicants):
     try:
@@ -91,26 +402,35 @@ def is_applicant_existing(applicant_data, existing_applicants):
         records = applicant_data.get("records", [])
         if not records:
             print("No records found in the applicant data.")
-            return False
+            return [], 404  # Returning empty list with status 404 if no record is found
         
         applicant_fields = records[0].get("fields", {})
         applicant_first_name = applicant_fields.get("First Name")
         applicant_last_name = applicant_fields.get("Last Name")
 
         # Loop through existing applicants to find a match
+        matching_records = []
         for record in existing_applicants:
             fields = record.get("fields", {})
             if (
                 fields.get("First Name") == applicant_first_name
                 and fields.get("Last Name") == applicant_last_name
             ):
-                return True
+                matching_records.append({
+                    "Applicant_ID": fields.get("Applicant_ID"),
+                    "First Name": fields.get("First Name"),
+                    "Last Name": fields.get("Last Name"),
+                    "recordId": record.get("recordId")
+                })
         
-        return False
+        if matching_records:
+            return matching_records, 200  # Returning the matched records and status 200
+        else:
+            return [], 404  # No match, returning empty list and status 404
 
     except KeyError as e:
         print(f"KeyError occurred: {str(e)}")
-        return False
+        return [], 404
 
 # Function for APITable
 def post_to_apitable(api_url, headers, data, data_type):
@@ -176,26 +496,31 @@ def get_file_metadata(file_path):
     return {"file_name": file_name, "file_extension": file_extension, "mime_type": mime_type}
 
 def get_document_type(file_name):
-    file_name_lower = file_name.lower()
-    for doc_type, keywords in classified_documents.items():
-        if any(keyword in file_name_lower for keyword in keywords):
-            return doc_type
-    return "unknown_document"
+    normalized_file_name = re.sub(r'[^a-z0-9]', ' ', file_name.lower())
 
+    for doc_type, keywords in classified_documents.items():
+        if any(re.search(r'\b' + re.escape(keyword) + r'\b', normalized_file_name) for keyword in keywords):
+            return doc_type
+
+    return "unknown_document"
+    
 def prepare_headers_with_default_files(files):
     headers = {}
 
     # Initialize all document types with empty values
     for doc_type in classified_documents.keys():
-        headers[f"{doc_type}"] = ""
+        headers[doc_type] = ""
 
     # Track document types and their corresponding files
     doc_files = {doc_type: [] for doc_type in classified_documents.keys()}
+    unknown_files = []  # Track files that couldn't be classified
 
     # Assign actual file names if they exist
     for file_name in files:
         doc_type = get_document_type(file_name)
-        if doc_type:
+        if doc_type == "unknown_document":
+            unknown_files.append(file_name)
+        else:
             doc_files[doc_type].append(file_name)
 
     # Update headers to store all found files under their document types
@@ -203,8 +528,13 @@ def prepare_headers_with_default_files(files):
         if files_in_type:
             headers[doc_type] = ", ".join(files_in_type)  # Store all files for that doc type
 
+    # Optionally, add an "unknown" category for uncategorized files
+    if unknown_files:
+        headers["unknown_document"] = ", ".join(unknown_files)
+
     return headers
 
+This function will go to n8n and pass the documents from the salestrekker
 def send_applicant_data_with_files(applicant_details):
     folder_created = False
     folder_path = ""
@@ -214,33 +544,13 @@ def send_applicant_data_with_files(applicant_details):
     headers = {}
 
     # Combine applicant details into a single object
-    if len(applicant_details) == 1:
-        combined_applicant_data = {
-            "Applicant1": {
-                "Applicant_ID": applicant_details[0]["Applicant_ID"],
-                "First Name": applicant_details[0]["First Name"],
-                "Last Name": applicant_details[0]["Last Name"],
-                "recordId": applicant_details[0]["recordId"],
-            }
+    for i, applicant in enumerate(applicant_details):
+        combined_applicant_data[f"Applicant{i+1}"] = {
+            "Applicant_ID": applicant["Applicant_ID"],
+            "First Name": applicant["First Name"],
+            "Last Name": applicant["Last Name"],
+            "recordId": applicant["recordId"],
         }
-    elif len(applicant_details) == 2:
-        combined_applicant_data = {
-            "Applicant1": {
-                "Applicant_ID": applicant_details[0]["Applicant_ID"],
-                "First Name": applicant_details[0]["First Name"],
-                "Last Name": applicant_details[0]["Last Name"],
-                "recordId": applicant_details[0]["recordId"],
-            },
-            "Applicant2": {
-                "Applicant_ID": applicant_details[1]["Applicant_ID"],
-                "First Name": applicant_details[1]["First Name"],
-                "Last Name": applicant_details[1]["Last Name"],
-                "recordId": applicant_details[1]["recordId"],
-            }
-        }
-    else:
-        print(f"Error: Expected 1 or 2 applicants but got {len(applicant_details)}.")
-        return 
 
     # Full name of the first applicant
     full_name = f"{applicant_details[0]['First Name']} {applicant_details[0]['Last Name']}"
@@ -318,6 +628,108 @@ def send_applicant_data_with_files(applicant_details):
         # Ensure all file handles are closed
         for _, file_obj, _, _ in files_to_upload:
             file_obj.close()
+
+def send_files_to_textract(applicant_details):
+    folder_path = ""
+    files_to_upload = []
+
+    # Combine applicant details into a single object
+    combined_applicant_data = {
+        f"Applicant{i+1}": {
+            "Applicant_ID": applicant["Applicant_ID"],
+            "First Name": applicant["First Name"],
+            "Last Name": applicant["Last Name"],
+            "recordId": applicant["recordId"],
+        }
+        for i, applicant in enumerate(applicant_details)
+    }
+
+    # Full name of the first applicant
+    full_name = f"{applicant_details[0]['First Name']} {applicant_details[0]['Last Name']}"
+
+    # Check if folder exists
+    folder_path = os.path.join(DOWNLOAD_PATH, full_name)
+    if not os.path.exists(folder_path) or not os.path.isdir(folder_path):
+        print(f"Folder not found for {full_name}.")
+        return  
+
+    # Collect files
+    for file_name in os.listdir(folder_path):
+        file_path = os.path.join(folder_path, file_name)
+        if os.path.isfile(file_path):
+            metadata = get_file_metadata(file_path)
+            doc_type = get_document_type(file_name)
+
+            # Store file for upload
+            files_to_upload.append((file_name, open(file_path, "rb"), metadata["mime_type"], doc_type))
+
+    # Check if there are files
+    if not files_to_upload:
+        print("No files found for the applicants.")
+        return  
+
+    # Prepare multipart form-data payload
+    fields = [
+        ("files", (file_name, file_obj, mime_type))  # ✅ Use "files" as the field name
+        for file_name, file_obj, mime_type, _ in files_to_upload
+    ]
+    
+    # Also send metadata
+    fields.append(("applicants", json.dumps(combined_applicant_data)))
+
+    # Create multipart encoder
+    multipart_data = MultipartEncoder(fields=fields)
+
+    # Set headers
+    headers = {
+        "Content-Type": multipart_data.content_type
+    }
+
+    # Define the new Textract middleware endpoint
+    textract_endpoint = "http://localhost:3012/upload"
+
+    try:
+        # Send POST request to your Textract middleware
+        response = requests.post(url=textract_endpoint, data=multipart_data, headers=headers)
+
+        # Close all file handles
+        for _, file_obj, _, _ in files_to_upload:
+            file_obj.close()
+
+        # Handle response
+        if response.status_code in (200, 201):
+            print("✅ Successfully sent files to Textract middleware!")
+        else:
+            print(f"❌ Failed to send files. Response Code: {response.status_code}")      
+    except requests.exceptions.RequestException as e:
+        print(f"Error while sending data: {str(e)}")
+    finally:
+        # Ensure all file handles are closed
+        for _, file_obj, _, _ in files_to_upload:
+            file_obj.close()
+
+def scroll_down_until_bottom(driver):
+    try:
+        ticket_content = driver.find_element(By.TAG_NAME, "ticket-content")
+        last_scroll_position = -1
+
+        while True:
+            # Scroll down
+            driver.execute_script("arguments[0].scrollBy(0, 500);", ticket_content)
+            time.sleep(2)  # Wait for new elements to load
+
+            # Get new scroll position
+            current_scroll_position = driver.execute_script("return arguments[0].scrollTop;", ticket_content)
+
+            # If the scroll position hasn't changed, we've reached the bottom
+            if current_scroll_position == last_scroll_position:
+                print("Reached the bottom of the timeline.")
+                break
+            else:
+                last_scroll_position = current_scroll_position
+
+    except Exception as e:
+        print(f"Error while scrolling down: {e}")
 
 @app.route('/', methods=['GET'])
 def home():
@@ -504,33 +916,41 @@ def process_url():
             print(f"Error getting deal owner data: {str(e)}")
         
         try:
-            # Find all 'timeline-event' elements
-            timeline_events = driver.find_elements(By.TAG_NAME, "timeline-event")
+            # Locate the scrollable container for forcing the scroll
+            scrollable_container = driver.find_element(By.CSS_SELECTOR, "md-content[md-scroll-y]")
 
+            # Force the scroll to the bottom to trigger new event loading
+            print("🔽 Scrolling down to trigger loading of new timeline events...")
+            driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight;", scrollable_container)
+            time.sleep(5)  # Wait for new items to load
+
+            # Get all timeline-event elements after scrolling
+            timeline_events = driver.find_elements(By.TAG_NAME, "timeline-event")
+            print(f"📋 Found {len(timeline_events)} timeline events.")
+
+            # Process the events
             for index, event in enumerate(timeline_events):
                 try:
                     # Check if the element contains <span>Labels</span>
                     labels_span = event.find_elements(By.XPATH, ".//span[text()='Labels']")
                     if labels_span:
-                        # Scroll the timeline-event into view
-                        driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", event)
-                        time.sleep(1)  # Allow some time for smooth scrolling
-                        
-                        # Locate the download button
+                        print(f"🎯 Found labels in timeline-event #{index + 1}, processing...")
+
+                        # Locate and click the download button
                         download_button = event.find_element(By.XPATH, ".//md-icon[text()='cloud_download']")
                         if download_button:
-                            # Scroll into view and click the download button
                             ActionChains(driver).move_to_element(download_button).perform()
                             download_button.click()
-                            print(f"Download button clicked for timeline-event #{index + 1}.")
+                            print(f"✅ Download button clicked for timeline-event #{index + 1}.")
                             time.sleep(2)  # Optional: Wait between downloads
-                except Exception as inner_e:
-                    print(f"Error processing timeline-event #{index + 1}: {inner_e}")
-                    continue
 
+                except Exception as e:
+                    print(f"⚠️ Error processing timeline-event #{index + 1}: {e}")
+
+            print("✅ All events processed. Stopping process.")
+            
         except Exception as e:
-            print(f"An error occurred: {e}")
-
+            print(f"Error during process: {e}")
 
         # POST the data to the apitable endpoint
         applicant_api_url = "https://ai-broker.korunaassist.com/fusion/v1/datasheets/dst1vag1MekDBbrzoS/records"
@@ -576,6 +996,7 @@ def process_url():
 
             applicant_details.append(applicant_data)
 
+            lender_data = {}
             # Post lender data only once
             if lender:
                 lender_data = {
@@ -591,8 +1012,6 @@ def process_url():
                     ],
                     "fieldKey": "name"
                 }
-
-                # post_to_apitable(lender_url, headers, lender_data, "Lender Hub")
             
             lender_details.append(lender_data)
 

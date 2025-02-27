@@ -5,8 +5,10 @@ import requests
 import mimetypes
 import re
 import tkinter as tk
-from tkinter import ttk, messagebox
+import sys
 import threading
+import pythoncom
+from tkinter import ttk, messagebox
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from selenium import webdriver
@@ -65,53 +67,43 @@ def process_applicants(applicant_details, lender_details, applicant_api_url, len
         matching_records, status_code = is_applicant_existing(applicant, existing_applicants)
         
         if status_code == 200:
-            all_applicant_details.extend(matching_records)
+            all_applicant_details.extend(matching_records)  # Include existing applicants
         else:
             new_applicants.append(applicant)
 
+    # Process new applicants in APITable
     if new_applicants:
-        # Process new applicants in APITable
         for applicant_data in new_applicants:
             response_data = post_to_apitable(applicant_api_url, headers, applicant_data, "Applicant Hub")
             if response_data:
                 all_applicant_details.extend(response_data)
 
-        # Add Application_ID to group applicants
-        application_id = time.strftime("%Y%m%d%H%M%S")  # Generate a unique ID
-        for applicant in all_applicant_details:
-            applicant["Application_ID"] = application_id
+    # Add Application_ID to group applicants (for both existing and new ones)
+    application_id = time.strftime("%Y%m%d%H%M%S")
+    for applicant in all_applicant_details:
+        applicant["Application_ID"] = application_id
 
-        # Process lender data
-        for lender_data in lender_details:
-            if lender_data:  # Only process if lender data exists
-                post_to_apitable(lender_api_url, headers, lender_data, "Lender Hub")
+    # Process lender data
+    for lender_data in lender_details:
+        if lender_data:
+            post_to_apitable(lender_api_url, headers, lender_data, "Lender Hub")
 
-        # Create and show Tkinter window
+    # **Always launch the Tkinter GUI**
+    if all_applicant_details:  # Ensure there are applicants to process
         root = tk.Tk()
         app = FileSelectorApp(root, all_applicant_details)
-        
-        # Start the GUI in the main thread
-        import sys
+
         if sys.platform.startswith('win'):
-            # On Windows, use this approach
-            import pythoncom
             pythoncom.CoInitialize()
             root.mainloop()
         else:
-            # On other platforms
             root.mainloop()
 
-        return {
-            "status": "success",
-            "message": "Processing started",
-            "applicant_count": len(all_applicant_details)
-        }
-    else:
-        return {
-            "status": "success",
-            "message": "No new applicants to process",
-            "applicant_count": len(all_applicant_details)
-        }
+    return {
+        "status": "success",
+        "message": "Processing started",
+        "applicant_count": len(all_applicant_details)
+    }
 
 class FileSelectorApp:
     def __init__(self, root, applicant_details):
@@ -512,210 +504,6 @@ def get_document_type(file_name):
 
     return "unknown_document"
     
-def prepare_headers_with_default_files(files):
-    headers = {}
-
-    # Initialize all document types with empty values
-    for doc_type in classified_documents.keys():
-        headers[doc_type] = ""
-
-    # Track document types and their corresponding files
-    doc_files = {doc_type: [] for doc_type in classified_documents.keys()}
-    unknown_files = []  # Track files that couldn't be classified
-
-    # Assign actual file names if they exist
-    for file_name in files:
-        doc_type = get_document_type(file_name)
-        if doc_type == "unknown_document":
-            unknown_files.append(file_name)
-        else:
-            doc_files[doc_type].append(file_name)
-
-    # Update headers to store all found files under their document types
-    for doc_type, files_in_type in doc_files.items():
-        if files_in_type:
-            headers[doc_type] = ", ".join(files_in_type)  # Store all files for that doc type
-
-    # Optionally, add an "unknown" category for uncategorized files
-    if unknown_files:
-        headers["unknown_document"] = ", ".join(unknown_files)
-
-    return headers
-
-# This function will go to n8n and pass the documents from the salestrekker
-def send_applicant_data_with_files(applicant_details):
-    folder_created = False
-    folder_path = ""
-    combined_applicant_data = {}
-    files_to_upload = []
-    file_metadata = {}
-    headers = {}
-
-    # Combine applicant details into a single object
-    for i, applicant in enumerate(applicant_details):
-        combined_applicant_data[f"Applicant{i+1}"] = {
-            "Applicant_ID": applicant["Applicant_ID"],
-            "First Name": applicant["First Name"],
-            "Last Name": applicant["Last Name"],
-            "recordId": applicant["recordId"],
-        }
-
-    # Full name of the first applicant
-    full_name = f"{applicant_details[0]['First Name']} {applicant_details[0]['Last Name']}"
-
-    # Check if folder exists
-    folder_path = os.path.join(DOWNLOAD_PATH, full_name)
-    if os.path.exists(folder_path) and os.path.isdir(folder_path):
-        folder_created = True
-        print(f"Using existing folder: {folder_path}")
-    else:
-        print(f"Folder not found for {full_name}.")
-        return  
-
-    # Collect files
-    found_files = []
-    if folder_created:
-        for index, file_name in enumerate(os.listdir(folder_path)):
-            file_path = os.path.join(folder_path, file_name)
-            if os.path.isfile(file_path):
-                metadata = get_file_metadata(file_path)
-                file_metadata[f"file{index}"] = metadata
-                
-                # Get document type
-                doc_type = get_document_type(file_name)
-
-                # Store file for upload
-                files_to_upload.append((file_name, open(file_path, "rb"), metadata["mime_type"], doc_type))
-
-                found_files.append(file_name)  # Track found files
-
-    # Ensure **all document types are included** in headers
-    headers.update(prepare_headers_with_default_files(found_files))
-
-    # Check if there are files
-    if not files_to_upload:
-        print("No files found for the applicants.")
-        return  
-
-    # Prepare multipart form-data payload
-    fields = {
-        "applicants": json.dumps(combined_applicant_data),
-        "file_metadata": json.dumps(file_metadata)
-    }
-
-    # Add files to form-data
-    for index, (file_name, file_obj, mime_type, _) in enumerate(files_to_upload):
-        fields[f"files_{index}"] = (file_name, file_obj, mime_type)
-
-    # Create multipart encoder
-    multipart_data = MultipartEncoder(fields=fields)
-
-    # Add Content-Type header
-    headers["Content-Type"] = multipart_data.content_type
-
-    # Define the endpoint
-    n8n_endpoint = "https://integration.korunaassist.com/webhook-test/67944059-2667-4476-87e0-1b6ec63ea6ef"
-
-    try:
-        # Send POST request with custom headers
-        response = requests.post(url=n8n_endpoint, data=multipart_data, headers=headers)
-
-        # Close all file handles
-        for _, file_obj, _, _ in files_to_upload:
-            file_obj.close()
-
-        # Handle response
-        if response.status_code in (200, 201):
-            print(f"✅ Successfully sent data for applicants!")
-        else:
-            print(f"❌ Failed to send data. Response Code: {response.status_code}")
-            print("Response:", response.text)
-    except requests.exceptions.RequestException as e:
-        print(f"Error while sending data: {str(e)}")
-    finally:
-        # Ensure all file handles are closed
-        for _, file_obj, _, _ in files_to_upload:
-            file_obj.close()
-
-def send_files_to_textract(applicant_details):
-    folder_path = ""
-    files_to_upload = []
-
-    # Combine applicant details into a single object
-    combined_applicant_data = {
-        f"Applicant{i+1}": {
-            "Applicant_ID": applicant["Applicant_ID"],
-            "First Name": applicant["First Name"],
-            "Last Name": applicant["Last Name"],
-            "recordId": applicant["recordId"],
-        }
-        for i, applicant in enumerate(applicant_details)
-    }
-
-    # Full name of the first applicant
-    full_name = f"{applicant_details[0]['First Name']} {applicant_details[0]['Last Name']}"
-
-    # Check if folder exists
-    folder_path = os.path.join(DOWNLOAD_PATH, full_name)
-    if not os.path.exists(folder_path) or not os.path.isdir(folder_path):
-        print(f"Folder not found for {full_name}.")
-        return  
-
-    # Collect files
-    for file_name in os.listdir(folder_path):
-        file_path = os.path.join(folder_path, file_name)
-        if os.path.isfile(file_path):
-            metadata = get_file_metadata(file_path)
-            doc_type = get_document_type(file_name)
-
-            # Store file for upload
-            files_to_upload.append((file_name, open(file_path, "rb"), metadata["mime_type"], doc_type))
-
-    # Check if there are files
-    if not files_to_upload:
-        print("No files found for the applicants.")
-        return  
-
-    # Prepare multipart form-data payload
-    fields = [
-        ("files", (file_name, file_obj, mime_type))  # ✅ Use "files" as the field name
-        for file_name, file_obj, mime_type, _ in files_to_upload
-    ]
-    
-    # Also send metadata
-    fields.append(("applicants", json.dumps(combined_applicant_data)))
-
-    # Create multipart encoder
-    multipart_data = MultipartEncoder(fields=fields)
-
-    # Set headers
-    headers = {
-        "Content-Type": multipart_data.content_type
-    }
-
-    # Define the new Textract middleware endpoint
-    textract_endpoint = "http://localhost:3012/upload"
-
-    try:
-        # Send POST request to your Textract middleware
-        response = requests.post(url=textract_endpoint, data=multipart_data, headers=headers)
-
-        # Close all file handles
-        for _, file_obj, _, _ in files_to_upload:
-            file_obj.close()
-
-        # Handle response
-        if response.status_code in (200, 201):
-            print("✅ Successfully sent files to Textract middleware!")
-        else:
-            print(f"❌ Failed to send files. Response Code: {response.status_code}")      
-    except requests.exceptions.RequestException as e:
-        print(f"Error while sending data: {str(e)}")
-    finally:
-        # Ensure all file handles are closed
-        for _, file_obj, _, _ in files_to_upload:
-            file_obj.close()
-
 def scroll_down_until_bottom(driver):
     try:
         ticket_content = driver.find_element(By.TAG_NAME, "ticket-content")
