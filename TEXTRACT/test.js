@@ -392,6 +392,189 @@ const sendToExpenditure = async (classifyData, applicants) => {
   }
 };
 
+// const saveDataToDB = async (applicantsData) => {
+//   const client = await pool.connect();
+//   try {
+//     await client.query("BEGIN");
+
+//     // Create applicants table if it doesn't exist
+//     await client.query(`
+//       CREATE TABLE IF NOT EXISTS applicants (
+//         id SERIAL PRIMARY KEY,
+//         applicant_id INT NOT NULL,
+//         record_id TEXT UNIQUE NOT NULL,
+//         full_name TEXT NOT NULL,
+//         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+//       );
+//     `);
+
+//     // Create extracted_data table if it doesn't exist
+//     await client.query(`
+//       CREATE TABLE IF NOT EXISTS extracted_data (
+//         id SERIAL PRIMARY KEY,
+//         applicant_id INT REFERENCES applicants(id) ON DELETE CASCADE,
+//         text TEXT,
+//         description TEXT,
+//         debit TEXT,
+//         credit TEXT,
+//         balance TEXT,
+//         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+//       );
+//     `);
+
+//     // Add processed column if it doesn't exist
+//     await client.query(`
+//       DO $$
+//       BEGIN
+//         IF NOT EXISTS (
+//           SELECT 1
+//           FROM information_schema.columns
+//           WHERE table_name = 'extracted_data'
+//           AND column_name = 'processed'
+//         ) THEN
+//           ALTER TABLE extracted_data
+//           ADD COLUMN processed BOOLEAN DEFAULT false;
+//         END IF;
+//       END $$;
+//     `);
+
+//     let newlyInsertedIds = [];
+
+//     // Iterate over applicantsData
+//     console.log(applicantsData);
+//     for (const applicant of applicantsData) {
+//       const { applicant_id, record_id, full_name, extractedData } = applicant;
+
+//       // Validate required fields
+//       if (!applicant_id || !record_id || !full_name || !extractedData) {
+//         console.error("❌ Missing required applicant data", applicant);
+//         continue;
+//       }
+
+//       // Check if applicant exists
+//       const existingApplicant = await client.query(
+//         "SELECT id FROM applicants WHERE applicant_id = $1",
+//         [applicant_id]
+//       );
+
+//       let applicantId;
+//       if (existingApplicant.rows.length > 0) {
+//         applicantId = existingApplicant.rows[0].id;
+//       } else {
+//         // Insert new applicant
+//         const result = await client.query(
+//           "INSERT INTO applicants (applicant_id, record_id, full_name, created_at) VALUES ($1, $2, $3, NOW()) RETURNING id",
+//           [applicant_id, record_id, full_name]
+//         );
+//         applicantId = result.rows[0].id;
+//       }
+
+//       // Ensure extractedData.tableResults is an array before processing
+//       if (extractedData && Array.isArray(extractedData.tableResults)) {
+//         const tableResults = extractedData.tableResults;
+
+//         for (const dataItem of tableResults) {
+//           const rows = dataItem.rows;
+
+//           if (rows && rows.length > 0) {
+//             console.log("Processing rows:", rows);
+
+//             // Group rows by rowIndex
+//             const groupedRows = {};
+
+//             for (const row of rows) {
+//               const { rowIndex, columnIndex, text } = row;
+
+//               if (
+//                 rowIndex === undefined ||
+//                 columnIndex === undefined ||
+//                 text === undefined
+//               ) {
+//                 console.warn(
+//                   "❌ Missing required fields (rowIndex, columnIndex, text):",
+//                   row
+//                 );
+//                 continue;
+//               }
+
+//               if (!groupedRows[rowIndex]) {
+//                 groupedRows[rowIndex] = { text: [] };
+//               }
+
+//               groupedRows[rowIndex].text[columnIndex - 1] = text;
+//             }
+
+//             // Convert groupedRows to database entries
+//             const dbEntries = [];
+//             for (const rowIndex in groupedRows) {
+//               const groupedRow = groupedRows[rowIndex];
+
+//               const rowData = {
+//                 applicant_id: applicantId,
+//                 text: groupedRow.text[0] || null,
+//                 description: groupedRow.text[1] || null,
+//                 debit: groupedRow.text[2] || null,
+//                 credit: groupedRow.text[3] || null,
+//                 balance: groupedRow.text[4] || null,
+//                 created_at: new Date().toISOString(),
+//               };
+
+//               dbEntries.push(rowData);
+//             }
+
+//             // Insert all entries into extracted_data table and collect their IDs
+//             for (const entry of dbEntries) {
+//               const result = await client.query(
+//                 "INSERT INTO extracted_data (applicant_id, text, description, debit, credit, balance, created_at, processed) VALUES ($1, $2, $3, $4, $5, $6, $7, false) RETURNING id",
+//                 [
+//                   entry.applicant_id,
+//                   entry.text,
+//                   entry.description,
+//                   entry.debit,
+//                   entry.credit,
+//                   entry.balance,
+//                   entry.created_at,
+//                 ]
+//               );
+//               newlyInsertedIds.push(result.rows[0].id);
+//             }
+//           } else {
+//             console.error("❌ No rows found for this dataItem:", dataItem);
+//           }
+//         }
+//       } else {
+//         console.error(
+//           "❌ extractedData.tableResults is not an array or is undefined"
+//         );
+//       }
+
+//       console.log("✅ Processed applicant:", applicant);
+//     }
+
+//     await client.query("COMMIT");
+//     console.log("✅ Data saved to PostgreSQL");
+
+//     // Process next document if available after a short delay
+//     setTimeout(() => {
+//       processNextDocument();
+//     }, 1000);
+
+//     return newlyInsertedIds; // Return the IDs of newly inserted records
+//   } catch (err) {
+//     await client.query("ROLLBACK");
+//     console.error("❌ Error saving to PostgreSQL:", err);
+
+//     // Even if there's an error, try to process the next document after a short delay
+//     setTimeout(() => {
+//       processNextDocument();
+//     }, 1000);
+
+//     return [];
+//   } finally {
+//     client.release();
+//   }
+// };
+
 const saveDataToDB = async (applicantsData) => {
   const client = await pool.connect();
   try {

@@ -44,35 +44,8 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 const bucketName = awsBucketName;
 
-// Global variables to manage document processing queue
-let processingQueue = [];
-let isProcessing = false;
-let n8nProcessing = false;
-
-// Debug function to print current queue status
-const printQueueStatus = () => {
-  console.log("=== Queue Status ===");
-  console.log(`isProcessing: ${isProcessing}`);
-  console.log(`n8nProcessing: ${n8nProcessing}`);
-  console.log(`Queue length: ${processingQueue.length}`);
-  if (processingQueue.length > 0) {
-    console.log("Files in queue:");
-    processingQueue.forEach((item, index) => {
-      console.log(`  ${index + 1}. ${item.file.originalname}`);
-    });
-  }
-  console.log("====================");
-};
-
 const classifiedDocuments = {
-  bank_statement: [
-    "bank",
-    "statement",
-    "transaction",
-    "account",
-    "banking",
-    "savings",
-  ],
+  bank_statement: ["bank", "statement", "transaction", "account", "banking"],
   drivers_license: ["license", "driver", "driving", "licence"],
   national_id: [
     "passport",
@@ -95,11 +68,6 @@ const classifiedDocuments = {
   application_form: ["application", "form", "forms"],
   payslip: ["payslip", "salary", "wage", "payment", "payroll", "pay"],
   insurance: ["insurance", "policy", "coverage", "premium"],
-};
-
-// Check if n8n is currently processing
-const checkN8nStatus = async () => {
-  return n8nProcessing;
 };
 
 // Improve document type detection to handle numbers
@@ -215,6 +183,8 @@ const getTextractResults = async (jobId, documentType) => {
           } else {
             resolve({ formResults });
           }
+
+          // resolve({ formResults, tableResults });
         } else if (jobResponse.JobStatus === "FAILED") {
           clearInterval(interval);
           reject("Textract job failed.");
@@ -295,43 +265,21 @@ const generatePDF = async (htmlContent, outputPath) => {
 
 const sendToN8N = async (data) => {
   try {
-    n8nProcessing = true;
-    console.log("Sending data to n8n...");
     const response = await axios.post(n8nWebhookUrl, data, {
       headers: { "Content-Type": "application/json" },
     });
-    console.log("✅ Successfully sent to n8n:", response.data);
-
-    // Important: Wait a moment before clearing the n8nProcessing flag
-    // This ensures we don't start the next job too quickly
-    setTimeout(() => {
-      n8nProcessing = false;
-      console.log("n8n processing flag cleared, ready for next document");
-      processNextDocument();
-    }, 1000);
-
-    return response;
+    console.log("✅ Successfully sent to n8n:", response.message);
   } catch (error) {
     console.error(
       "❌ Error sending to n8n:",
       error.response?.data || error.message
     );
-    n8nProcessing = false;
-
-    // Even if there's an error, try to process the next document
-    setTimeout(() => {
-      processNextDocument();
-    }, 1000);
-
-    throw error;
   }
 };
 
 const sendToExpenditure = async (classifyData, applicants) => {
+  const client = await pool.connect();
   try {
-    n8nProcessing = true;
-    console.log("Sending data to expenditure endpoint...");
-
     // ✅ Handle multiple applicants correctly
     let applicantIdsArray, recordIdsArray;
 
@@ -363,32 +311,14 @@ const sendToExpenditure = async (classifyData, applicants) => {
       headers: formattedHeaders,
     });
 
-    console.log("✅ Successfully sent to n8n expenditure:", response.data);
-
-    // Important: Wait a moment before clearing the n8nProcessing flag
-    // This ensures we don't start the next job too quickly
-    setTimeout(() => {
-      n8nProcessing = false;
-      console.log(
-        "n8n expenditure processing flag cleared, ready for next document"
-      );
-      processNextDocument();
-    }, 1000);
-
-    return response;
+    console.log("✅ Successfully sent to n8n:", response.data);
   } catch (error) {
     console.error(
-      "❌ Error sending to n8n expenditure:",
+      "❌ Error sending to n8n:",
       error.response?.data || error.message
     );
-    n8nProcessing = false;
-
-    // Even if there's an error, try to process the next document
-    setTimeout(() => {
-      processNextDocument();
-    }, 1000);
-
-    throw error;
+  } finally {
+    client.release();
   }
 };
 
@@ -399,55 +329,46 @@ const saveDataToDB = async (applicantsData) => {
 
     // Create applicants table if it doesn't exist
     await client.query(`
-        CREATE TABLE IF NOT EXISTS applicants (
-          id SERIAL PRIMARY KEY,
-          applicant_id INT NOT NULL,
-          record_id TEXT UNIQUE NOT NULL,
-          full_name TEXT NOT NULL,
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
-      `);
+      CREATE TABLE IF NOT EXISTS applicants (
+        id SERIAL PRIMARY KEY,
+        applicant_id INT NOT NULL,
+        record_id TEXT UNIQUE NOT NULL,
+        full_name TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
 
     // Create extracted_data table if it doesn't exist
     await client.query(`
-        CREATE TABLE IF NOT EXISTS extracted_data (
-          id SERIAL PRIMARY KEY,
-          applicant_id INT REFERENCES applicants(id) ON DELETE CASCADE,
-          text TEXT,
-          description TEXT,
-          debit TEXT,
-          credit TEXT,
-          balance TEXT,
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
-      `);
+      CREATE TABLE IF NOT EXISTS extracted_data (
+        id SERIAL PRIMARY KEY,
+        applicant_id INT REFERENCES applicants(id) ON DELETE CASCADE,
+        text TEXT,
+        description TEXT,
+        debit TEXT,
+        credit TEXT,
+        balance TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
 
     // Add processed column if it doesn't exist
     await client.query(`
-        DO $$ 
-        BEGIN 
-          IF NOT EXISTS (
-            SELECT 1 
-            FROM information_schema.columns 
-            WHERE table_name = 'extracted_data' 
-            AND column_name = 'processed'
-          ) THEN 
-            ALTER TABLE extracted_data 
-            ADD COLUMN processed BOOLEAN DEFAULT false;
-          END IF;
-        END $$;
-      `);
+      DO $$ 
+      BEGIN 
+        IF NOT EXISTS (
+          SELECT 1 
+          FROM information_schema.columns 
+          WHERE table_name = 'extracted_data' 
+          AND column_name = 'processed'
+        ) THEN 
+          ALTER TABLE extracted_data 
+          ADD COLUMN processed BOOLEAN DEFAULT false;
+        END IF;
+      END $$;
+    `);
 
     let newlyInsertedIds = [];
-
-    // Helper function to clean currency values
-    const cleanCurrencyValue = (value) => {
-      if (!value) return null;
-
-      // Remove $ and DR, but keep commas and decimal points
-      // This will result in formats like 80,000.00 or 82,994.30
-      return value.replace(/[$DR\s]/g, "");
-    };
 
     // Iterate over applicantsData
     console.log(applicantsData);
@@ -486,8 +407,6 @@ const saveDataToDB = async (applicantsData) => {
           const rows = dataItem.rows;
 
           if (rows && rows.length > 0) {
-            console.log("Processing rows:", rows);
-
             // Group rows by rowIndex
             const groupedRows = {};
 
@@ -518,18 +437,13 @@ const saveDataToDB = async (applicantsData) => {
             for (const rowIndex in groupedRows) {
               const groupedRow = groupedRows[rowIndex];
 
-              // Clean currency values before storing
-              const rawDebit = groupedRow.text[2] || null;
-              const rawCredit = groupedRow.text[3] || null;
-              const rawBalance = groupedRow.text[4] || null;
-
               const rowData = {
                 applicant_id: applicantId,
                 text: groupedRow.text[0] || null,
                 description: groupedRow.text[1] || null,
-                debit: cleanCurrencyValue(rawDebit),
-                credit: cleanCurrencyValue(rawCredit),
-                balance: cleanCurrencyValue(rawBalance),
+                debit: groupedRow.text[2] || null,
+                credit: groupedRow.text[3] || null,
+                balance: groupedRow.text[4] || null,
                 created_at: new Date().toISOString(),
               };
 
@@ -567,22 +481,10 @@ const saveDataToDB = async (applicantsData) => {
 
     await client.query("COMMIT");
     console.log("✅ Data saved to PostgreSQL");
-
-    // Process next document if available after a short delay
-    setTimeout(() => {
-      processNextDocument();
-    }, 1000);
-
     return newlyInsertedIds; // Return the IDs of newly inserted records
   } catch (err) {
     await client.query("ROLLBACK");
     console.error("❌ Error saving to PostgreSQL:", err);
-
-    // Even if there's an error, try to process the next document after a short delay
-    setTimeout(() => {
-      processNextDocument();
-    }, 1000);
-
     return [];
   } finally {
     client.release();
@@ -633,7 +535,6 @@ const classification = async (applicantData) => {
          AND processed = false
          AND (debit ~ '^[0-9]' OR credit ~ '^[0-9]')
          AND description IS NOT NULL
-         AND text IS NOT NULL
          AND description <> ''`,
         [applicantDbId]
       );
@@ -657,234 +558,28 @@ const classification = async (applicantData) => {
           [ids]
         );
 
-        // Log the final structured data
-        console.log(
-          "📂 Structured Data:",
-          JSON.stringify(dataStructure, null, 2)
-        );
-
         // Only send if we have new data
         await sendToExpenditure(extractedDataRes.rows, applicantIds);
       } else {
         console.log(`No new data to process for applicant ${name}`);
-
-        // Even if there's no new data, check if there are more documents to process
-        setTimeout(() => {
-          processNextDocument();
-        }, 1000);
       }
     }
   } catch (error) {
     console.error("❌ Error querying database:", error);
-
-    // Even if there's an error, try to process the next document
-    setTimeout(() => {
-      processNextDocument();
-    }, 1000);
   } finally {
     client.release();
   }
 };
 
-// Process a single document from the queue
-const processDocument = async (fileObj, applicants) => {
-  // Safety check - if we're already processing, don't proceed
-  if (isProcessing) {
-    console.log(
-      `Already processing another document, queuing ${fileObj.file.originalname}`
-    );
-    return;
-  }
-
-  // Set the flag to prevent concurrent processing
-  isProcessing = true;
-
-  console.log(`🔄 Processing document: ${fileObj.file.originalname}`);
-  printQueueStatus();
-
-  try {
-    const uploadDir = path.join(__dirname, "uploads");
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-
-    let filePath = path.join(__dirname, "uploads", fileObj.file.originalname);
-    fs.writeFileSync(filePath, fileObj.file.buffer);
-
-    const fileExt = path.extname(fileObj.file.originalname).toLowerCase();
-    if (![".pdf", ".png", ".jpeg", ".jpg", ".tiff"].includes(fileExt)) {
-      console.log(`Converting ${fileObj.file.originalname} to PDF...`);
-      const convertedPath = await convertToPDF(filePath);
-      if (!convertedPath) {
-        throw new Error("Unsupported file type.");
-      }
-      filePath = convertedPath;
-    }
-
-    const s3Key = `uploads/${path.basename(filePath)}`;
-    const fileBuffer = fs.readFileSync(filePath);
-
-    // Get document type from filename
-    const docType = getDocumentType(fileObj.file.originalname);
-    console.log("Document Type:", docType);
-
-    // Upload to S3
-    await s3
-      .upload({
-        Bucket: bucketName,
-        Key: s3Key,
-        Body: fileBuffer,
-        ContentType: "application/pdf",
-      })
-      .promise();
-
-    let textractResults;
-
-    if (docType === "bank_statement") {
-      // Process bank statements
-      const startExtraction = await textract
-        .startDocumentAnalysis({
-          DocumentLocation: { S3Object: { Bucket: bucketName, Name: s3Key } },
-          FeatureTypes: ["TABLES"],
-        })
-        .promise();
-
-      const extractedId = startExtraction.JobId;
-      console.log(`Started Textract job for ${fileObj.file.originalname}`);
-      textractResults = await getTextractResults(extractedId, true);
-
-      const tableResults = textractResults && textractResults.tableResults;
-      if (!Array.isArray(tableResults)) {
-        console.error(
-          "❌ No valid tableResults found for",
-          fileObj.file.originalname
-        );
-        textractResults = { tableResults: [] };
-      }
-
-      const bankStatement = {
-        file: fileObj.file.originalname,
-        classified: docType,
-        message: `File processed successfully.`,
-        extractedData: textractResults,
-      };
-
-      // Process bank statement with applicant data
-      const formattedData = [];
-      const applicantKeys = Object.keys(applicants);
-      const applicantKey = applicantKeys[0]; // Use first applicant for now
-      const applicantData = applicants[applicantKey];
-
-      if (applicantData) {
-        formattedData.push({
-          applicant_id: applicantData.Applicant_ID,
-          record_id: applicantData.recordId,
-          full_name: `${applicantData["First Name"]} ${applicantData["Last Name"]}`,
-          extractedData: bankStatement.extractedData,
-        });
-      }
-
-      // Save to DB and prepare for n8n
-      await saveDataToDB(formattedData);
-      await classification(applicants);
-    } else {
-      // Process non-bank statement files
-      console.log(
-        `Processing non-bank statement file: ${fileObj.file.originalname}`
-      );
-      const startResponse = await textract
-        .startDocumentAnalysis({
-          DocumentLocation: { S3Object: { Bucket: bucketName, Name: s3Key } },
-          FeatureTypes: ["TABLES", "FORMS"],
-        })
-        .promise();
-
-      const jobId = startResponse.JobId;
-      console.log(`Started Textract job for ${fileObj.file.originalname}`);
-      textractResults = await getTextractResults(jobId, false);
-
-      const nonBankFile = {
-        file: fileObj.file.originalname,
-        classified: docType,
-        message: `File processed successfully.`,
-        extractedData: textractResults || [],
-      };
-
-      // Process with n8n
-      const applicant_data = {
-        applicants: applicants,
-        extract_data: [nonBankFile],
-      };
-
-      await sendToN8N(applicant_data);
-    }
-
-    // Clean up: Delete uploaded file to save storage
-    fs.unlinkSync(filePath);
-
-    console.log(`✅ Successfully processed ${fileObj.file.originalname}`);
-  } catch (error) {
-    console.error(
-      `❌ Error processing document ${fileObj.file.originalname}:`,
-      error
-    );
-
-    // Release the processing lock and trigger next document processing
-    isProcessing = false;
-    setTimeout(() => {
-      processNextDocument();
-    }, 1000);
-  } finally {
-    // Release the processing lock
-    isProcessing = false;
-
-    // Check if more documents are in the queue
-    console.log(
-      `Processing of ${fileObj.file.originalname} complete, checking for more documents...`
-    );
-    processNextDocument();
-  }
-};
-
-// Start processing the next document in the queue if not currently processing
-const processNextDocument = async () => {
-  // First, print queue status for debugging
-  printQueueStatus();
-
-  // If already processing a document, don't start another one
-  if (isProcessing) {
-    console.log("Already processing a document, will check again later");
-    return;
-  }
-
-  // If n8n is processing, wait before processing next document
-  if (n8nProcessing) {
-    console.log(
-      "n8n is currently processing, waiting before starting next document"
-    );
-    setTimeout(processNextDocument, 2000); // Check again after 2 seconds
-    return;
-  }
-
-  // If queue has documents, process the next one
-  if (processingQueue.length > 0) {
-    const nextDoc = processingQueue.shift();
-    console.log(
-      `Starting processing for next document: ${nextDoc.file.originalname}`
-    );
-    await processDocument(nextDoc, nextDoc.applicants);
-  } else {
-    console.log("No more documents in the processing queue");
-  }
-};
-
-// Upload endpoint - modified to handle sequential processing
+// Upload endpoint
 app.post("/upload", upload.array("files", 10), async (req, res) => {
   if (!req.files || req.files.length === 0) {
     return res.status(400).send("No files uploaded.");
   }
 
-  console.log(`Received ${req.files.length} files for processing`);
+  let jobResults = [];
+  let nonBankStatementFiles = [];
+  const bankStatements = [];
 
   // Parse applicant data - handle both singular and plural forms
   let applicants = {};
@@ -900,39 +595,144 @@ app.post("/upload", upload.array("files", 10), async (req, res) => {
   }
 
   try {
-    // Add files to the processing queue
     for (const file of req.files) {
-      processingQueue.push({
-        file,
-        applicants,
-      });
-      console.log(`Added ${file.originalname} to processing queue`);
+      const uploadDir = path.join(__dirname, "uploads");
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+
+      let filePath = path.join(__dirname, "uploads", file.originalname);
+      fs.writeFileSync(filePath, file.buffer);
+
+      const fileExt = path.extname(file.originalname).toLowerCase();
+      if (![".pdf", ".png", ".jpeg", ".jpg", ".tiff"].includes(fileExt)) {
+        console.log(`Converting ${file.originalname} to PDF...`);
+        const convertedPath = await convertToPDF(filePath);
+        if (!convertedPath) {
+          return res.status(400).send({ message: "Unsupported file type." });
+        }
+        filePath = convertedPath;
+      }
+
+      const s3Key = `uploads/${path.basename(filePath)}`;
+      const fileBuffer = fs.readFileSync(filePath);
+
+      // Get document type from filename
+      const docType = getDocumentType(file.originalname);
+      console.log("Document Type:", docType);
+
+      // Upload to S3
+      await s3
+        .upload({
+          Bucket: bucketName,
+          Key: s3Key,
+          Body: fileBuffer,
+          ContentType: "application/pdf",
+        })
+        .promise();
+
+      let textractResults;
+
+      if (docType === "bank_statement") {
+        // Process bank statements
+        const startExtraction = await textract
+          .startDocumentAnalysis({
+            DocumentLocation: { S3Object: { Bucket: bucketName, Name: s3Key } },
+            FeatureTypes: ["TABLES"],
+          })
+          .promise();
+
+        const extractedId = startExtraction.JobId;
+        console.log(`Started Textract job for ${file.originalname}`);
+        textractResults = await getTextractResults(extractedId, true);
+
+        const tableResults = textractResults && textractResults.tableResults;
+        if (!Array.isArray(tableResults)) {
+          console.error(
+            "❌ No valid tableResults found for",
+            file.originalname
+          );
+          textractResults = [];
+        }
+
+        bankStatements.push({
+          file: file.originalname,
+          classified: docType,
+          message: `File processed successfully.`,
+          extractedData: textractResults,
+        });
+
+        // Process bank statements with applicant data
+        const formattedData = [];
+        const applicantKeys = Object.keys(applicants);
+        if (bankStatements.length > 0) {
+          for (let i = 0; i < bankStatements.length; i++) {
+            const applicantKey = applicantKeys[i] || applicantKeys[0];
+            const applicantData = applicants[applicantKey];
+
+            if (applicantData) {
+              formattedData.push({
+                applicant_id: applicantData.Applicant_ID,
+                record_id: applicantData.recordId,
+                full_name: `${applicantData["First Name"]} ${applicantData["Last Name"]}`,
+                extractedData: bankStatements[i].extractedData,
+              });
+            }
+          }
+
+          if (formattedData.length > 0) {
+            await saveDataToDB(formattedData);
+            await classification(applicants);
+          }
+        }
+      } else {
+        // Process non-bank statement files
+        console.log(`Processing non-bank statement file: ${file.originalname}`);
+        const startResponse = await textract
+          .startDocumentAnalysis({
+            DocumentLocation: { S3Object: { Bucket: bucketName, Name: s3Key } },
+            FeatureTypes: ["TABLES", "FORMS"],
+          })
+          .promise();
+
+        const jobId = startResponse.JobId;
+        console.log(`Started Textract job for ${file.originalname}`);
+        textractResults = await getTextractResults(jobId, false);
+
+        nonBankStatementFiles.push({
+          file: file.originalname,
+          classified: docType,
+          message: `File processed successfully.`,
+          extractedData: textractResults || [],
+        });
+      }
+
+      // Clean up: Delete uploaded file to save storage
+      fs.unlinkSync(filePath);
     }
 
-    // Print queue status after adding files
-    printQueueStatus();
+    // Process non-bank statement files with n8n
+    if (nonBankStatementFiles.length > 0) {
+      const applicant_data = {
+        applicants: applicants,
+        extract_data: nonBankStatementFiles,
+      };
 
-    // Start processing the first document immediately if not already processing
-    if (!isProcessing && !n8nProcessing) {
-      processNextDocument();
-    } else {
-      console.log(
-        "A document is already processing. New files have been queued."
-      );
+      await sendToN8N(applicant_data);
     }
 
-    // Respond immediately that files have been queued
+    // Send success response
     res.status(200).send({
-      message: "All files have been queued for processing.",
-      queueStatus: {
-        totalFiles: req.files.length,
-        processing: isProcessing,
-        remainingInQueue: processingQueue.length,
+      message: "All files processed successfully.",
+      results: {
+        jobResults,
+        nonBankStatementFiles,
+        bankStatements,
       },
     });
   } catch (error) {
-    console.error("Error queueing files:", error);
-    res.status(500).send("Error queueing files for processing.");
+    console.error("Error processing files:", error);
+    res.status(500).send("Error processing files.");
   }
 });
 
