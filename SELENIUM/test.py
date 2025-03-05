@@ -72,21 +72,50 @@ def process_applicants(applicant_details, lender_details, applicant_api_url, len
             new_applicants.append(applicant)
 
     # Process new applicants in APITable
+    new_applicant_recordIDs = []
     if new_applicants:
         for applicant_data in new_applicants:
             response_data = post_to_apitable(applicant_api_url, headers, applicant_data, "Applicant Hub")
             if response_data:
                 all_applicant_details.extend(response_data)
+                # Extract and store recordIDs for new applicants
+                for record in response_data:
+                    if 'recordId' in record:
+                        new_applicant_recordIDs.append(record['recordId'])
+        
+        # Process lender data
+        for lender_data in lender_details:
+            if lender_data:
+                post_to_apitable(lender_api_url, headers, lender_data, "Lender Hub")
+
+        application_hub_api = "https://ai-broker.korunaassist.com/fusion/v1/datasheets/dstLr3xUL37tbn2Sud/records"
+        # Prepare the application data
+        application_data = {
+            "records": [
+                {
+                    "fields": {
+                        "Applicants": new_applicant_recordIDs,
+                        "Status": "New"
+                    }
+                }
+            ],
+            "fieldKey": "name"
+        }
+            
+        # Post the application record
+        app_response = requests.post(
+            application_hub_api, 
+            headers=headers, 
+            json=application_data
+        )
+            
+        if app_response.status_code in (200, 201):
+            print("Application record created successfully")
 
     # Add Application_ID to group applicants (for both existing and new ones)
     application_id = time.strftime("%Y%m%d%H%M%S")
     for applicant in all_applicant_details:
         applicant["Application_ID"] = application_id
-
-    # Process lender data
-    for lender_data in lender_details:
-        if lender_data:
-            post_to_apitable(lender_api_url, headers, lender_data, "Lender Hub")
 
     # **Always launch the Tkinter GUI**
     if all_applicant_details:  # Ensure there are applicants to process
@@ -512,6 +541,7 @@ def post_to_apitable(api_url, headers, data, data_type):
             if response_data.get("success") and "records" in response_data["data"] and data_type != "Lender Hub":
                 records = response_data["data"]["records"]
                 processed_records = []
+                
 
                 for record in records:
                     record_id = record.get("recordId")
@@ -526,7 +556,7 @@ def post_to_apitable(api_url, headers, data, data_type):
                             "First Name": first_name,
                             "Last Name": last_name
                         })
-                
+
                 return processed_records  # Return processed records for the current applicant
             elif data_type != "Lender Hub":
                 print(f"No valid records found in {data_type} response.")
