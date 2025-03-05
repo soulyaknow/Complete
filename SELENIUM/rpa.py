@@ -30,12 +30,12 @@ CORS(app)
 DOWNLOAD_PATH = r"C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs"
 
 classified_documents = {
-    "drivers_license": ["license", "id", "driver"],
-    "national_id": ["passport", "national", "citizen", "citizenship", "residency"],
-    "utility_bill": ["bill", "utility"],
-    "bank_statement": ["bank", "statement"],
-    "application_form": ["application", "form"],
-    "payslip": ["payslip", "salary", "payroll"],
+    "bank_statement": ["bank", "statement", "transaction", "account", "banking"],
+    "drivers_license": ["license", "driver", "driving", "licence", "id"],
+    "national_id": ["passport", "national", "id", "identification", "citizen", "citizenship", "residency"],
+    "utility_bill": ["bill", "utility", "electric", "water", "gas", "electricity", "utilities"],
+    "application_form": ["application", "form", "forms"],
+    "payslip": ["payslip", "salary", "wage", "payment", "payroll", "pay"],
     "insurance": ["insurance", "policy", "coverage", "premium"]
 }
 
@@ -316,7 +316,7 @@ class FileSelectorApp:
             # Find applicant details
             applicant = next(
                 (app for app in self.applicant_details 
-                 if f"{app['First Name']} {app['Last Name']}" == applicant_name),
+                if f"{app['First Name']} {app['Last Name']}" == applicant_name),
                 None
             )
             
@@ -327,54 +327,62 @@ class FileSelectorApp:
                     file_path = os.path.join(folder_path, file_name)
                     if os.path.isfile(file_path):
                         metadata = get_file_metadata(file_path)
-                        files_to_upload.append((file_name, open(file_path, "rb"), metadata["mime_type"]))
+                        doc_type = get_document_type(file_name)  # Get document type
+                        files_to_upload.append((file_name, open(file_path, "rb"), metadata["mime_type"], doc_type))
                 
                 if files_to_upload:
                     try:
                         self.root.after(0, self.update_status, f"Processing files for {applicant_name}...")
                         
-                        # Prepare multipart form-data
-                        fields = [
-                            ("files", (file_name, file_obj, mime_type))
-                            for file_name, file_obj, mime_type in files_to_upload
-                        ]
-                        
-                        # Add applicant metadata
-                        fields.append(("applicant", json.dumps({
-                            "Applicant_ID": applicant["Applicant_ID"],
-                            "First Name": applicant["First Name"],
-                            "Last Name": applicant["Last Name"],
-                            "recordId": applicant["recordId"]
-                        })))
-                        
-                        multipart_data = MultipartEncoder(fields=dict(fields))
+                        # Create multipart form-data that properly handles multiple files
+                        multipart_data = self._create_multipart_data(files_to_upload, applicant)
                         
                         # Send to Textract middleware
                         response = requests.post(
-                            "http://localhost:3012/upload",
+                            "https://textractor.korunaassist.com/upload",
                             data=multipart_data,
-                            headers={"Content-Type": multipart_data.content_type}
+                            headers={"Content-Type": multipart_data.content_type},
+                            timeout=30  # Increased timeout for multiple files
                         )
                         
                         if response.status_code in (200, 201):
+                            # Parse the queue status from response
+                            queue_info = ""
+                            try:
+                                resp_data = response.json()
+                                if "queueStatus" in resp_data:
+                                    status = resp_data["queueStatus"]
+                                    queue_info = f" (Files in queue: {status.get('remainingInQueue', 0)})"
+                                    
+                                    # If we have files in queue, show a more detailed message
+                                    if status.get('remainingInQueue', 0) > 0:
+                                        queue_info = f" (Processing {status.get('totalFiles', 0)} files sequentially. {status.get('remainingInQueue', 0)} remaining.)"
+                            except Exception as e:
+                                print(f"Error parsing queue status: {str(e)}")
+                                    
                             # Mark files as processed for this applicant
                             if applicant_name not in self.processed_files:
                                 self.processed_files[applicant_name] = set()
-                            for file_name, _, _ in files_to_upload:
+                                
+                            for file_name, _, _, _ in files_to_upload:
                                 self.processed_files[applicant_name].add(file_name)
                             
                             self.root.after(0, self.update_status,
-                                          f"✅ Successfully processed files for {applicant_name}")
+                                f"✅ Files for {applicant_name} successfully queued and being processed{queue_info}")
+                                
+                            # Show a more informative message about sequential processing
+                            self.root.after(0, self.update_status,
+                                "Files are processed one at a time. You can check log files for progress.")
                         else:
                             self.root.after(0, self.update_status,
-                                          f"❌ Failed to process files for {applicant_name}")
+                                f"❌ Failed to process files for {applicant_name}: {response.text}")
                     
                     except Exception as e:
                         self.root.after(0, self.update_status,
-                                      f"Error processing files for {applicant_name}: {str(e)}")
+                            f"Error processing files for {applicant_name}: {str(e)}")
                     
                     finally:
-                        for _, file_obj, _ in files_to_upload:
+                        for _, file_obj, _, _ in files_to_upload:
                             file_obj.close()
         
         # Clear assignments after processing
@@ -382,6 +390,48 @@ class FileSelectorApp:
         
         # Update UI in main thread
         self.root.after(0, self._after_processing)
+    
+    def _create_multipart_data(self, files_to_upload, applicant):
+        """
+        Create a properly structured multipart form-data that supports multiple files.
+        
+        Args:
+            files_to_upload: List of tuples (file_name, file_obj, mime_type, doc_type)
+            applicant: Applicant information dictionary
+            
+        Returns:
+            MultipartEncoder object configured with all files
+        """
+        # Use requests_toolbelt's MultipartEncoder with a list of tuples
+        # The key difference is we're not converting to a dict, which preserves multiple values for the same key
+        fields = []
+        
+        # Add each file with the same field name 'files'
+        for i, (file_name, file_obj, mime_type, doc_type) in enumerate(files_to_upload):
+            # Keep the field name 'files' the same for all files
+            fields.append(
+                ('files', (file_name, file_obj, mime_type))
+            )
+            # Add document type for each file
+            fields.append(
+                (f'document_type_{file_name}', doc_type)
+            )
+        
+        # Add applicant data
+        fields.append(('applicant', json.dumps({
+            "Applicant_ID": applicant["Applicant_ID"],
+            "First Name": applicant["First Name"],
+            "Last Name": applicant["Last Name"],
+            "recordId": applicant["recordId"]
+        })))
+        
+        # Print debug info
+        print(f"Creating request with {len(files_to_upload)} files")
+        for i, (file_name, _, _, doc_type) in enumerate(files_to_upload):
+            print(f"  File {i+1}: {file_name} (Type: {doc_type})")
+        
+        # Return the MultipartEncoder with all fields
+        return MultipartEncoder(fields=fields)
     
     def _after_processing(self):
         """Update UI after processing completes"""
@@ -393,8 +443,23 @@ class FileSelectorApp:
 def get_file_metadata(file_path):
     """Get file metadata including MIME type"""
     file_name = os.path.basename(file_path)
-    mime_type = mimetypes.guess_type(file_path)[0] or "application/octet-stream"
-    return {"file_name": file_name, "mime_type": mime_type}
+    file_extension = os.path.splitext(file_name)[1]  # Get file extension
+    mime_type = mimetypes.guess_type(file_path)[0] or "application/octet-stream"  # Guess MIME type
+    return {"file_name": file_name, "file_extension": file_extension, "mime_type": mime_type}
+
+def get_document_type(file_name):
+    """Get document type based on file name"""
+    normalized_file_name = re.sub(r'[^a-z0-9]', ' ', file_name.lower())
+    
+    # Check each document type's keywords
+    for doc_type, keywords in classified_documents.items():
+        for keyword in keywords:
+            if keyword in normalized_file_name:
+                print(f"Classified {file_name} as {doc_type}")
+                return doc_type
+    
+    print(f"Could not classify {file_name}, marking as unknown_document")
+    return "unknown_document"
 
 def is_applicant_existing(applicant_data, existing_applicants):
     try:
@@ -489,21 +554,6 @@ def get_existing_applicants(applicant_api_url, headers):
         print(f"Error fetching existing applicants: {str(e)}")
         return []
 
-def get_file_metadata(file_path):
-    file_name = os.path.basename(file_path)
-    file_extension = os.path.splitext(file_name)[1]  # Get file extension
-    mime_type = mimetypes.guess_type(file_path)[0] or "application/octet-stream"  # Guess MIME type
-    return {"file_name": file_name, "file_extension": file_extension, "mime_type": mime_type}
-
-def get_document_type(file_name):
-    normalized_file_name = re.sub(r'[^a-z0-9]', ' ', file_name.lower())
-
-    for doc_type, keywords in classified_documents.items():
-        if any(re.search(r'\b' + re.escape(keyword) + r'\b', normalized_file_name) for keyword in keywords):
-            return doc_type
-
-    return "unknown_document"
-    
 def scroll_down_until_bottom(driver):
     try:
         ticket_content = driver.find_element(By.TAG_NAME, "ticket-content")
@@ -531,7 +581,6 @@ def scroll_down_until_bottom(driver):
 def home():
     print('service is running')
     return "Service is running"
-
 
 @app.route('/process-url', methods=['POST'])
 def process_url():

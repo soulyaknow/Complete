@@ -627,7 +627,7 @@ const classification = async (applicantData) => {
 
       // Only get unprocessed records
       const extractedDataRes = await client.query(
-        `SELECT id, description, debit, credit
+        `SELECT id, text, description, debit, credit
          FROM extracted_data
          WHERE applicant_id = $1
          AND processed = false
