@@ -28,11 +28,6 @@ const pool = new Pool({
   port: process.env.DB_PORT,
 });
 
-// pool
-//   .connect()
-//   .then(() => console.log("✅ Connected to PostgreSQL"))
-//   .catch((err) => console.error("❌ Database connection error:", err));
-
 const connectWithRetry = (retries = 30, delay = 5000) => {
   pool
     .connect()
@@ -361,7 +356,7 @@ const sendToN8N = async (data) => {
   }
 };
 
-const sendToExpenditure = async (classifyData, applicants) => {
+const sendToExpenditure = async (classifyData, applicants, extractedId) => {
   try {
     n8nProcessing = true;
     console.log("Sending data to expenditure endpoint...");
@@ -390,6 +385,7 @@ const sendToExpenditure = async (classifyData, applicants) => {
         recordIdsArray.length > 1
           ? JSON.stringify(recordIdsArray)
           : recordIdsArray[0],
+      extracted_bank_id: extractedId,
     };
 
     // ✅ Send data to n8n
@@ -623,7 +619,7 @@ const saveDataToDB = async (applicantsData) => {
   }
 };
 
-const classification = async (applicantData) => {
+const classification = async (extractedId, applicantData) => {
   const client = await pool.connect();
   try {
     const applicants = applicantData;
@@ -698,7 +694,11 @@ const classification = async (applicantData) => {
         );
 
         // Only send if we have new data
-        await sendToExpenditure(extractedDataRes.rows, applicantIds);
+        await sendToExpenditure(
+          extractedDataRes.rows,
+          applicantIds,
+          extractedId
+        );
       } else {
         console.log(`No new data to process for applicant ${name}`);
 
@@ -820,7 +820,7 @@ const processDocument = async (fileObj, applicants) => {
 
       // Save to DB and prepare for n8n
       await saveDataToDB(formattedData);
-      await classification(applicants);
+      await classification(extractedId, applicants);
     } else {
       // Process non-bank statement files
       console.log(
