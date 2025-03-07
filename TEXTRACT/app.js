@@ -28,10 +28,28 @@ const pool = new Pool({
   port: process.env.DB_PORT,
 });
 
-pool
-  .connect()
-  .then(() => console.log("✅ Connected to PostgreSQL"))
-  .catch((err) => console.error("❌ Database connection error:", err));
+// pool
+//   .connect()
+//   .then(() => console.log("✅ Connected to PostgreSQL"))
+//   .catch((err) => console.error("❌ Database connection error:", err));
+
+const connectWithRetry = (retries = 30, delay = 5000) => {
+  pool
+    .connect()
+    .then(() => console.log("✅ Connected to PostgreSQL"))
+    .catch((err) => {
+      console.error("❌ Database connection error:", err);
+      if (retries > 0) {
+        console.log(
+          `Retrying in ${delay / 1000}s... (${retries} attempts left)`
+        );
+        setTimeout(() => connectWithRetry(retries - 1, delay), delay);
+      } else {
+        console.error("❌ Failed to connect after multiple attempts.");
+        process.exit(1);
+      }
+    });
+};
 
 const textract = new AWS.Textract();
 const s3 = new AWS.S3();
@@ -954,4 +972,5 @@ app.post("/upload", upload.array("files", 10), async (req, res) => {
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
+  connectWithRetry();
 });
