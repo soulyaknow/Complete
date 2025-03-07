@@ -30,7 +30,13 @@ CORS(app)
 DOWNLOAD_PATH = r"C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs"
 
 classified_documents = {
-    "bank_statement": ["bank", "statement", "transaction", "account", "banking"],
+    "bank_statement": [
+        "bank", "statement", "transaction", "account", "banking",
+        "deposit", "withdrawal", "balance", "credit", "debit",
+        "interest", "overdraft", "transfer", "statement period",
+        "monthly statement", "checking", "savings", "financial summary",
+        "ledger", "IBAN", "SWIFT", "sort code"
+    ],
     "drivers_license": ["license", "driver", "driving", "licence", "id"],
     "national_id": ["passport", "national", "id", "identification", "citizen", "citizenship", "residency"],
     "utility_bill": ["bill", "utility", "electric", "water", "gas", "electricity", "utilities"],
@@ -139,6 +145,14 @@ class FileSelectorApp:
         self.root = root
         self.root.title("Document Assignment Tool")
         self.root.geometry("1000x700")
+
+        # Add icon to the window and taskbar
+        try:
+            set_taskbar_icon(self.root, "logo/bot.ico")
+        except Exception as e:
+            # Fallback to the regular method if the new approach fails
+            print(f"Error setting taskbar icon: {str(e)}")
+            self.root.iconbitmap("logo/bot.ico")
         
         # Store applicant details and initialize assignments
         self.applicant_details = applicant_details
@@ -188,13 +202,25 @@ class FileSelectorApp:
         self.status_text = tk.Text(status_frame, height=4, wrap=tk.WORD)
         self.status_text.pack(fill=tk.X, padx=5, pady=5)
         
+        # Add progress bar to status frame
+        self.progress_var = tk.DoubleVar()
+        self.progress_bar = ttk.Progressbar(
+            status_frame, 
+            variable=self.progress_var,
+            maximum=100,
+            mode='determinate'
+        )
+        self.progress_bar.pack(fill=tk.X, padx=5, pady=5)
+        self.progress_label = ttk.Label(status_frame, text="0%")
+        self.progress_label.pack(padx=5)
+        
         # Buttons
         button_frame = ttk.Frame(right_frame)
         button_frame.pack(fill=tk.X, pady=10)
         
         ttk.Button(button_frame, text="Assign Document", command=self.assign_document).pack(fill=tk.X, pady=2)
         ttk.Button(button_frame, text="Remove Assignment", command=self.remove_assignment).pack(fill=tk.X, pady=2)
-        ttk.Button(button_frame, text="Submit to Textract", command=self.submit_to_textract).pack(fill=tk.X, pady=2)
+        ttk.Button(button_frame, text="Submit Document", command=self.submit_to_textract).pack(fill=tk.X, pady=2)
         ttk.Button(button_frame, text="Clear Status", command=self.clear_status).pack(fill=tk.X, pady=2)
         
         # Initialize the interface
@@ -269,10 +295,18 @@ class FileSelectorApp:
         self.status_text.insert(tk.END, f"[{timestamp}] {message}\n")
         self.status_text.see(tk.END)
     
+    def update_progress(self, percentage):
+        """Update progress bar and percentage display"""
+        self.progress_var.set(percentage)
+        self.progress_label.config(text=f"{int(percentage)}%")
+        self.root.update_idletasks()  # Force update of the UI
+    
     def clear_status(self):
         """Clear the status text"""
         self.status_text.delete(1.0, tk.END)
         self.update_status("Status cleared.")
+        # Reset progress bar
+        self.update_progress(0)
     
     def on_applicant_selected(self, event):
         """Handle applicant selection change"""
@@ -337,6 +371,10 @@ class FileSelectorApp:
         if not folder_path:
             self.root.after(0, self.update_status, "Error: Could not determine folder path")
             return
+        
+        # Calculate total files for progress tracking
+        total_files = sum(len(files) for files in self.assignments.values())
+        processed_count = 0
             
         for applicant_name, files in self.assignments.items():
             if not files:
@@ -363,12 +401,16 @@ class FileSelectorApp:
                     try:
                         self.root.after(0, self.update_status, f"Processing files for {applicant_name}...")
                         
+                        # Update progress at the start of processing for this applicant
+                        progress_percentage = (processed_count / total_files) * 100
+                        self.root.after(0, self.update_progress, progress_percentage)
+                        
                         # Create multipart form-data that properly handles multiple files
                         multipart_data = self._create_multipart_data(files_to_upload, applicant)
                         
                         # Send to Textract middleware
                         response = requests.post(
-                            "https://textractor.korunaassist.com/upload",
+                            "http://localhost:3012/upload",
                             data=multipart_data,
                             headers={"Content-Type": multipart_data.content_type},
                             timeout=30  # Increased timeout for multiple files
@@ -385,9 +427,16 @@ class FileSelectorApp:
                                     
                                     # If we have files in queue, show a more detailed message
                                     if status.get('remainingInQueue', 0) > 0:
-                                        queue_info = f" (Processing {status.get('totalFiles', 0)} files sequentially. {status.get('remainingInQueue', 0)} remaining.)"
+                                        queue_info = f" (Processing {status.get('totalFiles', 0)} files sequentially.)"
                             except Exception as e:
                                 print(f"Error parsing queue status: {str(e)}")
+                            
+                            # Increment count for processed files
+                            processed_count += len(files_to_upload)
+                            
+                            # Update progress after processing this applicant's files
+                            progress_percentage = (processed_count / total_files) * 100
+                            self.root.after(0, self.update_progress, progress_percentage)
                                     
                             # Mark files as processed for this applicant
                             if applicant_name not in self.processed_files:
@@ -399,9 +448,6 @@ class FileSelectorApp:
                             self.root.after(0, self.update_status,
                                 f"✅ Files for {applicant_name} successfully queued and being processed{queue_info}")
                                 
-                            # Show a more informative message about sequential processing
-                            self.root.after(0, self.update_status,
-                                "Files are processed one at a time. You can check log files for progress.")
                         else:
                             self.root.after(0, self.update_status,
                                 f"❌ Failed to process files for {applicant_name}: {response.text}")
@@ -413,6 +459,9 @@ class FileSelectorApp:
                     finally:
                         for _, file_obj, _, _ in files_to_upload:
                             file_obj.close()
+        
+        # Set progress to 100% when complete
+        self.root.after(0, self.update_progress, 100)
         
         # Clear assignments after processing
         self.assignments = {}
