@@ -103,8 +103,8 @@ const classifiedDocuments = {
     "sort code",
   ],
   drivers_license: ["license", "driver", "driving", "licence"],
+  passport_id: ["passport"],
   national_id: [
-    "passport",
     "national",
     "id",
     "identification",

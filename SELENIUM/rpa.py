@@ -39,7 +39,8 @@ classified_documents = {
         "ledger", "IBAN", "SWIFT", "sort code"
     ],
     "drivers_license": ["license", "driver", "driving", "licence", "id"],
-    "national_id": ["passport", "national", "id", "identification", "citizen", "citizenship", "residency"],
+    "passport_id": ["passport"],
+    "national_id": ["national", "id", "identification", "citizen", "citizenship", "residency"],
     "utility_bill": ["bill", "utility", "electric", "water", "gas", "electricity", "utilities"],
     "application_form": ["application", "form", "forms"],
     "payslip": ["payslip", "salary", "wage", "payment", "payroll", "pay"],
@@ -457,7 +458,7 @@ class FileSelectorApp:
                         
                         # Send to Textract middleware
                         response = requests.post(
-                            "http://localhost:3012/upload",
+                            "https://textractor.korunaassist.com/upload",
                             data=multipart_data,
                             headers={"Content-Type": multipart_data.content_type},
                             timeout=30  # Increased timeout for multiple files
