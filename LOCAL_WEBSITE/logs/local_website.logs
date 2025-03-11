@@ -1,55 +1,16 @@
 
-C:\Users\Hello World!\Desktop\local_website>call python app.py 
+C:\Users\Hello World!\Desktop\COMPLETE\LOCAL_WEBSITE>call python app.py 
  * Serving Flask app 'app'
  * Debug mode: on
 WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
  * Running on all addresses (0.0.0.0)
  * Running on http://127.0.0.1:2499
- * Running on http://192.168.1.12:2499
+ * Running on http://192.168.1.2:2499
 Press CTRL+C to quit
  * Restarting with stat
  * Debugger is active!
  * Debugger PIN: 122-264-443
-127.0.0.1 - - [11/Dec/2024 14:37:46] "GET / HTTP/1.1" 200 -
-127.0.0.1 - - [11/Dec/2024 14:41:24] "GET / HTTP/1.1" 200 -
-127.0.0.1 - - [11/Dec/2024 15:25:10] "GET / HTTP/1.1" 200 -
-127.0.0.1 - - [11/Dec/2024 16:49:41] "GET / HTTP/1.1" 200 -
-127.0.0.1 - - [11/Dec/2024 17:09:31] "GET / HTTP/1.1" 200 -
-127.0.0.1 - - [11/Dec/2024 17:18:53] "GET / HTTP/1.1" 200 -
-127.0.0.1 - - [11/Dec/2024 17:25:50] "GET / HTTP/1.1" 200 -
-127.0.0.1 - - [11/Dec/2024 19:00:58] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [11/Mar/2025 16:46:14] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [11/Mar/2025 16:57:43] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [11/Mar/2025 16:58:49] "GET / HTTP/1.1" 200 -
 Terminate batch job (Y/N)? 
-C:\Users\Hello World!\Desktop\local_website>call python app.py 
- * Serving Flask app 'app'
- * Debug mode: on
-WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
- * Running on all addresses (0.0.0.0)
- * Running on http://127.0.0.1:2499
- * Running on http://192.168.1.12:2499
-Press CTRL+C to quit
- * Restarting with stat
- * Debugger is active!
- * Debugger PIN: 122-264-443
-Terminate batch job (Y/N)? 
-C:\Users\Hello World!\Desktop\local_website>call python app.py 
- * Serving Flask app 'app'
- * Debug mode: on
-WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
- * Running on all addresses (0.0.0.0)
- * Running on http://127.0.0.1:2499
- * Running on http://192.168.1.12:2499
-Press CTRL+C to quit
- * Restarting with stat
- * Debugger is active!
- * Debugger PIN: 122-264-443
-127.0.0.1 - - [12/Dec/2024 07:13:45] "GET / HTTP/1.1" 200 -
-127.0.0.1 - - [12/Dec/2024 07:13:45] "GET /favicon.ico HTTP/1.1" 404 -
-127.0.0.1 - - [12/Dec/2024 07:26:30] "GET / HTTP/1.1" 200 -
-127.0.0.1 - - [12/Dec/2024 07:31:36] "GET / HTTP/1.1" 200 -
-127.0.0.1 - - [12/Dec/2024 07:33:19] "GET / HTTP/1.1" 200 -
-127.0.0.1 - - [12/Dec/2024 09:29:59] "GET / HTTP/1.1" 200 -
-127.0.0.1 - - [12/Dec/2024 09:31:36] "GET / HTTP/1.1" 200 -
-127.0.0.1 - - [19/Dec/2024 08:44:05] "GET / HTTP/1.1" 200 -
-127.0.0.1 - - [19/Dec/2024 08:44:06] "GET /favicon.ico HTTP/1.1" 404 -
-127.0.0.1 - - [19/Dec/2024 08:52:27] "GET / HTTP/1.1" 200 -
-127.0.0.1 - - [19/Dec/2024 08:52:27] "GET /favicon.ico HTTP/1.1" 404 -

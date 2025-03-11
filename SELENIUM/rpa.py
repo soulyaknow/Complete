@@ -1012,8 +1012,15 @@ def process_url():
         # Step 2: Navigate to provided URL
         driver.get(target_url)
 
+        print("locating the document btn")
+
         # Wait for content to load
         WebDriverWait(driver, 20).until(
+            EC.presence_of_element_located((By.XPATH, "//button[span[text()='Documents']]"))
+        ).click()
+
+        # Wait for content to load
+        WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.TAG_NAME, "ticket-contacts"))
         )
 

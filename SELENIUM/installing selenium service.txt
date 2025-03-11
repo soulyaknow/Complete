@@ -5,11 +5,11 @@ Step 4. Go to cmd run as administrator
 Step 5. paste the path of the selenium folder
 Step 6. Run this command
 
--call nssm.exe install Selenium_Service "%cd%\run_server.bat"
--call nssm.exe set Selenium_Service AppStdout "%cd%\logs\selenium_service.logs"
--call nssm.exe set Selenium_Service AppStderr "%cd%\logs\selenium_service.logs"
--call nssm set Selenium_Service AppRotateFiles 1
--call nssm set Selenium_Service AppRotateOnline 1
--call nssm set Selenium_Service AppRotateSeconds 86400
--call nssm set Selenium_Service AppRotateBytes 1048576
--call sc start Selenium_Service
+-call nssm.exe install Local_Website "%cd%\run_server.bat"
+-call nssm.exe set Local_Website AppStdout "%cd%\logs\local_website.logs"
+-call nssm.exe set Local_Website AppStderr "%cd%\logs\local_website.logs"
+-call nssm set Local_Website AppRotateFiles 1
+-call nssm set Local_Website AppRotateOnline 1
+-call nssm set Local_Website AppRotateSeconds 86400
+-call nssm set Local_Website AppRotateBytes 1048576
+-call sc start Local_Website
