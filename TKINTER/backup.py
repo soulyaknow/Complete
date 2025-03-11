@@ -3,6 +3,7 @@ from tkinter import PhotoImage
 import subprocess
 import psutil
 import os
+import threading
 
 # Initialize the main application
 root = tk.Tk()
@@ -21,20 +22,26 @@ def start_multiple_rpa():
             python_executable = r"C:\Users\Hello World!\AppData\Local\Programs\Python\Python312\pythonw.exe"
             scripts = [
                 r"C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM-RPA\rpa.py",
-                r"C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\rpa.py"
+                r"C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\rpa.py",
+                r"C:\Users\Hello World!\Desktop\COMPLETE\AIBROKER-NOTIF\aitable_notifier.py"
             ]
             
-            # Start both scripts
-            for script_path in scripts:
-                process = subprocess.Popen(
-                    [python_executable, script_path],
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL,
-                    creationflags=subprocess.CREATE_NO_WINDOW  # Hide command window
-                )
-                script_processes.append(process)
+            # Run in a separate thread
+            def run_scripts():
+                for script_path in scripts:
+                    process = subprocess.Popen(
+                        [python_executable, script_path],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                        creationflags=subprocess.CREATE_NO_WINDOW | subprocess.DETACHED_PROCESS
+                    )
+                    script_processes.append(process)
+                    
+                status_label.config(text="Scripts are running...", fg="green")
             
-            status_label.config(text="Scripts are running...", fg="green")
+            # Start the script-running in a new thread
+            threading.Thread(target=run_scripts, daemon=True).start()
+        
         except Exception as e:
             status_label.config(text=f"Error: {e}", fg="red")
     else:

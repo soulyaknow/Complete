@@ -8,6 +8,7 @@ import tkinter as tk
 import sys
 import threading
 import pythoncom
+import ctypes
 from tkinter import ttk, messagebox
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -38,7 +39,8 @@ classified_documents = {
         "ledger", "IBAN", "SWIFT", "sort code"
     ],
     "drivers_license": ["license", "driver", "driving", "licence", "id"],
-    "national_id": ["passport", "national", "id", "identification", "citizen", "citizenship", "residency"],
+    "passport_id": ["passport"],
+    "national_id": ["national", "id", "identification", "citizen", "citizenship", "residency"],
     "utility_bill": ["bill", "utility", "electric", "water", "gas", "electricity", "utilities"],
     "application_form": ["application", "form", "forms"],
     "payslip": ["payslip", "salary", "wage", "payment", "payroll", "pay"],
@@ -78,6 +80,7 @@ def process_applicants(applicant_details, lender_details, applicant_api_url, len
             new_applicants.append(applicant)
 
     # Process new applicants in APITable
+    application_recordIDs = []  
     new_applicant_recordIDs = []
     if new_applicants:
         for applicant_data in new_applicants:
@@ -116,7 +119,15 @@ def process_applicants(applicant_details, lender_details, applicant_api_url, len
         )
             
         if app_response.status_code in (200, 201):
+            response_json = app_response.json()  # Convert response to JSON
             print("Application record created successfully")
+
+            # Extract the recordId
+            if "data" in response_json and "records" in response_json["data"]:
+                application_recordIDs = [record["recordId"] for record in response_json["data"]["records"]]
+                print("Extracted Record IDs:", application_recordIDs)
+            else:
+                print("⚠️ Warning: No records found in response.")
 
     # Add Application_ID to group applicants (for both existing and new ones)
     application_id = time.strftime("%Y%m%d%H%M%S")
@@ -126,7 +137,7 @@ def process_applicants(applicant_details, lender_details, applicant_api_url, len
     # **Always launch the Tkinter GUI**
     if all_applicant_details:  # Ensure there are applicants to process
         root = tk.Tk()
-        app = FileSelectorApp(root, all_applicant_details)
+        app = FileSelectorApp(root, all_applicant_details, application_recordIDs)
 
         if sys.platform.startswith('win'):
             pythoncom.CoInitialize()
@@ -141,21 +152,26 @@ def process_applicants(applicant_details, lender_details, applicant_api_url, len
     }
 
 class FileSelectorApp:
-    def __init__(self, root, applicant_details):
+    def __init__(self, root, applicant_details, application_id):
         self.root = root
         self.root.title("Document Assignment Tool")
         self.root.geometry("1000x700")
 
         # Add icon to the window and taskbar
         try:
-            set_taskbar_icon(self.root, "logo/bot.ico")
+            # Try to set both window and taskbar icon
+            self.set_taskbar_icon(self.root, "logo/bot.ico")
         except Exception as e:
             # Fallback to the regular method if the new approach fails
             print(f"Error setting taskbar icon: {str(e)}")
-            self.root.iconbitmap("logo/bot.ico")
+            try:
+                self.root.iconbitmap("logo/bot.ico")
+            except:
+                print("Could not set icon using iconbitmap either")
         
         # Store applicant details and initialize assignments
         self.applicant_details = applicant_details
+        self.application_id = application_id
         self.assignments = {}  # Dictionary to store file assignments
         self.processed_files = {}  # Dictionary to track processed files per applicant
         
@@ -232,6 +248,37 @@ class FileSelectorApp:
         
         # Update status
         self.update_status("Ready to process documents.")
+    
+    def set_taskbar_icon(self, root, icon_path):
+        """Set both window and taskbar icons for a Tkinter application."""
+        # Set window icon using normal Tkinter approach
+        root.iconbitmap(icon_path)
+        
+        # For Windows taskbar icon
+        if sys.platform.startswith('win'):
+            # Get absolute path to the icon
+            abs_icon_path = os.path.abspath(icon_path)
+            
+            # Windows-specific method to set the taskbar icon
+            myappid = f'mycompany.documentprocessor.{os.path.basename(icon_path)}'  # Arbitrary string
+            ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+            
+            # Set the icon for the process
+            if hasattr(ctypes.windll, 'user32'):
+                # Apply icon for taskbar
+                hwnd = ctypes.windll.user32.GetActiveWindow()
+                if hwnd:
+                    icon_handle = ctypes.windll.user32.LoadImageW(
+                        None, 
+                        abs_icon_path, 
+                        1,  # IMAGE_ICON
+                        0, 
+                        0, 
+                        0x00000010 | 0x00000040  # LR_LOADFROMFILE | LR_DEFAULTSIZE
+                    )
+                    if icon_handle:
+                        ctypes.windll.user32.SendMessageW(hwnd, 0x0080, 0, icon_handle)  # WM_SETICON, ICON_SMALL
+                        ctypes.windll.user32.SendMessageW(hwnd, 0x0080, 1, icon_handle)  # WM_SETICON, ICON_BIG
     
     def get_folder_path(self):
         """Get the folder path for the current applicant"""
@@ -406,11 +453,12 @@ class FileSelectorApp:
                         self.root.after(0, self.update_progress, progress_percentage)
                         
                         # Create multipart form-data that properly handles multiple files
-                        multipart_data = self._create_multipart_data(files_to_upload, applicant)
+                        # Use self.application_id here instead of application_id
+                        multipart_data = self._create_multipart_data(files_to_upload, applicant, self.application_id)
                         
                         # Send to Textract middleware
                         response = requests.post(
-                            "http://localhost:3012/upload",
+                            "https://textractor.korunaassist.com/upload",
                             data=multipart_data,
                             headers={"Content-Type": multipart_data.content_type},
                             timeout=30  # Increased timeout for multiple files
@@ -469,13 +517,14 @@ class FileSelectorApp:
         # Update UI in main thread
         self.root.after(0, self._after_processing)
     
-    def _create_multipart_data(self, files_to_upload, applicant):
+    def _create_multipart_data(self, files_to_upload, applicant, application_id):
         """
         Create a properly structured multipart form-data that supports multiple files.
         
         Args:
             files_to_upload: List of tuples (file_name, file_obj, mime_type, doc_type)
             applicant: Applicant information dictionary
+            application_id: The ID of the application
             
         Returns:
             MultipartEncoder object configured with all files
@@ -500,7 +549,8 @@ class FileSelectorApp:
             "Applicant_ID": applicant["Applicant_ID"],
             "First Name": applicant["First Name"],
             "Last Name": applicant["Last Name"],
-            "recordId": applicant["recordId"]
+            "recordId": applicant["recordId"],
+            "application_recordId": application_id
         })))
         
         # Print debug info
