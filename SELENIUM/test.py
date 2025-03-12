@@ -973,26 +973,37 @@ def get_existing_applicants(applicant_api_url, headers):
         print(f"Error fetching existing applicants: {str(e)}")
         return []
 
-def scroll_down_until_bottom(driver):
+def scroll_down_until_bottom(driver, scroll_element):
+    """
+    Scroll down element until bottom is reached
+    
+    Args:
+        driver: The WebDriver instance
+        scroll_element: The element to scroll (should be scrollable)
+    """
     try:
-        ticket_content = driver.find_element(By.TAG_NAME, "ticket-content")
+        print("Starting to scroll down to load all content...")
         last_scroll_position = -1
-
-        while True:
+        scroll_attempts = 0
+        max_scroll_attempts = 30  # Limit scrolling attempts to prevent infinite loops
+        
+        while scroll_attempts < max_scroll_attempts:
             # Scroll down
-            driver.execute_script("arguments[0].scrollBy(0, 500);", ticket_content)
+            driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight;", scroll_element)
             time.sleep(2)  # Wait for new elements to load
-
+            
             # Get new scroll position
-            current_scroll_position = driver.execute_script("return arguments[0].scrollTop;", ticket_content)
-
+            current_scroll_position = driver.execute_script("return arguments[0].scrollTop;", scroll_element)
+            
             # If the scroll position hasn't changed, we've reached the bottom
             if current_scroll_position == last_scroll_position:
-                print("Reached the bottom of the timeline.")
+                print(f"Reached the bottom of the content after {scroll_attempts} scroll attempts.")
                 break
             else:
                 last_scroll_position = current_scroll_position
-
+                scroll_attempts += 1
+                print(f"Scrolled down (attempt {scroll_attempts}), position: {current_scroll_position}")
+                
     except Exception as e:
         print(f"Error while scrolling down: {e}")
 
@@ -1039,8 +1050,15 @@ def process_url():
         # Step 2: Navigate to provided URL
         driver.get(target_url)
 
+        print("locating the document btn")
+
         # Wait for content to load
         WebDriverWait(driver, 20).until(
+            EC.presence_of_element_located((By.XPATH, "//button[span[text()='Documents']]"))
+        ).click()
+
+        # Wait for content to load
+        WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.TAG_NAME, "ticket-contacts"))
         )
 
@@ -1115,7 +1133,6 @@ def process_url():
 
         time.sleep(5)
 
-
         lender = None
         try:
             lender_element = driver.find_element(By.XPATH, "//span[@ng-bind=\"::Model.currentLender.getName()\"]")
@@ -1182,15 +1199,17 @@ def process_url():
         try:
             # Locate the scrollable container for forcing the scroll
             scrollable_container = driver.find_element(By.CSS_SELECTOR, "md-content[md-scroll-y]")
-
-            # Force the scroll to the bottom to trigger new event loading
-            print("🔽 Scrolling down to trigger loading of new timeline events...")
-            driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight;", scrollable_container)
-            time.sleep(5)  # Wait for new items to load
+            
+            # *** Call the scroll function to load all timeline events before processing them ***
+            print("🔽 Starting to scroll down to load all timeline events...")
+            scroll_down_until_bottom(driver, scrollable_container)
+            
+            # Wait a bit after scrolling to ensure everything loads
+            time.sleep(5)  
 
             # Get all timeline-event elements after scrolling
             timeline_events = driver.find_elements(By.TAG_NAME, "timeline-event")
-            print(f"📋 Found {len(timeline_events)} timeline events.")
+            print(f"📋 Found {len(timeline_events)} timeline events after scrolling.")
 
             # Process the events
             for index, event in enumerate(timeline_events):
@@ -1217,6 +1236,8 @@ def process_url():
             print(f"Error during process: {e}")
 
         # POST the data to the apitable endpoint
+        import requests  # Add this import at the top of your file
+        
         applicant_api_url = "https://ai-broker.korunaassist.com/fusion/v1/datasheets/dst1vag1MekDBbrzoS/records"
         lender_api_url = "https://ai-broker.korunaassist.com/fusion/v1/datasheets/dstGYdtqYD60Hk58UV/records"
         headers = {
