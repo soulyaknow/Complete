@@ -151,21 +151,95 @@ def process_applicants(applicant_details, lender_details, applicant_api_url, len
         "applicant_count": len(all_applicant_details)
     }
 
+class Windows11Theme:
+    """Windows 11 styling for Tkinter"""
+    def __init__(self, root):
+        self.style = ttk.Style(root)
+        self.configure_styles()
+        
+    def configure_styles(self):
+        # Windows 11 colors
+        self.accent_color = "#0067C0"  # Windows 11 accent blue
+        self.bg_color = "#F3F3F3"      # Light background
+        self.text_color = "#202020"    # Dark text
+        self.border_color = "#E1DFDE"  # Light border
+        
+        # Configure the root style
+        self.style.configure('TFrame', background=self.bg_color)
+        self.style.configure('TLabel', background=self.bg_color, foreground=self.text_color)
+        self.style.configure('TLabelframe', background=self.bg_color, foreground=self.text_color)
+        self.style.configure('TLabelframe.Label', background=self.bg_color, foreground=self.text_color, font=('Segoe UI', 9, 'bold'))
+        
+        # Configure button styles (Windows 11 has rounded buttons with subtle shadows)
+        self.style.configure('TButton', 
+                             background='white',
+                             foreground=self.text_color,
+                             font=('Segoe UI', 9),
+                             relief=tk.FLAT,
+                             borderwidth=1)
+        
+        # Accent button style (with white text)
+        self.style.configure('Accent.TButton',
+                             background=self.accent_color,
+                             foreground='white',
+                             font=('Segoe UI', 9, 'bold'),
+                             relief=tk.FLAT,
+                             borderwidth=0)
+        
+        # Accent button style (with black text)
+        self.style.configure('AccentBlack.TButton',
+                             background=self.accent_color,
+                             foreground='black',
+                             font=('Segoe UI', 9, 'bold'),
+                             relief=tk.FLAT,
+                             borderwidth=0)
+        
+        # Hover styles
+        self.style.map('TButton',
+                      background=[('active', '#F5F5F5'), ('pressed', '#E1E1E1')],
+                      relief=[('pressed', 'flat')])
+        
+        self.style.map('Accent.TButton',
+                      background=[('active', '#005FB3'), ('pressed', '#004E99')],
+                      foreground=[('active', 'white'), ('pressed', 'white')])
+                      
+        self.style.map('AccentBlack.TButton',
+                      background=[('active', '#005FB3'), ('pressed', '#004E99')],
+                      foreground=[('active', 'black'), ('pressed', 'black')])
+        
+        # Configure combobox style
+        self.style.configure('TCombobox', 
+                            background='white',
+                            fieldbackground='white',
+                            foreground=self.text_color,
+                            arrowcolor=self.text_color)
+        
+        # Configure progressbar style
+        self.style.configure('TProgressbar', 
+                            background=self.accent_color,
+                            troughcolor='#E5E7EB',
+                            borderwidth=0,
+                            thickness=6)
+
 class FileSelectorApp:
     def __init__(self, root, applicant_details, application_id):
         self.root = root
         self.root.title("Document Assignment Tool")
         self.root.geometry("1000x700")
-
+        self.root.configure(bg="#F3F3F3")  # Windows 11 background color
+        
+        # Apply Windows 11 theme
+        self.theme = Windows11Theme(root)
+        
         # Add icon to the window and taskbar
         try:
             # Try to set both window and taskbar icon
-            self.set_taskbar_icon(self.root, "logo/bot.ico")
+            self.set_taskbar_icon(self.root, "logo/ka.ico")
         except Exception as e:
             # Fallback to the regular method if the new approach fails
             print(f"Error setting taskbar icon: {str(e)}")
             try:
-                self.root.iconbitmap("logo/bot.ico")
+                self.root.iconbitmap("logo/ka.ico")
             except:
                 print("Could not set icon using iconbitmap either")
         
@@ -178,66 +252,251 @@ class FileSelectorApp:
         # Create main container with grid
         self.root.grid_columnconfigure(0, weight=1)
         self.root.grid_columnconfigure(1, weight=1)
+        self.root.grid_rowconfigure(0, weight=1)
         
         # Left Frame: Available Files
-        left_frame = ttk.LabelFrame(self.root, text="Available Documents")
-        left_frame.grid(row=0, column=0, padx=10, pady=5, sticky="nsew")
+        left_frame = ttk.LabelFrame(self.root, text=" Available Documents ", padding=(10, 5))
+        left_frame.grid(row=0, column=0, padx=16, pady=16, sticky="nsew")
+        left_frame.grid_rowconfigure(1, weight=1)  # Ensure the file container expands
+        left_frame.grid_columnconfigure(0, weight=1)
         
-        # File listbox with scrollbar
-        self.file_listbox = tk.Listbox(left_frame, selectmode=tk.SINGLE)
-        file_scrollbar = ttk.Scrollbar(left_frame, orient=tk.VERTICAL, command=self.file_listbox.yview)
+        # Add heading with icon (simulated with a label)
+        doc_heading = ttk.Frame(left_frame)
+        doc_heading.grid(row=0, column=0, sticky="ew", pady=(0, 8))
+        
+        doc_heading_icon = ttk.Label(doc_heading, text="📄", font=("Segoe UI", 11))
+        doc_heading_icon.pack(side=tk.LEFT, padx=(0, 5))
+        
+        doc_heading_text = ttk.Label(doc_heading, text="Select a document to assign", font=("Segoe UI", 10))
+        doc_heading_text.pack(side=tk.LEFT)
+        
+        # File listbox with custom styling
+        file_container = ttk.Frame(left_frame)
+        file_container.grid(row=1, column=0, sticky="nsew")
+        file_container.grid_rowconfigure(0, weight=1)
+        file_container.grid_columnconfigure(0, weight=1)
+        
+        # Create a frame for the listbox with a border
+        listbox_frame = tk.Frame(file_container, bg="white", highlightbackground="#E1DFDE", 
+                                highlightthickness=1, bd=0)
+        listbox_frame.grid(row=0, column=0, sticky="nsew")
+        listbox_frame.grid_rowconfigure(0, weight=1)
+        listbox_frame.grid_columnconfigure(0, weight=1)
+        
+        # File listbox with custom styling
+        self.file_listbox = tk.Listbox(listbox_frame, 
+                                     selectmode=tk.SINGLE,
+                                     bg="white",
+                                     fg="#202020",
+                                     font=("Segoe UI", 9),
+                                     bd=0,
+                                     highlightthickness=0,
+                                     activestyle="none",
+                                     selectbackground="#CCE4F7",
+                                     selectforeground="#202020")
+        
+        file_scrollbar = ttk.Scrollbar(listbox_frame, orient=tk.VERTICAL, command=self.file_listbox.yview)
         self.file_listbox.configure(yscrollcommand=file_scrollbar.set)
         
-        self.file_listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        file_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.file_listbox.grid(row=0, column=0, sticky="nsew")
+        file_scrollbar.grid(row=0, column=1, sticky="ns")
         
         # Right Frame: Controls and Assigned Files
-        right_frame = ttk.Frame(self.root)
-        right_frame.grid(row=0, column=1, padx=10, pady=5, sticky="nsew")
+        right_frame = ttk.Frame(self.root, padding=(0, 0))
+        right_frame.grid(row=0, column=1, padx=16, pady=16, sticky="nsew")
+        right_frame.grid_columnconfigure(0, weight=1)
         
-        # Applicant selection
-        ttk.Label(right_frame, text="Select Applicant:").pack(pady=5)
+        # Applicant selection panel
+        applicant_frame = ttk.LabelFrame(right_frame, text=" Applicant Selection ", padding=(10, 5))
+        applicant_frame.grid(row=0, column=0, sticky="ew", pady=(0, 16))
+        
+        # Add heading with icon
+        app_heading = ttk.Frame(applicant_frame)
+        app_heading.pack(fill=tk.X, pady=(0, 8))
+        
+        app_heading_icon = ttk.Label(app_heading, text="👤", font=("Segoe UI", 11))
+        app_heading_icon.pack(side=tk.LEFT, padx=(0, 5))
+        
+        app_heading_text = ttk.Label(app_heading, text="Select an applicant", font=("Segoe UI", 10))
+        app_heading_text.pack(side=tk.LEFT)
+        
+        # Applicant dropdown with Windows 11 styling
+        dropdown_frame = ttk.Frame(applicant_frame)
+        dropdown_frame.pack(fill=tk.X, pady=5)
+        
         self.applicant_var = tk.StringVar()
-        self.applicant_dropdown = ttk.Combobox(right_frame, textvariable=self.applicant_var)
-        self.applicant_dropdown.pack(pady=5)
+        self.applicant_dropdown = ttk.Combobox(dropdown_frame, 
+                                             textvariable=self.applicant_var,
+                                             font=("Segoe UI", 9),
+                                             state="readonly",
+                                             height=5)
+        self.applicant_dropdown.pack(fill=tk.X)
         
         # Assigned files frame
-        assigned_frame = ttk.LabelFrame(right_frame, text="Assigned Documents")
-        assigned_frame.pack(fill=tk.BOTH, expand=True, pady=10)
+        assigned_frame = ttk.LabelFrame(right_frame, text=" Assigned Documents ", padding=(10, 5))
+        assigned_frame.grid(row=1, column=0, sticky="nsew", pady=(0, 16))
+        assigned_frame.grid_rowconfigure(1, weight=1)  # Ensure the assigned container expands
+        assigned_frame.grid_columnconfigure(0, weight=1)
         
-        self.assigned_listbox = tk.Listbox(assigned_frame)
-        assigned_scrollbar = ttk.Scrollbar(assigned_frame, orient=tk.VERTICAL, command=self.assigned_listbox.yview)
+        # Add heading with icon
+        assigned_heading = ttk.Frame(assigned_frame)
+        assigned_heading.grid(row=0, column=0, sticky="ew", pady=(0, 8))
+        
+        assigned_heading_icon = ttk.Label(assigned_heading, text="📋", font=("Segoe UI", 11))
+        assigned_heading_icon.pack(side=tk.LEFT, padx=(0, 5))
+        
+        assigned_heading_text = ttk.Label(assigned_heading, text="Documents assigned to this applicant", font=("Segoe UI", 10))
+        assigned_heading_text.pack(side=tk.LEFT)
+        
+        # Assigned listbox with custom styling
+        assigned_container = ttk.Frame(assigned_frame)
+        assigned_container.grid(row=1, column=0, sticky="nsew")
+        assigned_container.grid_rowconfigure(0, weight=1)
+        assigned_container.grid_columnconfigure(0, weight=1)
+        
+        # Create a frame for the listbox with a border
+        assigned_listbox_frame = tk.Frame(assigned_container, bg="white", highlightbackground="#E1DFDE", 
+                                        highlightthickness=1, bd=0)
+        assigned_listbox_frame.grid(row=0, column=0, sticky="nsew")
+        assigned_listbox_frame.grid_rowconfigure(0, weight=1)
+        assigned_listbox_frame.grid_columnconfigure(0, weight=1)
+        
+        self.assigned_listbox = tk.Listbox(assigned_listbox_frame,
+                                         selectmode=tk.SINGLE,
+                                         bg="white",
+                                         fg="#202020",
+                                         font=("Segoe UI", 9),
+                                         bd=0,
+                                         highlightthickness=0,
+                                         activestyle="none",
+                                         selectbackground="#CCE4F7",
+                                         selectforeground="#202020")
+        
+        assigned_scrollbar = ttk.Scrollbar(assigned_listbox_frame, orient=tk.VERTICAL, command=self.assigned_listbox.yview)
         self.assigned_listbox.configure(yscrollcommand=assigned_scrollbar.set)
         
-        self.assigned_listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        assigned_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.assigned_listbox.grid(row=0, column=0, sticky="nsew")
+        assigned_scrollbar.grid(row=0, column=1, sticky="ns")
         
         # Status frame
-        status_frame = ttk.LabelFrame(right_frame, text="Processing Status")
-        status_frame.pack(fill=tk.X, pady=10)
-        self.status_text = tk.Text(status_frame, height=4, wrap=tk.WORD)
-        self.status_text.pack(fill=tk.X, padx=5, pady=5)
+        status_frame = ttk.LabelFrame(right_frame, text=" Processing Status ", padding=(10, 5))
+        status_frame.grid(row=2, column=0, sticky="ew")
+        
+        # Add heading with icon
+        status_heading = ttk.Frame(status_frame)
+        status_heading.pack(fill=tk.X, pady=(0, 8))
+        
+        status_heading_icon = ttk.Label(status_heading, text="🔄", font=("Segoe UI", 11))
+        status_heading_icon.pack(side=tk.LEFT, padx=(0, 5))
+        
+        status_heading_text = ttk.Label(status_heading, text="Document processing status", font=("Segoe UI", 10))
+        status_heading_text.pack(side=tk.LEFT)
+        
+        # Status text with Windows 11 styling
+        status_text_frame = tk.Frame(status_frame, bg="white", highlightbackground="#E1DFDE", 
+                                    highlightthickness=1, bd=0)
+        status_text_frame.pack(fill=tk.X, pady=(0, 10))
+        
+        self.status_text = tk.Text(status_text_frame, 
+                                 height=4, 
+                                 wrap=tk.WORD,
+                                 bg="white",
+                                 fg="#202020",
+                                 font=("Segoe UI", 9),
+                                 bd=0,
+                                 highlightthickness=0,
+                                 padx=8,
+                                 pady=8)
+        self.status_text.pack(side=tk.LEFT, fill=tk.X, expand=True)
+        
+        status_text_scrollbar = ttk.Scrollbar(status_text_frame, orient=tk.VERTICAL, command=self.status_text.yview)
+        self.status_text.configure(yscrollcommand=status_text_scrollbar.set)
+        status_text_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         
         # Add progress bar to status frame
+        progress_frame = ttk.Frame(status_frame)
+        progress_frame.pack(fill=tk.X, pady=(0, 5))
+        
+        progress_label = ttk.Label(progress_frame, text="Progress:")
+        progress_label.pack(side=tk.LEFT, padx=(0, 5))
+        
         self.progress_var = tk.DoubleVar()
         self.progress_bar = ttk.Progressbar(
-            status_frame, 
+            progress_frame, 
             variable=self.progress_var,
             maximum=100,
-            mode='determinate'
+            mode='determinate',
+            length=100
         )
-        self.progress_bar.pack(fill=tk.X, padx=5, pady=5)
-        self.progress_label = ttk.Label(status_frame, text="0%")
-        self.progress_label.pack(padx=5)
+        self.progress_bar.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 5))
         
-        # Buttons
-        button_frame = ttk.Frame(right_frame)
-        button_frame.pack(fill=tk.X, pady=10)
+        self.progress_label = ttk.Label(progress_frame, text="0%", width=5)
+        self.progress_label.pack(side=tk.RIGHT)
         
-        ttk.Button(button_frame, text="Assign Document", command=self.assign_document).pack(fill=tk.X, pady=2)
-        ttk.Button(button_frame, text="Remove Assignment", command=self.remove_assignment).pack(fill=tk.X, pady=2)
-        ttk.Button(button_frame, text="Submit Document", command=self.submit_to_textract).pack(fill=tk.X, pady=2)
-        ttk.Button(button_frame, text="Clear Status", command=self.clear_status).pack(fill=tk.X, pady=2)
+        # Action button frame (bottom of the window)
+        button_frame = ttk.Frame(right_frame, padding=(0, 10))
+        button_frame.grid(row=3, column=0, sticky="ew", pady=(10, 0))
+        
+        button_grid = ttk.Frame(button_frame)
+        button_grid.pack(fill=tk.X)
+        button_grid.grid_columnconfigure(0, weight=1)
+        button_grid.grid_columnconfigure(1, weight=1)
+        
+        # Create assign button with icon
+        assign_button_frame = ttk.Frame(button_grid)
+        assign_button_frame.grid(row=0, column=0, sticky="ew", padx=(0, 5), pady=5)
+        assign_button_frame.grid_columnconfigure(0, weight=1)
+        
+        self.assign_button = ttk.Button(
+            assign_button_frame, 
+            text="Assign Document",
+            command=self.assign_document,
+            style="TButton",
+            width=20
+        )
+        self.assign_button.grid(row=0, column=0, sticky="ew")
+        
+        # Create remove button with icon
+        remove_button_frame = ttk.Frame(button_grid)
+        remove_button_frame.grid(row=0, column=1, sticky="ew", padx=(5, 0), pady=5)
+        remove_button_frame.grid_columnconfigure(0, weight=1)
+        
+        self.remove_button = ttk.Button(
+            remove_button_frame, 
+            text="Remove Assignment",
+            command=self.remove_assignment,
+            style="TButton",
+            width=20
+        )
+        self.remove_button.grid(row=0, column=0, sticky="ew")
+        
+        # Create submit button with accent style and BLACK text
+        submit_button_frame = ttk.Frame(button_grid)
+        submit_button_frame.grid(row=1, column=0, columnspan=2, sticky="ew", pady=5)
+        submit_button_frame.grid_columnconfigure(0, weight=1)
+        
+        self.submit_button = ttk.Button(
+            submit_button_frame, 
+            text="Submit Documents",
+            command=self.submit_to_textract,
+            style="AccentBlack.TButton",  # Changed to AccentBlack.TButton for black text
+            width=20
+        )
+        self.submit_button.grid(row=0, column=0, sticky="ew")
+        
+        # Create clear button
+        clear_button_frame = ttk.Frame(button_grid)
+        clear_button_frame.grid(row=2, column=0, columnspan=2, sticky="ew", pady=5)
+        clear_button_frame.grid_columnconfigure(0, weight=1)
+        
+        self.clear_button = ttk.Button(
+            clear_button_frame, 
+            text="Clear Status",
+            command=self.clear_status,
+            style="TButton",
+            width=20
+        )
+        self.clear_button.grid(row=0, column=0, sticky="ew")
         
         # Initialize the interface
         self.load_applicants()
@@ -251,6 +510,10 @@ class FileSelectorApp:
     
     def set_taskbar_icon(self, root, icon_path):
         """Set both window and taskbar icons for a Tkinter application."""
+        import os
+        import sys
+        import ctypes
+        
         # Set window icon using normal Tkinter approach
         root.iconbitmap(icon_path)
         
@@ -749,8 +1012,15 @@ def process_url():
         # Step 2: Navigate to provided URL
         driver.get(target_url)
 
+        print("locating the document btn")
+
         # Wait for content to load
         WebDriverWait(driver, 20).until(
+            EC.presence_of_element_located((By.XPATH, "//button[span[text()='Documents']]"))
+        ).click()
+
+        # Wait for content to load
+        WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.TAG_NAME, "ticket-contacts"))
         )
 

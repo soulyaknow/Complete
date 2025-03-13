@@ -526,14 +526,6 @@ class FileSelectorApp:
                     return
                 except Exception as e:
                     print(f"❌ Error setting icon from {icon_path}: {str(e)}")
-        
-        # If we got here, no icons were found
-        print("⚠️ No icon files found in any of the searched locations.")
-        print("Make sure to place ka.ico in one of the following directories:")
-        print("  - ./logo/")
-        print("  - ./ (root directory)")
-        print("  - ./assets/")
-        print("  - ./icons/")
     
     def set_taskbar_icon(self, root, icon_path):
         """Set both window and taskbar icons for a Tkinter application."""
@@ -808,19 +800,6 @@ class FileSelectorApp:
         self.root.after(0, self._after_processing)
     
     def _create_multipart_data(self, files_to_upload, applicant, application_id):
-        """
-        Create a properly structured multipart form-data that supports multiple files.
-        
-        Args:
-            files_to_upload: List of tuples (file_name, file_obj, mime_type, doc_type)
-            applicant: Applicant information dictionary
-            application_id: The ID of the application
-            
-        Returns:
-            MultipartEncoder object configured with all files
-        """
-        # Use requests_toolbelt's MultipartEncoder with a list of tuples
-        # The key difference is we're not converting to a dict, which preserves multiple values for the same key
         fields = []
         
         # Add each file with the same field name 'files'
@@ -931,6 +910,7 @@ def post_to_apitable(api_url, headers, data, data_type):
                 records = response_data["data"]["records"]
                 processed_records = []
                 
+                print(records)
 
                 for record in records:
                     record_id = record.get("recordId")
@@ -974,38 +954,59 @@ def get_existing_applicants(applicant_api_url, headers):
         return []
 
 def scroll_down_until_bottom(driver, scroll_element):
-    """
-    Scroll down element until bottom is reached
-    
-    Args:
-        driver: The WebDriver instance
-        scroll_element: The element to scroll (should be scrollable)
-    """
     try:
         print("Starting to scroll down to load all content...")
         last_scroll_position = -1
         scroll_attempts = 0
-        max_scroll_attempts = 30  # Limit scrolling attempts to prevent infinite loops
+        max_scroll_attempts = 30
+        no_change_count = 0
         
         while scroll_attempts < max_scroll_attempts:
-            # Scroll down
-            driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight;", scroll_element)
+            # Try different scroll approaches
+            try:
+                # Approach 1: Using execute_script on the element
+                driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight;", scroll_element)
+            except:
+                try:
+                    # Approach 2: Using JavaScript to scroll the window
+                    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                except:
+                    # Approach 3: Using ActionChains
+                    ActionChains(driver).move_to_element(scroll_element).send_keys(Keys.END).perform()
+            
             time.sleep(2)  # Wait for new elements to load
             
             # Get new scroll position
-            current_scroll_position = driver.execute_script("return arguments[0].scrollTop;", scroll_element)
+            try:
+                current_scroll_position = driver.execute_script("return arguments[0].scrollTop;", scroll_element)
+            except:
+                current_scroll_position = driver.execute_script("return window.pageYOffset;")
             
-            # If the scroll position hasn't changed, we've reached the bottom
+            print(f"Scrolled down (attempt {scroll_attempts}), position: {current_scroll_position}")
+            
+            # If the scroll position hasn't changed
             if current_scroll_position == last_scroll_position:
-                print(f"Reached the bottom of the content after {scroll_attempts} scroll attempts.")
-                break
+                no_change_count += 1
+                # Break if no change for 3 consecutive attempts
+                if no_change_count >= 3:
+                    print(f"Reached the bottom of the content after {scroll_attempts} scroll attempts.")
+                    break
             else:
-                last_scroll_position = current_scroll_position
-                scroll_attempts += 1
-                print(f"Scrolled down (attempt {scroll_attempts}), position: {current_scroll_position}")
+                no_change_count = 0
+                
+            last_scroll_position = current_scroll_position
+            scroll_attempts += 1
                 
     except Exception as e:
         print(f"Error while scrolling down: {e}")
+        # Try a simpler approach as fallback
+        try:
+            for _ in range(10):
+                driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                time.sleep(1)
+            print("Completed fallback scrolling")
+        except Exception as e2:
+            print(f"Fallback scrolling also failed: {e2}")
 
 @app.route('/', methods=['GET'])
 def home():
@@ -1057,6 +1058,8 @@ def process_url():
             EC.presence_of_element_located((By.XPATH, "//button[span[text()='Documents']]"))
         ).click()
 
+        time.sleep(5)
+
         # Wait for content to load
         WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.TAG_NAME, "ticket-contacts"))
@@ -1074,17 +1077,23 @@ def process_url():
             try:
                 # Extract name
                 name = contact.find_element(By.XPATH, ".//strong[@ng-bind='::client.getName()']").text
+                name_parts = name.strip().split()
+                first_name = name_parts[0]  # First word
+                last_name = name_parts[-1]  # Last word
+                middle_name = " ".join(name_parts[1:-1]) if len(name_parts) > 2 else ""
+                folder_name = f"{first_name} {last_name}"  # Use only First & Last Name
+
                 if name and name not in seen_names:
                     seen_names.add(name)
 
                     # Create or use the folder for the first applicant
                     if not folder_created:
-                        applicant_folder = os.path.join(DOWNLOAD_PATH, name)
+                        applicant_folder = os.path.join(DOWNLOAD_PATH, folder_name)  # FIXED HERE
 
                         # Check if the folder exists
                         if not os.path.exists(applicant_folder):
                             os.makedirs(applicant_folder)
-                            print(f"Folder created for the first applicant: {name}")
+                            print(f"Folder created for the first applicant: {folder_name}")
                         else:
                             print(f"Using existing folder: {applicant_folder}")
 
@@ -1156,8 +1165,7 @@ def process_url():
                 loan_security_addresses = ", ".join(addresses)
         except Exception as e:
             print(f"Error getting addresses: {str(e)}")
-
-        
+   
         deal_value = None
         try:
             deal_value_element = driver.find_element(By.XPATH, 
@@ -1170,7 +1178,6 @@ def process_url():
                 deal_value = float(deal_value.replace("$", "").replace(",", ""))
         except Exception as e:
             print(f"Error getting deal value data: {str(e)}")
-
 
         total_loan_amount = None
         try:
@@ -1197,12 +1204,30 @@ def process_url():
             print(f"Error getting deal owner data: {str(e)}")
         
         try:
-            # Locate the scrollable container for forcing the scroll
-            scrollable_container = driver.find_element(By.CSS_SELECTOR, "md-content[md-scroll-y]")
-            
-            # *** Call the scroll function to load all timeline events before processing them ***
-            print("🔽 Starting to scroll down to load all timeline events...")
-            scroll_down_until_bottom(driver, scrollable_container)
+            try:
+                # Locate the scrollable container for forcing the scroll
+                print("Attempting to locate scrollable container...")
+                scrollable_container = driver.find_element(By.CSS_SELECTOR, "md-content[md-scroll-y]")
+                print(f"Found scrollable container: {scrollable_container}")
+                
+                # Switch focus to browser window
+                driver.switch_to.window(driver.current_window_handle)
+                
+                # Call the scroll function
+                print("🔽 Starting to scroll down to load all timeline events...")
+                scroll_down_until_bottom(driver, scrollable_container)
+                
+            except Exception as e:
+                print(f"ERROR DURING SCROLLING: {e}")
+                # Try fallback approach
+                try:
+                    print("Attempting fallback scrolling approach...")
+                    for _ in range(15):
+                        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                        time.sleep(1)
+                    print("Completed fallback scrolling")
+                except Exception as e2:
+                    print(f"Fallback scrolling also failed: {e2}")
             
             # Wait a bit after scrolling to ensure everything loads
             time.sleep(5)  
@@ -1212,32 +1237,36 @@ def process_url():
             print(f"📋 Found {len(timeline_events)} timeline events after scrolling.")
 
             # Process the events
+            download_count = 0
             for index, event in enumerate(timeline_events):
                 try:
-                    # Check if the element contains <span>Labels</span>
                     labels_span = event.find_elements(By.XPATH, ".//span[text()='Labels']")
                     if labels_span:
-                        print(f"🎯 Found labels in timeline-event #{index + 1}, processing...")
+                        print(f"🎯 Found labels in timeline-event #{index + 1}, checking for download button...")
 
-                        # Locate and click the download button
-                        download_button = event.find_element(By.XPATH, ".//md-icon[text()='cloud_download']")
-                        if download_button:
-                            ActionChains(driver).move_to_element(download_button).perform()
-                            download_button.click()
-                            print(f"✅ Download button clicked for timeline-event #{index + 1}.")
-                            time.sleep(2)  # Optional: Wait between downloads
+                        # Locate download button
+                        download_buttons = event.find_elements(By.XPATH, ".//md-icon[text()='cloud_download']")
+                        if download_buttons:
+                            for button in download_buttons:
+                                ActionChains(driver).move_to_element(button).perform()
+                                button.click()
+                                download_count += 1
+                                print(f"✅ Clicked download for timeline-event #{index + 1}. Total triggered: {download_count}")
+                                time.sleep(1)  # Short delay to avoid missing clicks
 
                 except Exception as e:
                     print(f"⚠️ Error processing timeline-event #{index + 1}: {e}")
 
-            print("✅ All events processed. Stopping process.")
-            
+            # Ensure all download buttons were clicked
+            if download_count == 0:
+                print("⚠️ No downloads triggered. Check the page structure!")
+            else:
+                print(f"✅ Finished triggering {download_count} downloads.")
+
         except Exception as e:
             print(f"Error during process: {e}")
 
         # POST the data to the apitable endpoint
-        import requests  # Add this import at the top of your file
-        
         applicant_api_url = "https://ai-broker.korunaassist.com/fusion/v1/datasheets/dst1vag1MekDBbrzoS/records"
         lender_api_url = "https://ai-broker.korunaassist.com/fusion/v1/datasheets/dstGYdtqYD60Hk58UV/records"
         headers = {
@@ -1258,6 +1287,7 @@ def process_url():
                             "Application Hub": None,
                             "Title": None,
                             "First Name": applicant["applicant_name"].split()[0] if applicant.get("applicant_name") else None,
+                            "Middle Name": applicant["applicant_name"].split()[1] if len(applicant["applicant_name"].split()) > 2 else None,
                             "Last Name": applicant["applicant_name"].split()[-1] if applicant.get("applicant_name") else None,
                             "Date of Birth": None,
                             "Residential Address": loan_security_addresses if loan_security_addresses else None,

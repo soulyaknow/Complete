@@ -456,7 +456,7 @@ class AIBrokerApp:
                 python_executable = r"C:\Users\Hello World!\AppData\Local\Programs\Python\Python312\pythonw.exe"
                 scripts = [
                     r"C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM-RPA\rpa.py",
-                    r"C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\rpa.py",
+                    r"C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\test.py",
                     r"C:\Users\Hello World!\Desktop\COMPLETE\AIBROKER-NOTIF\aitable_notifier.py"
                 ]
                 
