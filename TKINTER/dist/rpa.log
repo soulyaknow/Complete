@@ -1,0 +1,67 @@
+2025-03-17 08:01:07,243 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-03-17 08:01:07,243 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-17 08:01:07,246 - INFO -  * Restarting with stat
+2025-03-17 08:01:08,873 - WARNING -  * Debugger is active!
+2025-03-17 08:01:08,882 - INFO -  * Debugger PIN: 361-797-060
+2025-03-17 08:01:19,115 - INFO - 127.0.0.1 - - [17/Mar/2025 08:01:19] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-03-17 08:01:19,379 - INFO - ====== WebDriver manager ======
+2025-03-17 08:01:22,990 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-17 08:01:23,310 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-17 08:01:23,611 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.88\chromedriver-win32/chromedriver.exe] found in cache
+2025-03-17 08:01:31,735 - INFO - Navigating to login page...
+2025-03-17 08:01:31,760 - INFO - Login page loaded. Waiting for user authentication...
+2025-03-17 08:02:01,784 - INFO - Login successful
+2025-03-17 08:02:05,047 - INFO - Navigating to target page...
+2025-03-17 08:02:07,256 - INFO - Clicked Documents button
+2025-03-17 08:02:17,352 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Alessandro Stagno
+2025-03-17 08:02:22,574 - INFO - Starting document processing...
+2025-03-17 08:02:22,590 - INFO - Starting enhanced scroll operation...
+2025-03-17 08:02:24,603 - INFO - Scroll attempt 1: Height = 889
+2025-03-17 08:02:26,614 - INFO - Scroll attempt 2: Height = 889
+2025-03-17 08:02:28,626 - INFO - Scroll attempt 3: Height = 889
+2025-03-17 08:02:30,637 - INFO - Reached bottom after 4 attempts
+2025-03-17 08:02:33,639 - INFO - Starting timeline event processing...
+2025-03-17 08:02:33,660 - INFO - Found 3 timeline events
+2025-03-17 08:02:36,778 - INFO - Processing timeline event #3
+2025-03-17 08:02:37,863 - INFO - Successfully clicked download button #1
+2025-03-17 08:02:55,866 - INFO - Completed processing with 1 downloads
+2025-03-17 08:02:59,374 - INFO - 127.0.0.1 - - [17/Mar/2025 08:02:59] "POST /process-url HTTP/1.1" 200 -
+2025-03-17 08:04:03,409 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-03-17 08:04:03,409 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-17 08:04:03,411 - INFO -  * Restarting with stat
+2025-03-17 08:04:05,199 - WARNING -  * Debugger is active!
+2025-03-17 08:04:05,208 - INFO -  * Debugger PIN: 361-797-060
+2025-03-17 08:04:06,300 - INFO - 127.0.0.1 - - [17/Mar/2025 08:04:06] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-03-17 08:04:06,562 - INFO - ====== WebDriver manager ======
+2025-03-17 08:04:09,185 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-17 08:04:09,493 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-17 08:04:09,752 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.88\chromedriver-win32/chromedriver.exe] found in cache
+2025-03-17 08:04:17,116 - INFO - Navigating to login page...
+2025-03-17 08:04:17,149 - INFO - Login page loaded. Waiting for user authentication...
+2025-03-17 08:04:47,178 - INFO - Login successful
+2025-03-17 08:04:50,880 - INFO - Navigating to target page...
+2025-03-17 08:04:56,760 - INFO - Clicked Documents button
+2025-03-17 08:05:06,914 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Simon Charly
+2025-03-17 08:05:12,445 - INFO - Starting document processing...
+2025-03-17 08:05:12,468 - INFO - Starting enhanced scroll operation...
+2025-03-17 08:05:14,493 - INFO - Scroll attempt 1: Height = 2811
+2025-03-17 08:05:16,510 - INFO - Scroll attempt 2: Height = 4830
+2025-03-17 08:05:18,528 - INFO - Scroll attempt 3: Height = 4830
+2025-03-17 08:05:20,539 - INFO - Scroll attempt 4: Height = 4830
+2025-03-17 08:05:22,550 - INFO - Reached bottom after 5 attempts
+2025-03-17 08:05:25,551 - INFO - Starting timeline event processing...
+2025-03-17 08:05:25,574 - INFO - Found 48 timeline events
+2025-03-17 08:05:28,104 - INFO - Processing timeline event #2
+2025-03-17 08:05:29,261 - INFO - Successfully clicked download button #1
+2025-03-17 08:06:35,417 - INFO - Completed processing with 1 downloads
+2025-03-17 08:06:38,936 - INFO - 127.0.0.1 - - [17/Mar/2025 08:06:38] "POST /process-url HTTP/1.1" 200 -
+2025-03-17 08:06:39,815 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\SELENIUM\\temp_gui_launcher.py', reloading
+2025-03-17 08:06:44,000 - INFO -  * Restarting with stat
+2025-03-17 08:06:46,038 - WARNING -  * Debugger is active!
+2025-03-17 08:06:46,045 - INFO -  * Debugger PIN: 361-797-060
