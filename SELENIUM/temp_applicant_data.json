@@ -1,0 +1,19 @@
+{
+  "applicant_details": [
+    {
+      "Applicant_ID": 636,
+      "First Name": "Hannah",
+      "Last Name": "Bouffier",
+      "recordId": "recas69uXKCi6",
+      "Application_ID": "20250318201701"
+    },
+    {
+      "Applicant_ID": 637,
+      "First Name": "Bayu",
+      "Last Name": "Sinclair",
+      "recordId": "recHoPMltQNpH",
+      "Application_ID": "20250318201701"
+    }
+  ],
+  "application_recordIDs": []
+}

@@ -6,6 +6,10 @@ import os
 import threading
 import sys
 import time
+import logging
+import queue
+from datetime import datetime
+import signal
 try:
     from PIL import Image, ImageTk
 except ImportError:
@@ -212,42 +216,72 @@ class ProcessManager:
         self.processes = {}
         self.lock = threading.Lock()
         self.status_queue = queue.Queue()
+        
+        # Set up logging
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s - %(levelname)s - %(message)s'
+        )
     
     def start_process(self, name, cmd, python_exe):
         with self.lock:
             try:
                 if name not in self.processes:
-                    # Set environment variables to prevent process termination
+                    # Set environment variables
                     env = os.environ.copy()
                     env['PYTHONUNBUFFERED'] = '1'
                     
-                    # Set creation flags for Windows
-                    creation_flags = subprocess.CREATE_NO_WINDOW
-                    if sys.platform.startswith('win'):
-                        creation_flags |= subprocess.CREATE_NEW_PROCESS_GROUP
+                    # Set working directory to the script's directory
+                    working_dir = os.path.dirname(os.path.abspath(cmd))
                     
-                    # Create process with detached flags
+                    # Create process with proper flags
                     process = subprocess.Popen(
                         [python_exe, cmd],
                         stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE,
-                        creationflags=creation_flags,
-                        start_new_session=True,
-                        env=env
+                        cwd=working_dir,
+                        env=env,
+                        creationflags=subprocess.CREATE_NO_WINDOW,
+                        text=True,
+                        bufsize=1
                     )
+                    
+                    # Start output monitoring threads
+                    threading.Thread(
+                        target=self._monitor_output,
+                        args=(process.stdout, f"{name}-stdout"),
+                        daemon=True
+                    ).start()
+                    
+                    threading.Thread(
+                        target=self._monitor_output,
+                        args=(process.stderr, f"{name}-stderr"),
+                        daemon=True
+                    ).start()
                     
                     self.processes[name] = {
                         'process': process,
                         'start_time': datetime.now(),
                         'status': 'running',
-                        'restart_count': 0
+                        'restart_count': 0,
+                        'working_dir': working_dir
                     }
-                    logging.info(f"Started process: {name}")
+                    logging.info(f"Started process: {name} in directory: {working_dir}")
                     return True
                 return False
             except Exception as e:
                 logging.error(f"Error starting process {name}: {e}")
                 return False
+    
+    def _monitor_output(self, pipe, name):
+        """Monitor process output streams."""
+        try:
+            for line in iter(pipe.readline, ''):
+                if line:
+                    logging.info(f"{name}: {line.strip()}")
+            pipe.close()
+        except Exception as e:
+            logging.error(f"Error monitoring {name}: {e}")
     
     def stop_process(self, name):
         with self.lock:
@@ -261,33 +295,27 @@ class ProcessManager:
                             parent = psutil.Process(process.pid)
                             children = parent.children(recursive=True)
                             
-                            # Send Ctrl+C signal to the process group
-                            if sys.platform.startswith('win'):
-                                try:
-                                    os.kill(process.pid, signal.CTRL_BREAK_EVENT)
-                                except Exception:
-                                    pass
+                            # First try graceful termination
+                            parent.terminate()
                             
-                            # Give processes time to clean up
-                            time.sleep(2)
+                            # Wait for parent to terminate
+                            try:
+                                parent.wait(timeout=5)
+                            except psutil.TimeoutExpired:
+                                # Force kill if timeout
+                                parent.kill()
                             
-                            # Terminate children if they're still running
+                            # Handle any remaining children
                             for child in children:
                                 try:
                                     if child.is_running():
                                         child.terminate()
-                                        child.wait(timeout=3)
-                                except (psutil.NoSuchProcess, psutil.TimeoutExpired):
-                                    try:
-                                        if child.is_running():
+                                        try:
+                                            child.wait(timeout=3)
+                                        except psutil.TimeoutExpired:
                                             child.kill()
-                                    except psutil.NoSuchProcess:
-                                        pass
-                            
-                            # Finally terminate parent if still running
-                            if parent.is_running():
-                                parent.terminate()
-                                parent.wait(timeout=3)
+                                except (psutil.NoSuchProcess, psutil.AccessDenied):
+                                    pass
                             
                             process_info['status'] = 'stopped'
                             logging.info(f"Stopped process: {name}")
@@ -336,7 +364,7 @@ class ProcessManager:
                             del self.processes[name]
                 except Exception as e:
                     logging.error(f"Error checking process {name} health: {e}")
-    
+
 class StatusCard(ttk.Frame):
     """A Windows 11 style card for displaying status information"""
     def __init__(self, parent, initial_status="Idle", **kwargs):
@@ -412,15 +440,16 @@ class AIBrokerApp:
         self.root.configure(bg="#F9F9F9")
         self.root.resizable(False, False)
         
+        # Initialize process manager
+        self.process_manager = ProcessManager()
+        
         # Apply Windows 11 theming
         self.theme = Windows11Theme(self.root)
         
         # Variables to store script processes
-        self.script_processes = {}  # Changed to dictionary to store process info
-
-        self.try_set_icon()
+        self.script_processes = {}
         
-        # Create the main layout
+        self.try_set_icon()
         self.setup_layout()
         
         # Start monitoring thread
@@ -560,7 +589,7 @@ class AIBrokerApp:
         footer.grid(row=0, column=0, sticky="e")
     
     def start_multiple_rpa(self):
-        if not self.script_processes:  # Check if no processes are running
+        if not self.script_processes:
             try:
                 python_executable = r"C:\Users\Hello World!\AppData\Local\Programs\Python\Python312\pythonw.exe"
                 scripts = {
@@ -570,57 +599,22 @@ class AIBrokerApp:
                 
                 for name, script_path in scripts.items():
                     if os.path.exists(script_path):
-                        process = subprocess.Popen(
-                            [python_executable, script_path],
-                            stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE,
-                            creationflags=subprocess.CREATE_NO_WINDOW | subprocess.DETACHED_PROCESS
-                        )
-                        self.script_processes[name] = {
-                            'process': process,
-                            'start_time': time.time()
-                        }
+                        if self.process_manager.start_process(name, script_path, python_executable):
+                            self.script_processes[name] = True
                 
                 self.status_card.update_status("AI assistant is now working", "running")
                 self.start_btn.disable()
                 self.stop_btn.enable()
                 
             except Exception as e:
+                logging.error(f"Error starting RPA: {e}")
                 self.status_card.update_status("Something went wrong", "error")
-        else:
-            self.status_card.update_status("AI assistant is already working", "running")
     
     def stop_all_rpa(self):
         if self.script_processes:
             try:
-                for name, info in list(self.script_processes.items()):
-                    process = info['process']
-                    if process.poll() is None:  # Check if process is still running
-                        try:
-                            # Get the parent process
-                            parent = psutil.Process(process.pid)
-                            
-                            # First, gently terminate child processes
-                            children = parent.children(recursive=True)
-                            for child in children:
-                                try:
-                                    child.terminate()
-                                    child.wait(timeout=3)  # Wait for the child to terminate
-                                except (psutil.NoSuchProcess, psutil.TimeoutExpired):
-                                    try:
-                                        child.kill()  # Force kill if timeout
-                                    except psutil.NoSuchProcess:
-                                        pass
-                            
-                            # Then terminate the parent
-                            parent.terminate()
-                            parent.wait(timeout=3)  # Wait for the parent to terminate
-                            
-                        except (psutil.NoSuchProcess, psutil.AccessDenied):
-                            pass  # Process already terminated
-                        
-                        # Remove from our tracking
-                        self.script_processes.pop(name, None)
+                for name in list(self.script_processes.keys()):
+                    self.process_manager.stop_process(name)
                 
                 self.script_processes.clear()
                 self.status_card.update_status("AI assistant has been stopped", "idle")
@@ -628,6 +622,7 @@ class AIBrokerApp:
                 self.stop_btn.disable()
                 
             except Exception as e:
+                logging.error(f"Error stopping RPA: {e}")
                 self.status_card.update_status("Could not stop the AI assistant", "error")
         else:
             self.status_card.update_status("AI assistant is not running", "idle")
@@ -637,8 +632,7 @@ class AIBrokerApp:
         while True:
             try:
                 for name, info in list(self.script_processes.items()):
-                    process = info['process']
-                    if process.poll() is not None:  # Process has terminated
+                    if not self.process_manager.is_running(name):
                         self.script_processes.pop(name, None)
                         
                         # Update UI from main thread

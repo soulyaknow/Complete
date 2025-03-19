@@ -22,11 +22,26 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from webdriver_manager.chrome import ChromeDriverManager
 from requests_toolbelt.multipart.encoder import MultipartEncoder
+import logging
+import subprocess
 
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('rpa.log'),
+        logging.StreamHandler()
+    ]
+)
 
 # Initialize Flask app
 app = Flask(__name__)
 CORS(app)
+
+# Global variables for process management
+active_gui_process = None
+active_driver = None
 
 DOWNLOAD_PATH = r"C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs"
 
@@ -51,22 +66,64 @@ classified_documents = {
 if not os.path.exists(DOWNLOAD_PATH):
     os.makedirs(DOWNLOAD_PATH)
 
-chrome_options = webdriver.ChromeOptions()    
-chrome_options.add_argument("user-data-dir=C:\\Automation\\RPA")
-chrome_options.add_argument("--start-maximized")
-chrome_options.add_argument("--disable-blink-features=AutomationControlled")
-chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-chrome_options.add_experimental_option("useAutomationExtension", False)
+def setup_chrome_options():
+    """Set up Chrome options with enhanced stability and performance"""
+    chrome_options = webdriver.ChromeOptions()    
+    chrome_options.add_argument("user-data-dir=C:\\Automation\\RPA")
+    chrome_options.add_argument("--start-maximized")
+    chrome_options.add_argument("--disable-blink-features=AutomationControlled")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--disable-software-rasterizer")
+    chrome_options.add_argument("--disable-extensions")
+    chrome_options.add_argument("--disable-popup-blocking")
+    chrome_options.add_argument("--disable-notifications")
+    chrome_options.add_argument("--disable-infobars")
+    chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    chrome_options.add_experimental_option("useAutomationExtension", False)
+    
+    prefs = {
+        "download.default_directory": DOWNLOAD_PATH,
+        "download.prompt_for_download": False,
+        "download.directory_upgrade": True,
+        "safebrowsing.enabled": True,
+        "profile.default_content_settings.popups": 0,
+        "profile.default_content_setting_values.notifications": 2
+    }
+    chrome_options.add_experimental_option("prefs", prefs)
+    
+    return chrome_options
 
-prefs = {
-    "download.default_directory": DOWNLOAD_PATH,  # Set download path
-    "download.prompt_for_download": False,        # Disable prompt
-    "download.directory_upgrade": True,          # Allow path updates
-    "safebrowsing.enabled": True                 # Enable safe browsing
-}
-chrome_options.add_experimental_option("prefs", prefs)
+def cleanup_previous_process():
+    """Clean up any existing GUI process and Selenium driver"""
+    global active_gui_process, active_driver
+    
+    # Clean up GUI process
+    if active_gui_process:
+        try:
+            active_gui_process.terminate()
+            active_gui_process.wait(timeout=5)
+        except Exception as e:
+            logging.error(f"Error terminating GUI process: {e}")
+        finally:
+            active_gui_process = None
+    
+    # Clean up Selenium driver
+    if active_driver:
+        try:
+            active_driver.quit()
+        except Exception as e:
+            logging.error(f"Error closing Selenium driver: {e}")
+        finally:
+            active_driver = None
 
 def process_applicants(applicant_details, lender_details, applicant_api_url, lender_api_url, headers):
+    global active_gui_process
+    
+    # Clean up any existing process
+    cleanup_previous_process()
+    
     existing_applicants = get_existing_applicants(applicant_api_url, headers)
     new_applicants = []
     all_applicant_details = []
@@ -75,7 +132,7 @@ def process_applicants(applicant_details, lender_details, applicant_api_url, len
         matching_records, status_code = is_applicant_existing(applicant, existing_applicants)
         
         if status_code == 200:
-            all_applicant_details.extend(matching_records)  # Include existing applicants
+            all_applicant_details.extend(matching_records)
         else:
             new_applicants.append(applicant)
 
@@ -87,7 +144,6 @@ def process_applicants(applicant_details, lender_details, applicant_api_url, len
             response_data = post_to_apitable(applicant_api_url, headers, applicant_data, "Applicant Hub")
             if response_data:
                 all_applicant_details.extend(response_data)
-                # Extract and store recordIDs for new applicants
                 for record in response_data:
                     if 'recordId' in record:
                         new_applicant_recordIDs.append(record['recordId'])
@@ -98,7 +154,6 @@ def process_applicants(applicant_details, lender_details, applicant_api_url, len
                 post_to_apitable(lender_api_url, headers, lender_data, "Lender Hub")
 
         application_hub_api = "https://ai-broker.korunaassist.com/fusion/v1/datasheets/dstLr3xUL37tbn2Sud/records"
-        # Prepare the application data
         application_data = {
             "records": [
                 {
@@ -111,7 +166,6 @@ def process_applicants(applicant_details, lender_details, applicant_api_url, len
             "fieldKey": "name"
         }
             
-        # Post the application record
         app_response = requests.post(
             application_hub_api, 
             headers=headers, 
@@ -119,36 +173,80 @@ def process_applicants(applicant_details, lender_details, applicant_api_url, len
         )
             
         if app_response.status_code in (200, 201):
-            response_json = app_response.json()  # Convert response to JSON
+            response_json = app_response.json()
             print("Application record created successfully")
 
-            # Extract the recordId
             if "data" in response_json and "records" in response_json["data"]:
                 application_recordIDs = [record["recordId"] for record in response_json["data"]["records"]]
                 print("Extracted Record IDs:", application_recordIDs)
             else:
                 print("⚠️ Warning: No records found in response.")
 
-    # Add Application_ID to group applicants (for both existing and new ones)
+    # Add Application_ID to group applicants
     application_id = time.strftime("%Y%m%d%H%M%S")
     for applicant in all_applicant_details:
         applicant["Application_ID"] = application_id
 
-    # **Always launch the Tkinter GUI**
-    if all_applicant_details:  # Ensure there are applicants to process
-        root = tk.Tk()
-        app = FileSelectorApp(root, all_applicant_details, application_recordIDs)
+    if all_applicant_details:
+        try:
+            # Create temporary launcher script
+            temp_script = os.path.join(os.path.dirname(__file__), "temp_gui_launcher.py")
+            with open(temp_script, 'w') as f:
+                f.write("""
+import tkinter as tk
+import sys
+import json
+import os
 
-        if sys.platform.startswith('win'):
-            pythoncom.CoInitialize()
-            root.mainloop()
-        else:
-            root.mainloop()
+def main():
+    if len(sys.argv) != 2:
+        print("Usage: temp_gui_launcher.py <data_file>")
+        sys.exit(1)
+    
+    with open(sys.argv[1], 'r') as f:
+        data = json.load(f)
+    
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    sys.path.append(script_dir)
+    from rpa import FileSelectorApp
+    
+    root = tk.Tk()
+    app = FileSelectorApp(root, data['applicant_details'], data['application_recordIDs'])
+    root.mainloop()
+
+if __name__ == "__main__":
+    main()
+""")
+
+            # Save applicant details to temporary file
+            temp_data_file = os.path.join(os.path.dirname(__file__), "temp_applicant_data.json")
+            with open(temp_data_file, 'w') as f:
+                json.dump({
+                    'applicant_details': all_applicant_details,
+                    'application_recordIDs': application_recordIDs
+                }, f)
+            
+            # Start GUI process and store reference
+            active_gui_process = subprocess.Popen([
+                sys.executable,
+                temp_script,
+                temp_data_file
+            ], 
+            creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if sys.platform == 'win32' else 0)
+            
+            print("File selector GUI launched as separate process")
+            
+        except Exception as e:
+            print(f"Error launching file selector GUI: {e}")
+            # Clean up temp files if there was an error
+            for temp_file in [temp_script, temp_data_file]:
+                if os.path.exists(temp_file):
+                    os.remove(temp_file)
 
     return {
         "status": "success",
         "message": "Processing started",
-        "applicant_count": len(all_applicant_details)
+        "applicant_count": len(all_applicant_details),
     }
 
 class Windows11Theme:
@@ -233,7 +331,7 @@ class FileSelectorApp:
         
         # Add icon to the window and taskbar - with improved icon finding
         self.find_and_set_icon()
-        
+  
         # Store applicant details and initialize assignments
         self.applicant_details = applicant_details
         self.application_id = application_id
@@ -836,7 +934,7 @@ class FileSelectorApp:
         self.load_files()
         self.update_status("Processing complete. Ready for more documents.")
         messagebox.showinfo("Success", "Documents have been submitted for processing")
-        
+            
 def get_file_metadata(file_path):
     """Get file metadata including MIME type"""
     file_name = os.path.basename(file_path)
@@ -954,59 +1052,180 @@ def get_existing_applicants(applicant_api_url, headers):
         return []
 
 def scroll_down_until_bottom(driver, scroll_element):
+    """Enhanced scrolling with better stability and error handling"""
+    logging.info("Starting enhanced scroll operation...")
+    
     try:
-        print("Starting to scroll down to load all content...")
-        last_scroll_position = -1
-        scroll_attempts = 0
-        max_scroll_attempts = 30
+        # Initial setup
+        last_height = 0
+        max_attempts = 30
+        scroll_pause_time = 2
         no_change_count = 0
+        max_no_change = 3
         
-        while scroll_attempts < max_scroll_attempts:
-            # Try different scroll approaches
+        # Ensure we're in the correct frame/window context
+        driver.switch_to.default_content()
+        
+        # Multiple scroll attempts
+        for attempt in range(max_attempts):
             try:
-                # Approach 1: Using execute_script on the element
-                driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight;", scroll_element)
-            except:
+                # Try different scroll approaches
+                current_height = None
+                
+                # Approach 1: Smooth scroll with JavaScript
                 try:
-                    # Approach 2: Using JavaScript to scroll the window
-                    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                except:
-                    # Approach 3: Using ActionChains
-                    ActionChains(driver).move_to_element(scroll_element).send_keys(Keys.END).perform()
-            
-            time.sleep(2)  # Wait for new elements to load
-            
-            # Get new scroll position
-            try:
-                current_scroll_position = driver.execute_script("return arguments[0].scrollTop;", scroll_element)
-            except:
-                current_scroll_position = driver.execute_script("return window.pageYOffset;")
-            
-            print(f"Scrolled down (attempt {scroll_attempts}), position: {current_scroll_position}")
-            
-            # If the scroll position hasn't changed
-            if current_scroll_position == last_scroll_position:
-                no_change_count += 1
-                # Break if no change for 3 consecutive attempts
-                if no_change_count >= 3:
-                    print(f"Reached the bottom of the content after {scroll_attempts} scroll attempts.")
-                    break
-            else:
-                no_change_count = 0
+                    current_height = driver.execute_script("""
+                        arguments[0].scrollTo({
+                            top: arguments[0].scrollHeight,
+                            behavior: 'smooth'
+                        });
+                        return arguments[0].scrollHeight;
+                    """, scroll_element)
+                except Exception as e1:
+                    logging.warning(f"Primary scroll method failed: {e1}")
+                    
+                    # Approach 2: Direct scrollHeight manipulation
+                    try:
+                        current_height = driver.execute_script("""
+                            arguments[0].scrollTop = arguments[0].scrollHeight;
+                            return arguments[0].scrollHeight;
+                        """, scroll_element)
+                    except Exception as e2:
+                        logging.warning(f"Secondary scroll method failed: {e2}")
+                        
+                        # Approach 3: Fallback to window scrolling
+                        try:
+                            current_height = driver.execute_script("""
+                                window.scrollTo(0, document.body.scrollHeight);
+                                return document.body.scrollHeight;
+                            """)
+                        except Exception as e3:
+                            logging.error(f"All scroll methods failed: {e3}")
+                            continue
                 
-            last_scroll_position = current_scroll_position
-            scroll_attempts += 1
+                # Wait for content to load
+                time.sleep(scroll_pause_time)
                 
+                # Check if we've reached the bottom
+                if current_height == last_height:
+                    no_change_count += 1
+                    if no_change_count >= max_no_change:
+                        logging.info(f"Reached bottom after {attempt + 1} attempts")
+                        break
+                else:
+                    no_change_count = 0
+                
+                last_height = current_height
+                logging.info(f"Scroll attempt {attempt + 1}: Height = {current_height}")
+                
+            except Exception as e:
+                logging.error(f"Scroll attempt {attempt + 1} failed: {str(e)}")
+                time.sleep(1)  # Brief pause before retry
+        
+        # Final wait to ensure everything is loaded
+        time.sleep(3)
+        return True
+        
     except Exception as e:
-        print(f"Error while scrolling down: {e}")
-        # Try a simpler approach as fallback
-        try:
-            for _ in range(10):
-                driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                time.sleep(1)
-            print("Completed fallback scrolling")
-        except Exception as e2:
-            print(f"Fallback scrolling also failed: {e2}")
+        logging.error(f"Scrolling operation failed: {str(e)}")
+        return False
+
+def process_timeline_events(driver):
+    """Enhanced timeline event processing with better stability"""
+    logging.info("Starting timeline event processing...")
+    
+    try:
+        # Wait for timeline events with explicit wait
+        wait = WebDriverWait(driver, 20)
+        timeline_events = wait.until(
+            EC.presence_of_all_elements_located((By.TAG_NAME, "timeline-event"))
+        )
+        
+        logging.info(f"Found {len(timeline_events)} timeline events")
+        download_count = 0
+        
+        # Process each timeline event
+        for index, event in enumerate(timeline_events, 1):
+            try:
+                # Wait for the event to be visible and interactable
+                wait.until(EC.visibility_of(event))
+                
+                # Scroll event into view with smooth scrolling
+                driver.execute_script(
+                    "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});",
+                    event
+                )
+                time.sleep(1)  # Wait for scroll to complete
+                
+                # Look for Labels section first
+                labels = event.find_elements(By.XPATH, ".//span[contains(text(), 'Labels')]")
+                
+                if labels:
+                    logging.info(f"Processing timeline event #{index}")
+                    
+                    # Find all download buttons in this event
+                    download_buttons = event.find_elements(
+                        By.XPATH,
+                        ".//md-icon[contains(text(), 'cloud_download')]"
+                    )
+                    
+                    if download_buttons:
+                        for button in download_buttons:
+                            try:
+                                # Ensure button is visible and clickable
+                                wait.until(EC.element_to_be_clickable(button))
+                                
+                                # Scroll to the button
+                                driver.execute_script(
+                                    "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});",
+                                    button
+                                )
+                                time.sleep(1)  # Wait for scroll
+                                
+                                # Click using JavaScript for better reliability
+                                driver.execute_script("arguments[0].click();", button)
+                                download_count += 1
+                                logging.info(f"Successfully clicked download button #{download_count}")
+                                
+                                # Wait longer between downloads to ensure completion
+                                time.sleep(3)
+                                
+                                # Wait for the file selector dialog to appear and complete
+                                time.sleep(5)  # Increased wait time for dialog
+                                
+                            except Exception as e:
+                                logging.error(f"Error clicking download button in event #{index}: {str(e)}")
+                                continue
+                    else:
+                        logging.info(f"No download buttons found in event #{index}")
+                else:
+                    logging.debug(f"No Labels section found in event #{index}")
+            
+            except Exception as e:
+                logging.error(f"Error processing timeline event #{index}: {str(e)}")
+                continue
+        
+        # Final wait to ensure all downloads and dialogs complete
+        time.sleep(10)  # Increased final wait time
+        
+        logging.info(f"Completed processing with {download_count} downloads")
+        return download_count > 0  # Return True if any downloads occurred
+        
+    except Exception as e:
+        logging.error(f"Timeline processing failed: {str(e)}")
+        return False
+
+def wait_for_downloads(download_path, timeout=300):
+    """Wait for all downloads to complete"""
+    start_time = time.time()
+    while time.time() - start_time < timeout:
+        # Check for .crdownload or .tmp files
+        downloading_files = [f for f in os.listdir(download_path) 
+                           if f.endswith('.crdownload') or f.endswith('.tmp')]
+        if not downloading_files:
+            return True
+        time.sleep(1)
+    return False
 
 @app.route('/', methods=['GET'])
 def home():
@@ -1015,53 +1234,53 @@ def home():
 
 @app.route('/process-url', methods=['POST'])
 def process_url():
-    # Parse request data
+    global active_driver
     data = request.json
-    print(data)
     login_url = data.get('loginUrl')
     target_url = data.get('targetUrl')
 
     if not login_url or not target_url:
         return jsonify({"error": "Missing required parameters"}), 400
 
+    # Clean up any existing processes
+    cleanup_previous_process()
+
     # Set up Chrome WebDriver
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+    chrome_options = setup_chrome_options()
+    active_driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=chrome_options)
+    wait = WebDriverWait(active_driver, 10000)
     try:
         # Step 1: Log in
-        driver.get(login_url)
+        active_driver.get(login_url)
 
         # Wait for specific elements to load (example: <a> tag)
-        WebDriverWait(driver, 10000).until(
+        logging.info("Navigating to login page...")
+        WebDriverWait(active_driver, 10000).until(
             EC.presence_of_element_located((By.TAG_NAME, "a"))
         )
 
-        print("Login page is loaded. Pausing for user to input credentials...")
-
         # Pause and allow the user to input credentials
+        logging.info("Login page loaded. Waiting for user authentication...")
         time.sleep(30)
 
-        print("Waiting for user to log in...")
-
-        WebDriverWait(driver, 20).until(
+        WebDriverWait(active_driver, 20).until(
             EC.presence_of_element_located((By.TAG_NAME, "img"))
         )
-
-        print("Login successful. Continuing automation...")
+        logging.info("Login successful")
 
         # Step 2: Navigate to provided URL
-        driver.get(target_url)
-
-        print("locating the document btn")
-
-        # Wait for content to load
-        WebDriverWait(driver, 20).until(
-            EC.presence_of_element_located((By.XPATH, "//button[span[text()='Documents']]"))
-        ).click()
-
-        time.sleep(5)
+        active_driver.get(target_url)
+        logging.info("Navigating to target page...")
 
         # Wait for content to load
-        WebDriverWait(driver, 10).until(
+        documents_button = wait.until(
+            EC.element_to_be_clickable((By.XPATH, "//button[span[text()='Documents']]"))
+        )
+        documents_button.click()
+        logging.info("Clicked Documents button")
+
+        # Wait for content to load
+        WebDriverWait(active_driver, 10).until(
             EC.presence_of_element_located((By.TAG_NAME, "ticket-contacts"))
         )
 
@@ -1069,7 +1288,7 @@ def process_url():
 
         applicants = []
         seen_names = set()
-        ticket_contacts = driver.find_elements(By.TAG_NAME, "ticket-contacts")
+        ticket_contacts = active_driver.find_elements(By.TAG_NAME, "ticket-contacts")
         folder_created = False
         applicant_folder = ""
 
@@ -1094,11 +1313,12 @@ def process_url():
                         if not os.path.exists(applicant_folder):
                             os.makedirs(applicant_folder)
                             print(f"Folder created for the first applicant: {folder_name}")
+                            logging.info(f"Folder created for the first applicant: {folder_name}")
                         else:
                             print(f"Using existing folder: {applicant_folder}")
-
+                            logging.info(f"Using existing folder: {applicant_folder}")
                         # Update download directory dynamically for the first applicant
-                        driver.execute_cdp_cmd(
+                        active_driver.execute_cdp_cmd(
                             "Page.setDownloadBehavior",
                             {
                                 "behavior": "allow",
@@ -1136,7 +1356,7 @@ def process_url():
                 continue
 
         # Wait for content to load
-        WebDriverWait(driver, 20).until(
+        WebDriverWait(active_driver, 20).until(
             EC.presence_of_element_located((By.TAG_NAME, "ticket-basic-info-value"))
         )
 
@@ -1144,7 +1364,7 @@ def process_url():
 
         lender = None
         try:
-            lender_element = driver.find_element(By.XPATH, "//span[@ng-bind=\"::Model.currentLender.getName()\"]")
+            lender_element = active_driver.find_element(By.XPATH, "//span[@ng-bind=\"::Model.currentLender.getName()\"]")
             lender = lender_element.get_attribute("innerText").strip()
         except Exception as e:
             print(f"Error getting lender data: {str(e)}")
@@ -1152,7 +1372,7 @@ def process_url():
         # Get loan security addresses
         loan_security_addresses = None  # Initialize as None
         try:
-            address_elements = driver.find_elements(By.XPATH, 
+            address_elements = active_driver.find_elements(By.XPATH, 
                 "//ticket-basic-info-value//span[@ng-repeat='security in Model.currentHomeLoan.securityDetails.securitySplits']")
             addresses = []  # Temporary list to hold the addresses
             for address_elem in address_elements:
@@ -1168,7 +1388,7 @@ def process_url():
    
         deal_value = None
         try:
-            deal_value_element = driver.find_element(By.XPATH, 
+            deal_value_element = active_driver.find_element(By.XPATH, 
                 "//ticket-basic-info-value[@ng-bind='Model.currentTicket.values.onceOff.formatWithCurrency(CurrentCurrency(), 0)']")
             deal_value = deal_value_element.get_attribute("innerText").strip()
 
@@ -1181,7 +1401,7 @@ def process_url():
 
         total_loan_amount = None
         try:
-            total_loan_amount_element = driver.find_element(By.XPATH, 
+            total_loan_amount_element = active_driver.find_element(By.XPATH, 
                 "//ticket-basic-info-value[@ng-bind='Model.preferredProductTotalLoanAmount.formatWithCurrency(CurrentCurrency())']")
             total_loan_amount = total_loan_amount_element.get_attribute("innerText").strip()
         except Exception as e:
@@ -1189,7 +1409,7 @@ def process_url():
 
         estimated_settlement_date = None
         try:
-            settlement_element = driver.find_element(By.XPATH, 
+            settlement_element = active_driver.find_element(By.XPATH, 
                 "//span[@ng-bind='Model.currentTicket.getDueDate(CurrentTimeZone(), CurrentOrganizationDateTimeLocale())']")
             estimated_settlement_date = settlement_element.get_attribute("innerText").strip()
         except Exception as e:
@@ -1197,74 +1417,48 @@ def process_url():
 
         deal_owner = None
         try:
-            deal_owner_element = driver.find_element(By.XPATH, 
+            deal_owner_element = active_driver.find_element(By.XPATH, 
                 "//span[@ng-bind=\"getAccount(Model.currentTicket.idOwner).getName()\"]")
             deal_owner = deal_owner_element.get_attribute("innerText").strip()
         except Exception as e:
             print(f"Error getting deal owner data: {str(e)}")
         
         try:
-            try:
-                # Locate the scrollable container for forcing the scroll
-                print("Attempting to locate scrollable container...")
-                scrollable_container = driver.find_element(By.CSS_SELECTOR, "md-content[md-scroll-y]")
-                print(f"Found scrollable container: {scrollable_container}")
-                
-                # Switch focus to browser window
-                driver.switch_to.window(driver.current_window_handle)
-                
-                # Call the scroll function
-                print("🔽 Starting to scroll down to load all timeline events...")
-                scroll_down_until_bottom(driver, scrollable_container)
-                
-            except Exception as e:
-                print(f"ERROR DURING SCROLLING: {e}")
-                # Try fallback approach
-                try:
-                    print("Attempting fallback scrolling approach...")
-                    for _ in range(15):
-                        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                        time.sleep(1)
-                    print("Completed fallback scrolling")
-                except Exception as e2:
-                    print(f"Fallback scrolling also failed: {e2}")
+            logging.info("Starting document processing...")
             
-            # Wait a bit after scrolling to ensure everything loads
-            time.sleep(5)  
-
-            # Get all timeline-event elements after scrolling
-            timeline_events = driver.find_elements(By.TAG_NAME, "timeline-event")
-            print(f"📋 Found {len(timeline_events)} timeline events after scrolling.")
-
-            # Process the events
-            download_count = 0
-            for index, event in enumerate(timeline_events):
+            # Find the scrollable container with retry mechanism
+            max_attempts = 3
+            scroll_container = None
+            
+            for attempt in range(max_attempts):
                 try:
-                    labels_span = event.find_elements(By.XPATH, ".//span[text()='Labels']")
-                    if labels_span:
-                        print(f"🎯 Found labels in timeline-event #{index + 1}, checking for download button...")
-
-                        # Locate download button
-                        download_buttons = event.find_elements(By.XPATH, ".//md-icon[text()='cloud_download']")
-                        if download_buttons:
-                            for button in download_buttons:
-                                ActionChains(driver).move_to_element(button).perform()
-                                button.click()
-                                download_count += 1
-                                print(f"✅ Clicked download for timeline-event #{index + 1}. Total triggered: {download_count}")
-                                time.sleep(1)  # Short delay to avoid missing clicks
-
+                    scroll_container = wait.until(
+                        EC.presence_of_element_located((By.CSS_SELECTOR, "md-content[md-scroll-y]"))
+                    )
+                    break
                 except Exception as e:
-                    print(f"⚠️ Error processing timeline-event #{index + 1}: {e}")
-
-            # Ensure all download buttons were clicked
-            if download_count == 0:
-                print("⚠️ No downloads triggered. Check the page structure!")
+                    if attempt == max_attempts - 1:
+                        raise Exception("Failed to find scrollable container")
+                    time.sleep(2)
+            
+            # Perform scrolling with enhanced stability
+            if scroll_container:
+                if scroll_down_until_bottom(active_driver, scroll_container):
+                    # Process timeline events if scrolling was successful
+                    if not process_timeline_events(active_driver):
+                        raise Exception("Failed to process timeline events")
+                    
+                    # Wait for downloads to complete
+                    if not wait_for_downloads(DOWNLOAD_PATH):
+                        logging.warning("Some downloads may not have completed")
+                else:
+                    raise Exception("Failed to scroll the page")
             else:
-                print(f"✅ Finished triggering {download_count} downloads.")
-
+                raise Exception("Could not locate scrollable container")
+            
         except Exception as e:
-            print(f"Error during process: {e}")
+            logging.error(f"Document processing failed: {str(e)}")
+            raise
 
         # POST the data to the apitable endpoint
         applicant_api_url = "https://ai-broker.korunaassist.com/fusion/v1/datasheets/dst1vag1MekDBbrzoS/records"
@@ -1336,10 +1530,13 @@ def process_url():
 
     except Exception as e:
         print(f"Error occurred: {str(e)}")
+        cleanup_previous_process()
         return jsonify({"message": "URL processed unsuccessfully!"}), 500
 
     finally:
-        driver.quit()
+        if active_driver and (is_gui_closed):
+            active_driver.quit()
+            
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=2500, debug=True)

@@ -9,6 +9,8 @@ import sys
 import threading
 import pythoncom
 import ctypes
+import logging
+import subprocess
 from tkinter import ttk, messagebox
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -22,8 +24,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from webdriver_manager.chrome import ChromeDriverManager
 from requests_toolbelt.multipart.encoder import MultipartEncoder
-import logging
-import subprocess
+from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
+
 
 # Configure logging
 logging.basicConfig(
@@ -42,6 +44,7 @@ CORS(app)
 # Global variables for process management
 active_gui_process = None
 active_driver = None
+script_dir = os.path.dirname(os.path.abspath(__file__))
 
 DOWNLOAD_PATH = r"C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs"
 
@@ -65,189 +68,6 @@ classified_documents = {
 # Ensure the download directory exists
 if not os.path.exists(DOWNLOAD_PATH):
     os.makedirs(DOWNLOAD_PATH)
-
-def setup_chrome_options():
-    """Set up Chrome options with enhanced stability and performance"""
-    chrome_options = webdriver.ChromeOptions()    
-    chrome_options.add_argument("user-data-dir=C:\\Automation\\RPA")
-    chrome_options.add_argument("--start-maximized")
-    chrome_options.add_argument("--disable-blink-features=AutomationControlled")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-gpu")
-    chrome_options.add_argument("--disable-software-rasterizer")
-    chrome_options.add_argument("--disable-extensions")
-    chrome_options.add_argument("--disable-popup-blocking")
-    chrome_options.add_argument("--disable-notifications")
-    chrome_options.add_argument("--disable-infobars")
-    chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-    chrome_options.add_experimental_option("useAutomationExtension", False)
-    
-    prefs = {
-        "download.default_directory": DOWNLOAD_PATH,
-        "download.prompt_for_download": False,
-        "download.directory_upgrade": True,
-        "safebrowsing.enabled": True,
-        "profile.default_content_settings.popups": 0,
-        "profile.default_content_setting_values.notifications": 2
-    }
-    chrome_options.add_experimental_option("prefs", prefs)
-    
-    return chrome_options
-
-def cleanup_previous_process():
-    """Clean up any existing GUI process and Selenium driver"""
-    global active_gui_process, active_driver
-    
-    # Clean up GUI process
-    if active_gui_process:
-        try:
-            active_gui_process.terminate()
-            active_gui_process.wait(timeout=5)
-        except Exception as e:
-            logging.error(f"Error terminating GUI process: {e}")
-        finally:
-            active_gui_process = None
-    
-    # Clean up Selenium driver
-    if active_driver:
-        try:
-            active_driver.quit()
-        except Exception as e:
-            logging.error(f"Error closing Selenium driver: {e}")
-        finally:
-            active_driver = None
-
-def process_applicants(applicant_details, lender_details, applicant_api_url, lender_api_url, headers):
-    global active_gui_process
-    
-    # Clean up any existing process
-    cleanup_previous_process()
-    
-    existing_applicants = get_existing_applicants(applicant_api_url, headers)
-    new_applicants = []
-    all_applicant_details = []
-
-    for applicant in applicant_details:
-        matching_records, status_code = is_applicant_existing(applicant, existing_applicants)
-        
-        if status_code == 200:
-            all_applicant_details.extend(matching_records)
-        else:
-            new_applicants.append(applicant)
-
-    # Process new applicants in APITable
-    application_recordIDs = []  
-    new_applicant_recordIDs = []
-    if new_applicants:
-        for applicant_data in new_applicants:
-            response_data = post_to_apitable(applicant_api_url, headers, applicant_data, "Applicant Hub")
-            if response_data:
-                all_applicant_details.extend(response_data)
-                for record in response_data:
-                    if 'recordId' in record:
-                        new_applicant_recordIDs.append(record['recordId'])
-        
-        # Process lender data
-        for lender_data in lender_details:
-            if lender_data:
-                post_to_apitable(lender_api_url, headers, lender_data, "Lender Hub")
-
-        application_hub_api = "https://ai-broker.korunaassist.com/fusion/v1/datasheets/dstLr3xUL37tbn2Sud/records"
-        application_data = {
-            "records": [
-                {
-                    "fields": {
-                        "Applicants": new_applicant_recordIDs,
-                        "Status": "New"
-                    }
-                }
-            ],
-            "fieldKey": "name"
-        }
-            
-        app_response = requests.post(
-            application_hub_api, 
-            headers=headers, 
-            json=application_data
-        )
-            
-        if app_response.status_code in (200, 201):
-            response_json = app_response.json()
-            print("Application record created successfully")
-
-            if "data" in response_json and "records" in response_json["data"]:
-                application_recordIDs = [record["recordId"] for record in response_json["data"]["records"]]
-                print("Extracted Record IDs:", application_recordIDs)
-            else:
-                print("⚠️ Warning: No records found in response.")
-
-    # Add Application_ID to group applicants
-    application_id = time.strftime("%Y%m%d%H%M%S")
-    for applicant in all_applicant_details:
-        applicant["Application_ID"] = application_id
-
-    if all_applicant_details:
-        try:
-            # Create temporary launcher script
-            temp_script = os.path.join(os.path.dirname(__file__), "temp_gui_launcher.py")
-            with open(temp_script, 'w') as f:
-                f.write("""
-import tkinter as tk
-import sys
-import json
-import os
-
-def main():
-    if len(sys.argv) != 2:
-        print("Usage: temp_gui_launcher.py <data_file>")
-        sys.exit(1)
-    
-    with open(sys.argv[1], 'r') as f:
-        data = json.load(f)
-    
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    sys.path.append(script_dir)
-    from rpa import FileSelectorApp
-    
-    root = tk.Tk()
-    app = FileSelectorApp(root, data['applicant_details'], data['application_recordIDs'])
-    root.mainloop()
-
-if __name__ == "__main__":
-    main()
-""")
-
-            # Save applicant details to temporary file
-            temp_data_file = os.path.join(os.path.dirname(__file__), "temp_applicant_data.json")
-            with open(temp_data_file, 'w') as f:
-                json.dump({
-                    'applicant_details': all_applicant_details,
-                    'application_recordIDs': application_recordIDs
-                }, f)
-            
-            # Start GUI process and store reference
-            active_gui_process = subprocess.Popen([
-                sys.executable,
-                temp_script,
-                temp_data_file
-            ], 
-            creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if sys.platform == 'win32' else 0)
-            
-            print("File selector GUI launched as separate process")
-            
-        except Exception as e:
-            print(f"Error launching file selector GUI: {e}")
-            # Clean up temp files if there was an error
-            for temp_file in [temp_script, temp_data_file]:
-                if os.path.exists(temp_file):
-                    os.remove(temp_file)
-
-    return {
-        "status": "success",
-        "message": "Processing started",
-        "applicant_count": len(all_applicant_details),
-    }
 
 class Windows11Theme:
     """Windows 11 styling for Tkinter"""
@@ -934,7 +754,185 @@ class FileSelectorApp:
         self.load_files()
         self.update_status("Processing complete. Ready for more documents.")
         messagebox.showinfo("Success", "Documents have been submitted for processing")
-            
+
+def setup_chrome_options():
+    """Set up Chrome options with enhanced stability and performance"""
+    chrome_options = webdriver.ChromeOptions()    
+    chrome_options.add_argument("user-data-dir=C:\\Automation\\RPA")
+    chrome_options.add_argument("--start-maximized")
+    chrome_options.add_argument("--disable-blink-features=AutomationControlled")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--disable-software-rasterizer")
+    chrome_options.add_argument("--disable-extensions")
+    chrome_options.add_argument("--disable-popup-blocking")
+    chrome_options.add_argument("--disable-notifications")
+    chrome_options.add_argument("--disable-infobars")
+    chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    chrome_options.add_experimental_option("useAutomationExtension", False)
+    
+    prefs = {
+        "download.default_directory": DOWNLOAD_PATH,
+        "download.prompt_for_download": False,
+        "download.directory_upgrade": True,
+        "safebrowsing.enabled": True,
+        "profile.default_content_settings.popups": 0,
+        "profile.default_content_setting_values.notifications": 2
+    }
+    chrome_options.add_experimental_option("prefs", prefs)
+    
+    return chrome_options
+
+def cleanup_previous_process():
+    """Clean up any existing GUI process and Selenium driver"""
+    global active_gui_process, active_driver
+    
+    # Clean up GUI process
+    if active_gui_process:
+        try:
+            active_gui_process.terminate()
+            active_gui_process.wait(timeout=5)
+        except Exception as e:
+            logging.error(f"Error terminating GUI process: {e}")
+        finally:
+            active_gui_process = None
+    
+    # Clean up Selenium driver
+    if active_driver:
+        try:
+            active_driver.quit()
+        except Exception as e:
+            logging.error(f"Error closing Selenium driver: {e}")
+        finally:
+            active_driver = None
+
+def process_applicants(applicant_details,lender_details,applicant_api_url,lender_api_url,headers):
+    global active_gui_process
+    try:
+        # Clean up any existing process
+        cleanup_previous_process()
+        
+        # Initialize tracking variables
+        existing_applicants = get_existing_applicants(applicant_api_url, headers)
+        new_applicants = []
+        all_applicant_details = []
+        application_recordIDs = []
+        new_applicant_recordIDs = []
+
+        # Process each applicant
+        for applicant in applicant_details:
+            matching_records, status_code = is_applicant_existing(applicant, existing_applicants)
+            if status_code == 200:
+                all_applicant_details.extend(matching_records)
+            else:
+                new_applicants.append(applicant)
+
+        # Process new applicants
+        if new_applicants:
+            # Create applicant records
+            for applicant_data in new_applicants:
+                response_data = post_to_apitable(
+                    applicant_api_url, 
+                    headers, 
+                    applicant_data, 
+                    "Applicant Hub"
+                )
+                if response_data:
+                    all_applicant_details.extend(response_data)
+                    new_applicant_recordIDs.extend(
+                        record['recordId'] for record in response_data 
+                        if 'recordId' in record
+                    )
+
+            # Process lender data
+            for lender_data in lender_details:
+                if lender_data:
+                    post_to_apitable(
+                        lender_api_url, 
+                        headers, 
+                        lender_data, 
+                        "Lender Hub"
+                    )
+
+            # Create application record
+            if new_applicant_recordIDs:
+                application_hub_api = "https://ai-broker.korunaassist.com/fusion/v1/datasheets/dstLr3xUL37tbn2Sud/records"
+                application_data = {
+                    "records": [{
+                        "fields": {
+                            "Applicants": new_applicant_recordIDs,
+                            "Status": "New"
+                        }
+                    }],
+                    "fieldKey": "name"
+                }
+                
+                app_response = requests.post(
+                    application_hub_api,
+                    headers=headers,
+                    json=application_data
+                )
+                
+                if app_response.status_code in (200, 201):
+                    response_json = app_response.json()
+                    if "data" in response_json and "records" in response_json["data"]:
+                        application_recordIDs = [
+                            record["recordId"] 
+                            for record in response_json["data"]["records"]
+                        ]
+                        logging.info(f"Application records created: {len(application_recordIDs)}")
+                    else:
+                        logging.warning("No records found in application response")
+
+        # Add Application_ID to group applicants
+        application_id = time.strftime("%Y%m%d%H%M%S")
+        for applicant in all_applicant_details:
+            applicant["Application_ID"] = application_id
+
+        # Launch GUI if we have applicant details
+        if all_applicant_details:
+            try:
+                # Save applicant details to temporary file
+                temp_data_file = os.path.join(script_dir, "temp_applicant_data.json")
+                with open(temp_data_file, 'w') as f:
+                    json.dump({
+                        'applicant_details': all_applicant_details,
+                        'application_recordIDs': application_recordIDs
+                    }, f, indent=2)
+                
+                # Use existing GUI launcher
+                gui_launcher = os.path.join(script_dir, "gui_launcher.py")
+                
+                # Start GUI process
+                creation_flags = subprocess.CREATE_NEW_PROCESS_GROUP if sys.platform == 'win32' else 0
+                active_gui_process = subprocess.Popen(
+                    [sys.executable, gui_launcher, temp_data_file],
+                    creationflags=creation_flags
+                )
+                
+                logging.info("File selector GUI launched as separate process")
+                
+            except Exception as e:
+                logging.error(f"Error launching file selector GUI: {e}")
+                # Clean up temp file if there was an error
+                if os.path.exists(temp_data_file):
+                    os.remove(temp_data_file)
+
+        return {
+            "status": "success",
+            "message": "Processing started",
+            "applicant_count": len(all_applicant_details),
+        }
+
+    except Exception as e:
+        logging.error(f"Error in process_applicants: {e}")
+        return {
+            "status": "error",
+            "message": str(e),
+            "applicant_count": 0
+        }
+
 def get_file_metadata(file_path):
     """Get file metadata including MIME type"""
     file_name = os.path.basename(file_path)
@@ -1131,101 +1129,220 @@ def scroll_down_until_bottom(driver, scroll_element):
         return False
 
 def process_timeline_events(driver):
-    """Enhanced timeline event processing with better stability"""
-    logging.info("Starting timeline event processing...")
+    """Enhanced timeline event processing with batching and memory management"""
+    logging.info("Starting optimized timeline processing...")
     
     try:
-        # Wait for timeline events with explicit wait
+        # Configuration for performance optimization
+        BATCH_SIZE = 100  # Process 25 documents at a time
+        SCROLL_PAUSE = 1  # Seconds between scrolls
+        DOWNLOAD_PAUSE = 2  # Seconds between downloads
+        MAX_RETRIES = 5  # Maximum retry attempts
+        
         wait = WebDriverWait(driver, 20)
-        timeline_events = wait.until(
-            EC.presence_of_all_elements_located((By.TAG_NAME, "timeline-event"))
-        )
-        
-        logging.info(f"Found {len(timeline_events)} timeline events")
         download_count = 0
+        processed_events = set()
         
-        # Process each timeline event
-        for index, event in enumerate(timeline_events, 1):
+        def get_fresh_elements():
+            """Helper function to get fresh elements from the page"""
             try:
-                # Wait for the event to be visible and interactable
-                wait.until(EC.visibility_of(event))
-                
-                # Scroll event into view with smooth scrolling
-                driver.execute_script(
-                    "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});",
-                    event
+                return wait.until(
+                    EC.presence_of_all_elements_located((By.TAG_NAME, "timeline-event"))
                 )
-                time.sleep(1)  # Wait for scroll to complete
-                
-                # Look for Labels section first
-                labels = event.find_elements(By.XPATH, ".//span[contains(text(), 'Labels')]")
-                
-                if labels:
-                    logging.info(f"Processing timeline event #{index}")
-                    
-                    # Find all download buttons in this event
-                    download_buttons = event.find_elements(
-                        By.XPATH,
-                        ".//md-icon[contains(text(), 'cloud_download')]"
-                    )
-                    
-                    if download_buttons:
-                        for button in download_buttons:
-                            try:
-                                # Ensure button is visible and clickable
-                                wait.until(EC.element_to_be_clickable(button))
-                                
-                                # Scroll to the button
-                                driver.execute_script(
-                                    "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});",
-                                    button
-                                )
-                                time.sleep(1)  # Wait for scroll
-                                
-                                # Click using JavaScript for better reliability
-                                driver.execute_script("arguments[0].click();", button)
-                                download_count += 1
-                                logging.info(f"Successfully clicked download button #{download_count}")
-                                
-                                # Wait longer between downloads to ensure completion
-                                time.sleep(3)
-                                
-                                # Wait for the file selector dialog to appear and complete
-                                time.sleep(5)  # Increased wait time for dialog
-                                
-                            except Exception as e:
-                                logging.error(f"Error clicking download button in event #{index}: {str(e)}")
-                                continue
-                    else:
-                        logging.info(f"No download buttons found in event #{index}")
-                else:
-                    logging.debug(f"No Labels section found in event #{index}")
+            except TimeoutException:
+                logging.error("Timeout waiting for timeline events")
+                return []
+
+        def is_element_stale(element):
+            """Check if an element is stale"""
+            try:
+                element.is_enabled()
+                return False
+            except StaleElementReferenceException:
+                return True
+            except Exception:
+                return True
+
+        def refresh_events_with_labels():
+            """Refresh and return all events with labels"""
+            fresh_events = get_fresh_elements()
+            labeled_events = []
+            for fresh_event in fresh_events:
+                try:
+                    if not is_element_stale(fresh_event):
+                        labels = fresh_event.find_elements(By.XPATH, ".//span[contains(text(), 'Labels')]")
+                        if labels:
+                            labeled_events.append(fresh_event)
+                except Exception:
+                    continue
+            return labeled_events
+
+        # First phase: Document discovery
+        timeline_events = get_fresh_elements()
+        if not timeline_events:
+            logging.error("No timeline events found")
+            return False
+        
+        logging.info(f"Found {len(timeline_events)} total timeline events")
+        
+        # Get initial events with labels
+        events_with_labels = refresh_events_with_labels()
+        logging.info(f"Found {len(events_with_labels)} events with labels")
+        
+        # Process events in batches
+        batch_start = 0
+        while batch_start < len(events_with_labels):
+            batch = events_with_labels[batch_start:batch_start + BATCH_SIZE]
+            current_batch = (batch_start // BATCH_SIZE) + 1
+            total_batches = (len(events_with_labels) + BATCH_SIZE - 1) // BATCH_SIZE
+            logging.info(f"Processing batch {current_batch} of {total_batches}")
             
-            except Exception as e:
-                logging.error(f"Error processing timeline event #{index}: {str(e)}")
-                continue
+            batch_processed = 0
+            retry_count = 0
+            
+            while batch_processed < len(batch) and retry_count < MAX_RETRIES:
+                event = batch[batch_processed]
+                try:
+                    # Check if element is stale
+                    if is_element_stale(event):
+                        if retry_count < MAX_RETRIES - 1:
+                            # Refresh events and update batch
+                            events_with_labels = refresh_events_with_labels()
+                            if batch_start < len(events_with_labels):
+                                batch = events_with_labels[batch_start:batch_start + BATCH_SIZE]
+                                retry_count += 1
+                                time.sleep(1)
+                                continue
+                            else:
+                                break
+                        else:
+                            batch_processed += 1
+                            continue
+
+                    # Generate unique identifier for event
+                    event_id = driver.execute_script("""
+                        try {
+                            return arguments[0].getAttribute('data-id') || arguments[0].innerHTML;
+                        } catch(e) {
+                            return null;
+                        }
+                    """, event)
+                    
+                    if not event_id or event_id in processed_events:
+                        batch_processed += 1
+                        continue
+                    
+                    # Scroll event into view
+                    driver.execute_script("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", event)
+                    time.sleep(SCROLL_PAUSE)
+                    
+                    # Find and process download buttons
+                    if not is_element_stale(event):
+                        download_buttons = event.find_elements(
+                            By.XPATH,
+                            ".//md-icon[contains(text(), 'cloud_download')]"
+                        )
+                        
+                        if download_buttons:
+                            for button in download_buttons:
+                                try:
+                                    if is_element_stale(button):
+                                        continue
+                                    
+                                    # Ensure button is visible and clickable
+                                    if not button.is_displayed() or not button.is_enabled():
+                                        continue
+                                    
+                                    # Click with JavaScript for better reliability
+                                    driver.execute_script("arguments[0].click();", button)
+                                    download_count += 1
+                                    logging.info(f"Successfully initiated download {download_count}")
+                                    time.sleep(DOWNLOAD_PAUSE)
+                                    
+                                except Exception as button_error:
+                                    logging.error(f"Error clicking download button: {button_error}")
+                                    continue
+                    
+                    processed_events.add(event_id)
+                    batch_processed += 1
+                    
+                except Exception as event_error:
+                    logging.error(f"Error processing event: {event_error}")
+                    batch_processed += 1
+                    continue
+            
+            # Update progress
+            if events_with_labels:
+                progress = (len(processed_events) / len(events_with_labels)) * 100
+                logging.info(f"Processing progress: {progress:.1f}% ({download_count} downloads)")
+            
+            # Move to next batch
+            batch_start += BATCH_SIZE
+            
+            # Memory optimization between batches
+            driver.execute_script("window.gc && window.gc();")
+            time.sleep(DOWNLOAD_PAUSE)
         
-        # Final wait to ensure all downloads and dialogs complete
-        time.sleep(10)  # Increased final wait time
+        # Final wait to ensure downloads are initiated
+        time.sleep(DOWNLOAD_PAUSE * 2)
         
-        logging.info(f"Completed processing with {download_count} downloads")
-        return download_count > 0  # Return True if any downloads occurred
+        logging.info(f"Timeline processing complete: {download_count} downloads initiated")
+        return download_count > 0
         
     except Exception as e:
         logging.error(f"Timeline processing failed: {str(e)}")
         return False
 
 def wait_for_downloads(download_path, timeout=300):
-    """Wait for all downloads to complete"""
-    start_time = time.time()
-    while time.time() - start_time < timeout:
-        # Check for .crdownload or .tmp files
-        downloading_files = [f for f in os.listdir(download_path) 
-                           if f.endswith('.crdownload') or f.endswith('.tmp')]
-        if not downloading_files:
-            return True
-        time.sleep(1)
-    return False
+    """Enhanced download monitoring with better stability"""
+    logging.info(f"Monitoring downloads in {download_path}")
+    
+    try:
+        start_time = time.time()
+        check_interval = 1.0  # Initial check interval
+        max_interval = 5.0    # Maximum check interval
+        stable_count = 0      # Counter for stable state
+        last_count = 0        # Last known file count
+        required_stable_checks = 3  # Number of stable checks required
+        
+        while (time.time() - start_time) < timeout:
+            try:
+                # Get current download status
+                current_files = os.listdir(download_path)
+                downloading = [f for f in current_files if f.endswith(('.crdownload', '.tmp', '.partial'))]
+                completed = [f for f in current_files if not f.endswith(('.crdownload', '.tmp', '.partial'))]
+                
+                # Log current status
+                if downloading:
+                    logging.info(f"Still downloading: {len(downloading)} files, Completed: {len(completed)} files")
+                
+                # Check for stability
+                if len(completed) == last_count and not downloading:
+                    stable_count += 1
+                    # Increase check interval as stability increases
+                    check_interval = min(check_interval * 1.5, max_interval)
+                else:
+                    stable_count = 0
+                    check_interval = 1.0  # Reset interval
+                    last_count = len(completed)
+                
+                # Check if we've reached a stable state
+                if stable_count >= required_stable_checks:
+                    logging.info(f"Downloads complete. Total files: {len(completed)}")
+                    return True
+                
+                time.sleep(check_interval)
+                
+            except Exception as e:
+                logging.error(f"Error checking downloads: {e}")
+                time.sleep(1)
+        
+        logging.warning(f"Download timeout reached after {timeout} seconds")
+        return False
+        
+    except Exception as e:
+        logging.error(f"Download monitoring failed: {e}")
+        return False
 
 @app.route('/', methods=['GET'])
 def home():
@@ -1537,6 +1654,5 @@ def process_url():
     #     if active_driver and (is_gui_closed):
     #         active_driver.quit()
             
-
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=2500, debug=True)
