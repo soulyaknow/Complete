@@ -1,19 +1,14 @@
 {
   "applicant_details": [
     {
-      "Applicant_ID": 636,
-      "First Name": "Hannah",
-      "Last Name": "Bouffier",
-      "recordId": "recas69uXKCi6",
-      "Application_ID": "20250318201701"
-    },
-    {
-      "Applicant_ID": 637,
-      "First Name": "Bayu",
-      "Last Name": "Sinclair",
-      "recordId": "recHoPMltQNpH",
-      "Application_ID": "20250318201701"
+      "Applicant_ID": 679,
+      "recordId": "rectLOAI49n5l",
+      "First Name": "Donna",
+      "Last Name": "Madigan",
+      "Application_ID": "20250320151946"
     }
   ],
-  "application_recordIDs": []
+  "application_recordIDs": [
+    "rec5unLgRGmgq"
+  ]
 }

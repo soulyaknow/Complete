@@ -5534,3 +5534,400 @@ Stacktrace:
 2025-03-18 20:16:58,418 - INFO - Downloads complete. Total files: 13
 2025-03-18 20:17:01,988 - INFO - File selector GUI launched as separate process
 2025-03-18 20:17:01,989 - INFO - 127.0.0.1 - - [18/Mar/2025 20:17:01] "POST /process-url HTTP/1.1" 200 -
+2025-03-19 12:05:31,612 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-03-19 12:05:31,613 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-19 12:05:31,630 - INFO -  * Restarting with stat
+2025-03-19 12:05:33,937 - WARNING -  * Debugger is active!
+2025-03-19 12:05:33,949 - INFO -  * Debugger PIN: 361-797-060
+2025-03-19 12:05:34,474 - INFO - 127.0.0.1 - - [19/Mar/2025 12:05:34] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-03-19 12:05:34,742 - INFO - ====== WebDriver manager ======
+2025-03-19 12:05:41,041 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-19 12:05:41,321 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-19 12:05:41,848 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-19 12:05:42,951 - INFO - WebDriver version 134.0.6998.88 selected
+2025-03-19 12:05:42,958 - INFO - Modern chrome version https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.88/win32/chromedriver-win32.zip
+2025-03-19 12:05:42,958 - INFO - About to download new driver from https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.88/win32/chromedriver-win32.zip
+2025-03-19 12:05:43,298 - INFO - Driver downloading response is 200
+2025-03-19 12:05:44,718 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-19 12:05:45,188 - INFO - Driver has been saved in cache [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.88]
+2025-03-19 12:05:56,068 - INFO - Navigating to login page...
+2025-03-19 12:05:56,095 - INFO - Login page loaded. Waiting for user authentication...
+2025-03-19 12:06:26,117 - INFO - Login successful
+2025-03-19 12:06:32,926 - INFO - Navigating to target page...
+2025-03-19 12:06:37,209 - INFO - Clicked Documents button
+2025-03-19 12:06:47,479 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Simon Charly
+2025-03-19 12:06:52,928 - INFO - Starting document processing...
+2025-03-19 12:06:52,962 - INFO - Starting enhanced scroll operation...
+2025-03-19 12:06:54,981 - INFO - Scroll attempt 1: Height = 2811
+2025-03-19 12:06:56,992 - INFO - Scroll attempt 2: Height = 4830
+2025-03-19 12:06:59,005 - INFO - Scroll attempt 3: Height = 4830
+2025-03-19 12:07:01,015 - INFO - Scroll attempt 4: Height = 4830
+2025-03-19 12:07:03,026 - INFO - Reached bottom after 5 attempts
+2025-03-19 12:07:06,027 - INFO - Starting optimized timeline processing...
+2025-03-19 12:07:06,050 - INFO - Found 48 total timeline events
+2025-03-19 12:07:07,386 - INFO - Found 1 events with labels
+2025-03-19 12:07:07,386 - INFO - Processing batch 1 of 1
+2025-03-19 12:07:08,511 - INFO - Successfully initiated download 1
+2025-03-19 12:07:10,512 - INFO - Processing progress: 100.0% (1 downloads)
+2025-03-19 12:07:16,583 - INFO - Timeline processing complete: 1 downloads initiated
+2025-03-19 12:07:16,583 - INFO - Monitoring downloads in C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs
+2025-03-19 12:07:21,336 - INFO - Downloads complete. Total files: 2
+2025-03-19 12:07:27,668 - INFO - File selector GUI launched as separate process
+2025-03-19 12:07:27,669 - INFO - 127.0.0.1 - - [19/Mar/2025 12:07:27] "POST /process-url HTTP/1.1" 200 -
+2025-03-20 10:51:26,334 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-03-20 10:51:26,414 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-20 10:51:26,449 - INFO -  * Restarting with stat
+2025-03-20 10:51:29,981 - WARNING -  * Debugger is active!
+2025-03-20 10:51:29,994 - INFO -  * Debugger PIN: 361-797-060
+2025-03-20 10:51:46,617 - INFO - 127.0.0.1 - - [20/Mar/2025 10:51:46] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-03-20 10:51:46,874 - INFO - ====== WebDriver manager ======
+2025-03-20 10:51:52,040 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-20 10:51:52,514 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-20 10:51:53,277 - INFO - There is no [win64] chromedriver "134.0.6998.90" for browser google-chrome "134.0.6998" in cache
+2025-03-20 10:51:53,277 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-20 10:51:54,332 - INFO - WebDriver version 134.0.6998.90 selected
+2025-03-20 10:51:54,397 - INFO - Modern chrome version https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.90/win32/chromedriver-win32.zip
+2025-03-20 10:51:54,409 - INFO - About to download new driver from https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.90/win32/chromedriver-win32.zip
+2025-03-20 10:51:55,124 - INFO - Driver downloading response is 200
+2025-03-20 10:52:08,363 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-20 10:52:19,578 - INFO - Driver has been saved in cache [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.90]
+2025-03-20 10:52:34,468 - INFO - Navigating to login page...
+2025-03-20 10:52:34,527 - INFO - Login page loaded. Waiting for user authentication...
+2025-03-20 10:53:04,562 - INFO - Login successful
+2025-03-20 10:53:11,582 - INFO - Navigating to target page...
+2025-03-20 10:53:15,541 - INFO - Clicked Documents button
+2025-03-20 10:53:25,720 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Simon Charly
+2025-03-20 10:53:31,179 - INFO - Starting document processing...
+2025-03-20 10:53:31,211 - INFO - Starting enhanced scroll operation...
+2025-03-20 10:53:33,262 - INFO - Scroll attempt 1: Height = 2811
+2025-03-20 10:53:35,273 - INFO - Scroll attempt 2: Height = 4830
+2025-03-20 10:53:37,285 - INFO - Scroll attempt 3: Height = 4830
+2025-03-20 10:53:39,296 - INFO - Scroll attempt 4: Height = 4830
+2025-03-20 10:53:41,306 - INFO - Reached bottom after 5 attempts
+2025-03-20 10:53:44,307 - INFO - Starting optimized timeline processing...
+2025-03-20 10:53:44,334 - INFO - Found 48 total timeline events
+2025-03-20 10:53:45,790 - INFO - Found 1 events with labels
+2025-03-20 10:53:45,790 - INFO - Processing batch 1 of 1
+2025-03-20 10:53:46,946 - INFO - Successfully initiated download 1
+2025-03-20 10:53:48,947 - INFO - Processing progress: 100.0% (1 downloads)
+2025-03-20 10:53:54,990 - INFO - Timeline processing complete: 1 downloads initiated
+2025-03-20 10:53:54,990 - INFO - Monitoring downloads in C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs
+2025-03-20 10:53:59,744 - INFO - Downloads complete. Total files: 2
+2025-03-20 10:54:09,914 - INFO - Application records created: 1
+2025-03-20 10:54:09,925 - INFO - File selector GUI launched as separate process
+2025-03-20 10:54:09,928 - INFO - 127.0.0.1 - - [20/Mar/2025 10:54:09] "POST /process-url HTTP/1.1" 200 -
+2025-03-20 14:23:58,887 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-03-20 14:24:03,869 - INFO -  * Restarting with stat
+2025-03-20 14:24:07,639 - WARNING -  * Debugger is active!
+2025-03-20 14:24:07,653 - INFO -  * Debugger PIN: 361-797-060
+2025-03-20 14:24:21,811 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-03-20 14:24:21,926 - INFO -  * Restarting with stat
+2025-03-20 14:24:24,501 - WARNING -  * Debugger is active!
+2025-03-20 14:24:24,510 - INFO -  * Debugger PIN: 361-797-060
+2025-03-20 14:25:47,418 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-03-20 14:25:47,572 - INFO -  * Restarting with stat
+2025-03-20 14:25:50,160 - WARNING -  * Debugger is active!
+2025-03-20 14:25:50,169 - INFO -  * Debugger PIN: 361-797-060
+2025-03-20 14:26:07,323 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-03-20 14:26:07,437 - INFO -  * Restarting with stat
+2025-03-20 14:26:10,582 - WARNING -  * Debugger is active!
+2025-03-20 14:26:10,592 - INFO -  * Debugger PIN: 361-797-060
+2025-03-20 14:26:21,710 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-03-20 14:26:21,815 - INFO -  * Restarting with stat
+2025-03-20 14:26:24,109 - WARNING -  * Debugger is active!
+2025-03-20 14:26:24,118 - INFO -  * Debugger PIN: 361-797-060
+2025-03-20 14:26:45,328 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-03-20 14:26:45,443 - INFO -  * Restarting with stat
+2025-03-20 14:28:34,635 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-03-20 14:28:34,636 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-20 14:28:34,639 - INFO -  * Restarting with stat
+2025-03-20 14:28:36,507 - WARNING -  * Debugger is active!
+2025-03-20 14:28:36,515 - INFO -  * Debugger PIN: 361-797-060
+2025-03-20 14:29:57,779 - INFO - 127.0.0.1 - - [20/Mar/2025 14:29:57] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-03-20 14:29:58,043 - INFO - ====== WebDriver manager ======
+2025-03-20 14:29:59,892 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-20 14:30:01,076 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-20 14:30:02,042 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.90\chromedriver-win32/chromedriver.exe] found in cache
+2025-03-20 14:30:32,577 - INFO - Navigating to login page...
+2025-03-20 14:30:32,659 - INFO - Login page loaded. Waiting for user authentication...
+2025-03-20 14:31:02,691 - INFO - Login successful
+2025-03-20 14:31:29,451 - INFO - Navigating to target page...
+2025-03-20 14:31:30,832 - INFO - Clicked Documents button
+2025-03-20 14:31:41,062 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Simon Charly
+2025-03-20 14:31:46,478 - INFO - Starting document processing...
+2025-03-20 14:31:46,514 - INFO - Starting enhanced scroll operation...
+2025-03-20 14:31:48,542 - INFO - Scroll attempt 1: Height = 2811
+2025-03-20 14:31:50,554 - INFO - Scroll attempt 2: Height = 4830
+2025-03-20 14:31:52,563 - INFO - Scroll attempt 3: Height = 4830
+2025-03-20 14:31:54,575 - INFO - Scroll attempt 4: Height = 4830
+2025-03-20 14:31:56,585 - INFO - Reached bottom after 5 attempts
+2025-03-20 14:31:59,586 - INFO - Starting optimized timeline processing...
+2025-03-20 14:31:59,617 - INFO - Found 48 total timeline events
+2025-03-20 14:32:00,828 - INFO - Found 1 events with labels
+2025-03-20 14:32:00,829 - INFO - Processing batch 1 of 1
+2025-03-20 14:32:01,963 - INFO - Successfully initiated download 1
+2025-03-20 14:32:03,964 - INFO - Processing progress: 100.0% (1 downloads)
+2025-03-20 14:32:09,981 - INFO - Timeline processing complete: 1 downloads initiated
+2025-03-20 14:32:09,982 - INFO - Monitoring downloads in C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs
+2025-03-20 14:32:14,735 - INFO - Downloads complete. Total files: 2
+2025-03-20 14:32:41,667 - INFO - Application records created: 1
+2025-03-20 14:32:41,685 - INFO - File selector GUI launched as separate process
+2025-03-20 14:32:41,687 - INFO - 127.0.0.1 - - [20/Mar/2025 14:32:41] "POST /process-url HTTP/1.1" 200 -
+2025-03-20 14:44:53,923 - INFO - 127.0.0.1 - - [20/Mar/2025 14:44:53] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-03-20 14:44:54,217 - INFO - ====== WebDriver manager ======
+2025-03-20 14:45:02,854 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-20 14:45:03,255 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-20 14:45:03,646 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.90\chromedriver-win32/chromedriver.exe] found in cache
+2025-03-20 14:45:19,616 - INFO - Navigating to login page...
+2025-03-20 14:45:19,708 - INFO - Login page loaded. Waiting for user authentication...
+2025-03-20 14:45:49,740 - INFO - Login successful
+2025-03-20 14:45:58,215 - INFO - Navigating to target page...
+2025-03-20 14:46:06,650 - INFO - Clicked Documents button
+2025-03-20 14:46:17,042 - INFO - Folder created for the first applicant: Hannah Bouffier
+2025-03-20 14:46:22,642 - INFO - Starting document processing...
+2025-03-20 14:46:22,682 - INFO - Starting enhanced scroll operation...
+2025-03-20 14:46:24,743 - INFO - Scroll attempt 1: Height = 3470
+2025-03-20 14:46:26,904 - INFO - Scroll attempt 2: Height = 5670
+2025-03-20 14:46:28,916 - INFO - Scroll attempt 3: Height = 6633
+2025-03-20 14:46:30,928 - INFO - Scroll attempt 4: Height = 6633
+2025-03-20 14:46:32,940 - INFO - Scroll attempt 5: Height = 6633
+2025-03-20 14:46:34,951 - INFO - Reached bottom after 6 attempts
+2025-03-20 14:46:37,952 - INFO - Starting optimized timeline processing...
+2025-03-20 14:46:38,590 - INFO - Found 72 total timeline events
+2025-03-20 14:46:41,611 - INFO - Found 28 events with labels
+2025-03-20 14:46:41,612 - INFO - Processing batch 1 of 1
+2025-03-20 14:46:42,870 - INFO - Successfully initiated download 1
+2025-03-20 14:46:47,749 - INFO - Successfully initiated download 2
+2025-03-20 14:46:51,055 - INFO - Successfully initiated download 3
+2025-03-20 14:46:54,982 - INFO - Successfully initiated download 4
+2025-03-20 14:46:58,180 - INFO - Successfully initiated download 5
+2025-03-20 14:47:01,338 - INFO - Successfully initiated download 6
+2025-03-20 14:47:04,654 - INFO - Successfully initiated download 7
+2025-03-20 14:47:07,846 - INFO - Successfully initiated download 8
+2025-03-20 14:47:11,018 - INFO - Successfully initiated download 9
+2025-03-20 14:47:14,619 - INFO - Successfully initiated download 10
+2025-03-20 14:47:17,768 - INFO - Successfully initiated download 11
+2025-03-20 14:47:20,947 - INFO - Successfully initiated download 12
+2025-03-20 14:47:24,256 - INFO - Successfully initiated download 13
+2025-03-20 14:47:27,455 - INFO - Successfully initiated download 14
+2025-03-20 14:47:31,147 - INFO - Successfully initiated download 15
+2025-03-20 14:47:34,391 - INFO - Successfully initiated download 16
+2025-03-20 14:47:37,607 - INFO - Successfully initiated download 17
+2025-03-20 14:47:40,833 - INFO - Successfully initiated download 18
+2025-03-20 14:47:45,750 - INFO - Successfully initiated download 19
+2025-03-20 14:47:49,144 - INFO - Successfully initiated download 20
+2025-03-20 14:47:52,474 - INFO - Successfully initiated download 21
+2025-03-20 14:47:55,924 - INFO - Successfully initiated download 22
+2025-03-20 14:48:03,721 - INFO - Successfully initiated download 23
+2025-03-20 14:48:10,573 - INFO - Successfully initiated download 24
+2025-03-20 14:48:14,718 - INFO - Successfully initiated download 25
+2025-03-20 14:48:18,173 - INFO - Successfully initiated download 26
+2025-03-20 14:48:21,570 - INFO - Successfully initiated download 27
+2025-03-20 14:48:24,806 - INFO - Successfully initiated download 28
+2025-03-20 14:48:26,816 - INFO - Processing progress: 100.0% (28 downloads)
+2025-03-20 14:48:32,849 - INFO - Timeline processing complete: 28 downloads initiated
+2025-03-20 14:48:32,851 - INFO - Monitoring downloads in C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs
+2025-03-20 14:48:37,605 - INFO - Downloads complete. Total files: 3
+2025-03-20 14:48:59,118 - INFO - Application records created: 1
+2025-03-20 14:48:59,138 - INFO - File selector GUI launched as separate process
+2025-03-20 14:48:59,147 - INFO - 127.0.0.1 - - [20/Mar/2025 14:48:59] "POST /process-url HTTP/1.1" 200 -
+2025-03-20 14:55:05,200 - INFO - 127.0.0.1 - - [20/Mar/2025 14:55:05] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-03-20 14:55:05,447 - INFO - ====== WebDriver manager ======
+2025-03-20 14:55:08,140 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-20 14:55:12,603 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-20 14:55:13,012 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.90\chromedriver-win32/chromedriver.exe] found in cache
+2025-03-20 14:55:27,205 - INFO - Navigating to login page...
+2025-03-20 14:55:27,226 - INFO - Login page loaded. Waiting for user authentication...
+2025-03-20 14:55:57,252 - INFO - Login successful
+2025-03-20 14:56:05,290 - INFO - Navigating to target page...
+2025-03-20 14:56:08,934 - INFO - Clicked Documents button
+2025-03-20 14:56:19,114 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Hannah Bouffier
+2025-03-20 14:56:24,740 - INFO - Starting document processing...
+2025-03-20 14:56:24,765 - INFO - Starting enhanced scroll operation...
+2025-03-20 14:56:26,799 - INFO - Scroll attempt 1: Height = 3470
+2025-03-20 14:56:28,957 - INFO - Scroll attempt 2: Height = 5670
+2025-03-20 14:56:30,970 - INFO - Scroll attempt 3: Height = 6633
+2025-03-20 14:56:32,979 - INFO - Scroll attempt 4: Height = 6633
+2025-03-20 14:56:34,990 - INFO - Scroll attempt 5: Height = 6633
+2025-03-20 14:56:37,000 - INFO - Reached bottom after 6 attempts
+2025-03-20 14:56:40,001 - INFO - Starting optimized timeline processing...
+2025-03-20 14:56:40,037 - INFO - Found 72 total timeline events
+2025-03-20 14:56:41,870 - INFO - Found 28 events with labels
+2025-03-20 14:56:41,871 - INFO - Processing batch 1 of 1
+2025-03-20 14:56:43,153 - INFO - Successfully initiated download 1
+2025-03-20 14:56:47,173 - INFO - Successfully initiated download 2
+2025-03-20 14:56:50,387 - INFO - Successfully initiated download 3
+2025-03-20 14:56:53,782 - INFO - Successfully initiated download 4
+2025-03-20 14:56:57,371 - INFO - Successfully initiated download 5
+2025-03-20 14:57:00,559 - INFO - Successfully initiated download 6
+2025-03-20 14:57:03,747 - INFO - Successfully initiated download 7
+2025-03-20 14:57:06,907 - INFO - Successfully initiated download 8
+2025-03-20 14:57:10,185 - INFO - Successfully initiated download 9
+2025-03-20 14:57:13,367 - INFO - Successfully initiated download 10
+2025-03-20 14:57:16,524 - INFO - Successfully initiated download 11
+2025-03-20 14:57:19,679 - INFO - Successfully initiated download 12
+2025-03-20 14:57:22,880 - INFO - Successfully initiated download 13
+2025-03-20 14:57:26,070 - INFO - Successfully initiated download 14
+2025-03-20 14:57:29,246 - INFO - Successfully initiated download 15
+2025-03-20 14:57:32,400 - INFO - Successfully initiated download 16
+2025-03-20 14:57:35,566 - INFO - Successfully initiated download 17
+2025-03-20 14:57:38,740 - INFO - Successfully initiated download 18
+2025-03-20 14:57:41,995 - INFO - Successfully initiated download 19
+2025-03-20 14:57:45,175 - INFO - Successfully initiated download 20
+2025-03-20 14:57:48,332 - INFO - Successfully initiated download 21
+2025-03-20 14:57:51,503 - INFO - Successfully initiated download 22
+2025-03-20 14:57:54,685 - INFO - Successfully initiated download 23
+2025-03-20 14:57:57,871 - INFO - Successfully initiated download 24
+2025-03-20 14:58:01,056 - INFO - Successfully initiated download 25
+2025-03-20 14:58:04,566 - INFO - Successfully initiated download 26
+2025-03-20 14:58:08,161 - INFO - Successfully initiated download 27
+2025-03-20 14:58:11,415 - INFO - Successfully initiated download 28
+2025-03-20 14:58:13,418 - INFO - Processing progress: 100.0% (28 downloads)
+2025-03-20 14:58:19,442 - INFO - Timeline processing complete: 28 downloads initiated
+2025-03-20 14:58:19,442 - INFO - Monitoring downloads in C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs
+2025-03-20 14:58:24,260 - INFO - Downloads complete. Total files: 3
+2025-03-20 14:58:28,286 - INFO - File selector GUI launched as separate process
+2025-03-20 14:58:28,296 - INFO - 127.0.0.1 - - [20/Mar/2025 14:58:28] "POST /process-url HTTP/1.1" 200 -
+2025-03-20 15:08:07,033 - INFO - 127.0.0.1 - - [20/Mar/2025 15:08:07] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-03-20 15:08:07,297 - INFO - ====== WebDriver manager ======
+2025-03-20 15:08:09,057 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-20 15:08:13,610 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-20 15:08:14,384 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.90\chromedriver-win32/chromedriver.exe] found in cache
+2025-03-20 15:08:26,605 - INFO - Navigating to login page...
+2025-03-20 15:08:26,648 - INFO - Login page loaded. Waiting for user authentication...
+2025-03-20 15:08:56,678 - INFO - Login successful
+2025-03-20 15:09:08,736 - INFO - Navigating to target page...
+2025-03-20 15:09:13,870 - INFO - Clicked Documents button
+2025-03-20 15:09:24,017 - INFO - Folder created for the first applicant: Donna Madigan
+2025-03-20 15:09:29,446 - INFO - Starting document processing...
+2025-03-20 15:09:29,467 - INFO - Starting enhanced scroll operation...
+2025-03-20 15:09:31,496 - INFO - Scroll attempt 1: Height = 3201
+2025-03-20 15:09:33,509 - INFO - Scroll attempt 2: Height = 3812
+2025-03-20 15:09:35,519 - INFO - Scroll attempt 3: Height = 3812
+2025-03-20 15:09:37,529 - INFO - Scroll attempt 4: Height = 3812
+2025-03-20 15:09:39,540 - INFO - Reached bottom after 5 attempts
+2025-03-20 15:09:42,541 - INFO - Starting optimized timeline processing...
+2025-03-20 15:09:42,567 - INFO - Found 36 total timeline events
+2025-03-20 15:09:43,464 - INFO - Found 28 events with labels
+2025-03-20 15:09:43,465 - INFO - Processing batch 1 of 1
+2025-03-20 15:09:44,587 - INFO - Successfully initiated download 1
+2025-03-20 15:09:47,769 - INFO - Successfully initiated download 2
+2025-03-20 15:09:50,994 - INFO - Successfully initiated download 3
+2025-03-20 15:09:54,290 - INFO - Successfully initiated download 4
+2025-03-20 15:10:08,545 - INFO - Successfully initiated download 5
+2025-03-20 15:10:12,149 - INFO - Successfully initiated download 6
+2025-03-20 15:10:15,770 - INFO - Successfully initiated download 7
+2025-03-20 15:10:20,659 - INFO - Successfully initiated download 8
+2025-03-20 15:10:24,034 - INFO - Successfully initiated download 9
+2025-03-20 15:10:27,328 - INFO - Successfully initiated download 10
+2025-03-20 15:10:33,219 - INFO - Successfully initiated download 11
+2025-03-20 15:10:36,583 - INFO - Successfully initiated download 12
+2025-03-20 15:10:40,475 - INFO - Successfully initiated download 13
+2025-03-20 15:10:43,699 - INFO - Successfully initiated download 14
+2025-03-20 15:10:49,275 - INFO - Successfully initiated download 15
+2025-03-20 15:10:52,512 - INFO - Successfully initiated download 16
+2025-03-20 15:10:57,350 - INFO - Successfully initiated download 17
+2025-03-20 15:11:00,600 - INFO - Successfully initiated download 18
+2025-03-20 15:11:04,076 - INFO - Successfully initiated download 19
+2025-03-20 15:11:07,365 - INFO - Successfully initiated download 20
+2025-03-20 15:11:11,298 - INFO - Successfully initiated download 21
+2025-03-20 15:11:14,494 - INFO - Successfully initiated download 22
+2025-03-20 15:11:17,642 - INFO - Successfully initiated download 23
+2025-03-20 15:11:20,983 - INFO - Successfully initiated download 24
+2025-03-20 15:11:24,142 - INFO - Successfully initiated download 25
+2025-03-20 15:11:27,353 - INFO - Successfully initiated download 26
+2025-03-20 15:11:30,769 - INFO - Successfully initiated download 27
+2025-03-20 15:11:33,920 - INFO - Successfully initiated download 28
+2025-03-20 15:11:35,922 - INFO - Processing progress: 100.0% (28 downloads)
+2025-03-20 15:11:41,944 - INFO - Timeline processing complete: 28 downloads initiated
+2025-03-20 15:11:41,945 - INFO - Monitoring downloads in C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs
+2025-03-20 15:11:46,698 - INFO - Downloads complete. Total files: 4
+2025-03-20 15:11:54,728 - INFO - Application records created: 1
+2025-03-20 15:11:54,733 - INFO - File selector GUI launched as separate process
+2025-03-20 15:11:54,735 - INFO - 127.0.0.1 - - [20/Mar/2025 15:11:54] "POST /process-url HTTP/1.1" 200 -
+2025-03-20 15:12:35,028 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-03-20 15:12:39,378 - INFO -  * Restarting with stat
+2025-03-20 15:12:41,776 - WARNING -  * Debugger is active!
+2025-03-20 15:12:41,820 - INFO -  * Debugger PIN: 361-797-060
+2025-03-20 15:16:12,610 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-03-20 15:16:12,611 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-20 15:16:12,614 - INFO -  * Restarting with stat
+2025-03-20 15:16:15,561 - WARNING -  * Debugger is active!
+2025-03-20 15:16:15,572 - INFO -  * Debugger PIN: 361-797-060
+2025-03-20 15:16:23,608 - INFO - 127.0.0.1 - - [20/Mar/2025 15:16:23] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-03-20 15:16:23,871 - INFO - ====== WebDriver manager ======
+2025-03-20 15:16:25,933 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-20 15:16:26,377 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-20 15:16:27,339 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.90\chromedriver-win32/chromedriver.exe] found in cache
+2025-03-20 15:16:45,832 - INFO - Navigating to login page...
+2025-03-20 15:16:45,896 - INFO - Login page loaded. Waiting for user authentication...
+2025-03-20 15:17:15,924 - INFO - Login successful
+2025-03-20 15:17:24,048 - INFO - Navigating to target page...
+2025-03-20 15:17:27,907 - INFO - Clicked Documents button
+2025-03-20 15:17:38,047 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Donna Madigan
+2025-03-20 15:17:43,429 - INFO - Starting document processing...
+2025-03-20 15:17:43,451 - INFO - Starting enhanced scroll operation...
+2025-03-20 15:17:45,500 - INFO - Scroll attempt 1: Height = 3201
+2025-03-20 15:17:47,513 - INFO - Scroll attempt 2: Height = 3812
+2025-03-20 15:17:49,524 - INFO - Scroll attempt 3: Height = 3812
+2025-03-20 15:17:51,535 - INFO - Scroll attempt 4: Height = 3812
+2025-03-20 15:17:53,546 - INFO - Reached bottom after 5 attempts
+2025-03-20 15:17:56,548 - INFO - Starting optimized timeline processing...
+2025-03-20 15:17:56,574 - INFO - Found 36 total timeline events
+2025-03-20 15:17:57,627 - INFO - Found 28 events with labels
+2025-03-20 15:17:57,627 - INFO - Processing batch 1 of 1
+2025-03-20 15:17:58,759 - INFO - Successfully initiated download 1
+2025-03-20 15:18:01,897 - INFO - Successfully initiated download 2
+2025-03-20 15:18:05,027 - INFO - Successfully initiated download 3
+2025-03-20 15:18:08,164 - INFO - Successfully initiated download 4
+2025-03-20 15:18:11,373 - INFO - Successfully initiated download 5
+2025-03-20 15:18:14,541 - INFO - Successfully initiated download 6
+2025-03-20 15:18:17,693 - INFO - Successfully initiated download 7
+2025-03-20 15:18:20,844 - INFO - Successfully initiated download 8
+2025-03-20 15:18:23,979 - INFO - Successfully initiated download 9
+2025-03-20 15:18:27,123 - INFO - Successfully initiated download 10
+2025-03-20 15:18:30,268 - INFO - Successfully initiated download 11
+2025-03-20 15:18:33,413 - INFO - Successfully initiated download 12
+2025-03-20 15:18:36,611 - INFO - Successfully initiated download 13
+2025-03-20 15:18:39,747 - INFO - Successfully initiated download 14
+2025-03-20 15:18:42,890 - INFO - Successfully initiated download 15
+2025-03-20 15:18:46,028 - INFO - Successfully initiated download 16
+2025-03-20 15:18:49,166 - INFO - Successfully initiated download 17
+2025-03-20 15:18:52,453 - INFO - Successfully initiated download 18
+2025-03-20 15:18:55,599 - INFO - Successfully initiated download 19
+2025-03-20 15:18:58,744 - INFO - Successfully initiated download 20
+2025-03-20 15:19:01,876 - INFO - Successfully initiated download 21
+2025-03-20 15:19:05,005 - INFO - Successfully initiated download 22
+2025-03-20 15:19:08,189 - INFO - Successfully initiated download 23
+2025-03-20 15:19:11,326 - INFO - Successfully initiated download 24
+2025-03-20 15:19:14,471 - INFO - Successfully initiated download 25
+2025-03-20 15:19:17,621 - INFO - Successfully initiated download 26
+2025-03-20 15:19:20,791 - INFO - Successfully initiated download 27
+2025-03-20 15:19:23,937 - INFO - Successfully initiated download 28
+2025-03-20 15:19:25,938 - INFO - Processing progress: 100.0% (28 downloads)
+2025-03-20 15:19:31,970 - INFO - Timeline processing complete: 28 downloads initiated
+2025-03-20 15:19:31,971 - INFO - Monitoring downloads in C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs
+2025-03-20 15:19:36,723 - INFO - Downloads complete. Total files: 4
+2025-03-20 15:19:46,223 - INFO - Application records created: 1
+2025-03-20 15:19:46,233 - INFO - File selector GUI launched as separate process
+2025-03-20 15:19:46,235 - INFO - 127.0.0.1 - - [20/Mar/2025 15:19:46] "POST /process-url HTTP/1.1" 200 -
+2025-03-21 06:23:54,016 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-03-21 06:23:54,017 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-21 06:23:54,037 - INFO -  * Restarting with stat
+2025-03-21 06:23:56,017 - WARNING -  * Debugger is active!
+2025-03-21 06:23:56,049 - INFO -  * Debugger PIN: 361-797-060

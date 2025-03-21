@@ -25,7 +25,9 @@ from selenium.webdriver.common.action_chains import ActionChains
 from webdriver_manager.chrome import ChromeDriverManager
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
+from dotenv import load_dotenv
 
+load_dotenv()
 
 # Configure logging
 logging.basicConfig(
@@ -857,7 +859,7 @@ def process_applicants(applicant_details,lender_details,applicant_api_url,lender
 
             # Create application record
             if new_applicant_recordIDs:
-                application_hub_api = "https://ai-broker.korunaassist.com/fusion/v1/datasheets/dstLr3xUL37tbn2Sud/records"
+                application_hub_api = os.getenv("APPLICATION_HUB_URL")
                 application_data = {
                     "records": [{
                         "fields": {
@@ -1293,7 +1295,7 @@ def process_timeline_events(driver):
         logging.error(f"Timeline processing failed: {str(e)}")
         return False
 
-def wait_for_downloads(download_path, timeout=300):
+def wait_for_downloads(download_path, timeout=900):
     """Enhanced download monitoring with better stability"""
     logging.info(f"Monitoring downloads in {download_path}")
     
@@ -1578,11 +1580,11 @@ def process_url():
             raise
 
         # POST the data to the apitable endpoint
-        applicant_api_url = "https://ai-broker.korunaassist.com/fusion/v1/datasheets/dst1vag1MekDBbrzoS/records"
-        lender_api_url = "https://ai-broker.korunaassist.com/fusion/v1/datasheets/dstGYdtqYD60Hk58UV/records"
+        applicant_api_url = os.getenv("APPLICANT_HUB_URL")
+        lender_api_url = os.getenv("LENDER_HUB_URL")
         headers = {
             "Content-Type": "application/json",
-            "Authorization": "Bearer usk5YzjFkoAuRfYFNcPCM0j"
+            "Authorization": f"Bearer {os.getenv('API_KEY')}"
         }
 
         applicant_details = []

@@ -1,0 +1,29 @@
+2025-03-21 09:16:07,797 - INFO - [backup.py:30] - Successfully initialized winotify for Windows 11 notifications
+2025-03-21 09:16:07,799 - INFO - [backup.py:54] - Found icon at: C:\Users\Hello World!\Desktop\COMPLETE\aibroker-notif\ka.png
+2025-03-21 09:16:07,799 - INFO - [backup.py:238] - Starting AITable Monitor...
+2025-03-21 09:16:07,819 - INFO - [backup.py:77] - Successfully sent winotify notification: AI Broker Started
+2025-03-21 09:16:09,242 - INFO - [backup.py:148] - Successfully fetched record count: 3
+2025-03-21 09:16:09,246 - INFO - [backup.py:163] - Successfully saved record count: 3
+2025-03-21 09:16:19,252 - INFO - [backup.py:207] - Checking for new records...
+2025-03-21 09:16:19,267 - INFO - [backup.py:176] - Successfully loaded last record count: 3
+2025-03-21 09:16:20,500 - INFO - [backup.py:148] - Successfully fetched record count: 3
+2025-03-21 09:16:30,527 - INFO - [backup.py:207] - Checking for new records...
+2025-03-21 09:16:30,528 - INFO - [backup.py:176] - Successfully loaded last record count: 3
+2025-03-21 09:16:31,842 - INFO - [backup.py:148] - Successfully fetched record count: 4
+2025-03-21 09:16:31,843 - INFO - [backup.py:216] - Found 1 new records!
+2025-03-21 09:16:31,858 - INFO - [backup.py:77] - Successfully sent winotify notification: 🔔 AI Broker Alert!
+2025-03-21 09:16:31,862 - INFO - [backup.py:163] - Successfully saved record count: 4
+2025-03-21 09:16:41,870 - INFO - [backup.py:207] - Checking for new records...
+2025-03-21 09:16:41,881 - INFO - [backup.py:176] - Successfully loaded last record count: 4
+2025-03-21 09:16:43,122 - INFO - [backup.py:148] - Successfully fetched record count: 4
+2025-03-21 09:16:53,129 - INFO - [backup.py:207] - Checking for new records...
+2025-03-21 09:16:53,130 - INFO - [backup.py:176] - Successfully loaded last record count: 4
+2025-03-21 09:16:54,317 - INFO - [backup.py:148] - Successfully fetched record count: 4
+2025-03-21 09:16:56,008 - INFO - [backup.py:259] - Monitoring stopped by user
+2025-03-21 09:17:44,370 - INFO - [backup.py:30] - Successfully initialized winotify for Windows 11 notifications
+2025-03-21 09:17:44,372 - INFO - [backup.py:54] - Found icon at: C:\Users\Hello World!\Desktop\COMPLETE\aibroker-notif\ka.png
+2025-03-21 09:17:44,372 - INFO - [backup.py:238] - Starting AITable Monitor...
+2025-03-21 09:17:44,389 - INFO - [backup.py:77] - Successfully sent winotify notification: AI Broker Started
+2025-03-21 09:17:45,578 - INFO - [backup.py:148] - Successfully fetched record count: 2
+2025-03-21 09:17:45,579 - INFO - [backup.py:163] - Successfully saved record count: 2
+2025-03-21 09:17:52,798 - INFO - [backup.py:259] - Monitoring stopped by user
