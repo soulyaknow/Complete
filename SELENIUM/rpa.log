@@ -6382,3 +6382,1058 @@ Stacktrace:
 2025-04-02 12:51:46,042 - WARNING -  * Debugger is active!
 2025-04-02 12:51:46,054 - INFO -  * Debugger PIN: 361-797-060
 2025-04-02 12:51:51,190 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\rpa.py', reloading
+2025-04-02 12:51:51,369 - INFO -  * Restarting with stat
+2025-04-02 12:51:55,111 - WARNING -  * Debugger is active!
+2025-04-02 12:51:55,121 - INFO -  * Debugger PIN: 361-797-060
+2025-04-03 07:48:37,585 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-04-03 07:48:37,587 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-03 07:48:37,592 - INFO -  * Restarting with stat
+2025-04-03 07:49:19,436 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-04-03 07:49:19,437 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-03 07:49:19,442 - INFO -  * Restarting with stat
+2025-04-03 07:49:22,180 - WARNING -  * Debugger is active!
+2025-04-03 07:49:22,233 - INFO -  * Debugger PIN: 699-806-219
+2025-04-03 07:50:19,827 - INFO - 127.0.0.1 - - [03/Apr/2025 07:50:19] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-03 07:50:20,078 - INFO - ====== WebDriver manager ======
+2025-04-03 07:50:22,547 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-03 07:50:23,441 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-03 07:50:24,288 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-03 07:50:26,523 - INFO - WebDriver version 134.0.6998.165 selected
+2025-04-03 07:50:26,615 - INFO - Modern chrome version https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.165/win32/chromedriver-win32.zip
+2025-04-03 07:50:26,722 - INFO - About to download new driver from https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.165/win32/chromedriver-win32.zip
+2025-04-03 07:50:27,843 - INFO - Driver downloading response is 200
+2025-04-03 07:50:30,269 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-03 07:50:32,795 - INFO - Driver has been saved in cache [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165]
+2025-04-03 07:50:49,897 - INFO - Navigating to login page...
+2025-04-03 07:50:49,930 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-03 07:51:19,956 - INFO - Login successful
+2025-04-03 07:51:24,736 - INFO - Navigating to target page...
+2025-04-03 07:51:29,719 - INFO - Clicked Documents button
+2025-04-03 07:51:39,835 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Emma Douglas
+2025-04-03 07:51:45,234 - INFO - Starting document processing...
+2025-04-03 07:51:45,262 - INFO - Starting enhanced scroll operation...
+2025-04-03 07:51:47,281 - INFO - Scroll attempt 1: Height = 2811
+2025-04-03 07:51:49,293 - INFO - Scroll attempt 2: Height = 3070
+2025-04-03 07:51:51,303 - INFO - Scroll attempt 3: Height = 3070
+2025-04-03 07:51:53,315 - INFO - Scroll attempt 4: Height = 3070
+2025-04-03 07:51:55,325 - INFO - Reached bottom after 5 attempts
+2025-04-03 07:51:58,328 - INFO - Starting optimized timeline processing...
+2025-04-03 07:51:58,351 - INFO - Found 28 total timeline events
+2025-04-03 07:51:59,055 - INFO - Found 4 events with labels
+2025-04-03 07:51:59,055 - INFO - Processing batch 1 of 1
+2025-04-03 07:52:00,189 - INFO - Successfully initiated download 1
+2025-04-03 07:52:03,585 - INFO - Successfully initiated download 2
+2025-04-03 07:52:06,744 - INFO - Successfully initiated download 3
+2025-04-03 07:52:09,902 - INFO - Successfully initiated download 4
+2025-04-03 07:52:11,904 - INFO - Processing progress: 100.0% (4 downloads)
+2025-04-03 07:52:17,916 - INFO - Timeline processing complete: 4 downloads initiated
+2025-04-03 07:52:17,917 - INFO - Monitoring downloads in C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs
+2025-04-03 07:52:22,670 - INFO - Downloads complete. Total files: 3
+2025-04-03 07:52:27,377 - INFO - File selector GUI launched as separate process
+2025-04-03 07:52:27,379 - INFO - 127.0.0.1 - - [03/Apr/2025 07:52:27] "POST /process-url HTTP/1.1" 200 -
+2025-04-03 08:09:12,220 - INFO - 127.0.0.1 - - [03/Apr/2025 08:09:12] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-03 08:09:12,476 - INFO - ====== WebDriver manager ======
+2025-04-03 08:09:14,330 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-03 08:09:19,437 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-03 08:09:20,067 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-03 08:09:31,502 - INFO - Navigating to login page...
+2025-04-03 08:09:31,523 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-03 08:10:01,629 - INFO - Login successful
+2025-04-03 08:10:06,295 - INFO - Navigating to target page...
+2025-04-03 08:10:10,855 - INFO - Clicked Documents button
+2025-04-03 08:10:21,286 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Simon Charly
+2025-04-03 08:10:26,818 - INFO - Starting document processing...
+2025-04-03 08:10:26,901 - INFO - Starting enhanced scroll operation...
+2025-04-03 08:10:28,924 - INFO - Scroll attempt 1: Height = 2811
+2025-04-03 08:10:32,648 - INFO - Scroll attempt 2: Height = 4830
+2025-04-03 08:10:34,658 - INFO - Scroll attempt 3: Height = 4830
+2025-04-03 08:10:36,668 - INFO - Scroll attempt 4: Height = 4830
+2025-04-03 08:10:38,679 - INFO - Reached bottom after 5 attempts
+2025-04-03 08:10:41,680 - INFO - Starting optimized timeline processing...
+2025-04-03 08:10:41,705 - INFO - Found 48 total timeline events
+2025-04-03 08:10:42,961 - INFO - Found 1 events with labels
+2025-04-03 08:10:42,962 - INFO - Processing batch 1 of 1
+2025-04-03 08:10:44,093 - INFO - Successfully initiated download 1
+2025-04-03 08:10:46,094 - INFO - Processing progress: 100.0% (1 downloads)
+2025-04-03 08:10:52,542 - INFO - Timeline processing complete: 1 downloads initiated
+2025-04-03 08:10:52,542 - INFO - Monitoring downloads in C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs
+2025-04-03 08:10:57,296 - INFO - Downloads complete. Total files: 3
+2025-04-03 08:11:07,826 - INFO - Found existing lender: Macquarie
+2025-04-03 08:11:09,732 - INFO - Found existing lender: Macquarie
+2025-04-03 08:11:12,035 - INFO - Application records created: 1
+2025-04-03 08:11:12,040 - INFO - File selector GUI launched as separate process
+2025-04-03 08:11:12,043 - INFO - 127.0.0.1 - - [03/Apr/2025 08:11:12] "POST /process-url HTTP/1.1" 200 -
+2025-04-03 08:12:25,106 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-03 08:12:29,318 - INFO -  * Restarting with stat
+2025-04-03 08:12:32,245 - WARNING -  * Debugger is active!
+2025-04-03 08:12:32,262 - INFO -  * Debugger PIN: 699-806-219
+2025-04-03 08:16:45,183 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-03 08:16:45,312 - INFO -  * Restarting with stat
+2025-04-03 08:20:25,002 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-04-03 08:20:25,002 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-03 08:20:25,006 - INFO -  * Restarting with stat
+2025-04-03 08:20:26,984 - WARNING -  * Debugger is active!
+2025-04-03 08:20:26,995 - INFO -  * Debugger PIN: 699-806-219
+2025-04-03 08:20:30,389 - INFO - 127.0.0.1 - - [03/Apr/2025 08:20:30] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-03 08:20:30,654 - INFO - ====== WebDriver manager ======
+2025-04-03 08:20:32,621 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-03 08:20:33,664 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-03 08:20:34,695 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-03 08:20:48,752 - INFO - Navigating to login page...
+2025-04-03 08:20:48,781 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-03 08:21:18,811 - INFO - Login successful
+2025-04-03 08:21:24,711 - INFO - Navigating to target page...
+2025-04-03 08:21:29,430 - INFO - Clicked Documents button
+2025-04-03 08:21:39,771 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Simon Charly
+2025-04-03 08:21:45,248 - INFO - Starting document processing...
+2025-04-03 08:21:45,280 - INFO - Starting enhanced scroll operation...
+2025-04-03 08:21:47,329 - INFO - Scroll attempt 1: Height = 2811
+2025-04-03 08:21:49,342 - INFO - Scroll attempt 2: Height = 4830
+2025-04-03 08:21:51,354 - INFO - Scroll attempt 3: Height = 4830
+2025-04-03 08:21:53,364 - INFO - Scroll attempt 4: Height = 4830
+2025-04-03 08:21:55,374 - INFO - Reached bottom after 5 attempts
+2025-04-03 08:21:58,376 - INFO - Starting optimized timeline processing...
+2025-04-03 08:21:58,406 - INFO - Found 48 total timeline events
+2025-04-03 08:21:59,571 - INFO - Found 1 events with labels
+2025-04-03 08:21:59,572 - INFO - Processing batch 1 of 1
+2025-04-03 08:22:00,703 - INFO - Successfully initiated download 1
+2025-04-03 08:22:02,706 - INFO - Processing progress: 100.0% (1 downloads)
+2025-04-03 08:22:09,267 - INFO - Timeline processing complete: 1 downloads initiated
+2025-04-03 08:22:09,267 - INFO - Monitoring downloads in C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs
+2025-04-03 08:22:14,021 - INFO - Downloads complete. Total files: 3
+2025-04-03 08:22:14,580 - INFO - 127.0.0.1 - - [03/Apr/2025 08:22:14] "POST /process-url HTTP/1.1" 200 -
+2025-04-03 08:30:58,589 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-03 08:30:58,854 - INFO -  * Restarting with stat
+2025-04-03 08:34:10,087 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-04-03 08:34:10,088 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-03 08:34:10,096 - INFO -  * Restarting with stat
+2025-04-03 08:34:13,129 - WARNING -  * Debugger is active!
+2025-04-03 08:34:13,140 - INFO -  * Debugger PIN: 699-806-219
+2025-04-03 08:35:31,744 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-04-03 08:35:31,746 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-03 08:35:31,756 - INFO -  * Restarting with stat
+2025-04-03 08:35:34,542 - WARNING -  * Debugger is active!
+2025-04-03 08:35:34,551 - INFO -  * Debugger PIN: 699-806-219
+2025-04-03 08:35:34,573 - INFO - 127.0.0.1 - - [03/Apr/2025 08:35:34] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-03 08:35:34,580 - INFO - ====== WebDriver manager ======
+2025-04-03 08:35:36,784 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-03 08:35:37,433 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-03 08:35:38,501 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-03 08:35:49,662 - INFO - Navigating to login page...
+2025-04-03 08:35:49,689 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-03 08:36:19,713 - INFO - Login successful
+2025-04-03 08:36:25,306 - INFO - Navigating to target page...
+2025-04-03 08:37:22,273 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-04-03 08:37:22,273 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-03 08:37:22,278 - INFO -  * Restarting with stat
+2025-04-03 08:37:25,190 - WARNING -  * Debugger is active!
+2025-04-03 08:37:25,199 - INFO -  * Debugger PIN: 699-806-219
+2025-04-03 08:37:25,235 - INFO - 127.0.0.1 - - [03/Apr/2025 08:37:25] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-03 08:37:25,245 - INFO - ====== WebDriver manager ======
+2025-04-03 08:37:26,920 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-03 08:37:27,963 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-03 08:37:29,000 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-03 08:37:39,681 - INFO - Navigating to login page...
+2025-04-03 08:37:39,707 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-03 08:38:09,731 - INFO - Login successful
+2025-04-03 08:38:14,880 - INFO - Navigating to target page...
+2025-04-03 08:38:19,450 - INFO - Clicked Documents button
+2025-04-03 08:38:29,575 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Emma Douglas
+2025-04-03 08:38:35,209 - INFO - Starting document processing...
+2025-04-03 08:38:35,228 - INFO - Starting enhanced scroll operation...
+2025-04-03 08:38:37,277 - INFO - Scroll attempt 1: Height = 2811
+2025-04-03 08:38:39,287 - INFO - Scroll attempt 2: Height = 3070
+2025-04-03 08:38:41,296 - INFO - Scroll attempt 3: Height = 3070
+2025-04-03 08:38:43,307 - INFO - Scroll attempt 4: Height = 3070
+2025-04-03 08:38:45,318 - INFO - Reached bottom after 5 attempts
+2025-04-03 08:38:48,320 - INFO - Starting optimized timeline processing...
+2025-04-03 08:38:48,343 - INFO - Found 28 total timeline events
+2025-04-03 08:38:49,023 - INFO - Found 4 events with labels
+2025-04-03 08:38:49,023 - INFO - Processing batch 1 of 1
+2025-04-03 08:38:50,154 - INFO - Successfully initiated download 1
+2025-04-03 08:38:53,514 - INFO - Successfully initiated download 2
+2025-04-03 08:38:56,658 - INFO - Successfully initiated download 3
+2025-04-03 08:39:00,264 - INFO - Successfully initiated download 4
+2025-04-03 08:39:02,265 - INFO - Processing progress: 100.0% (4 downloads)
+2025-04-03 08:39:08,277 - INFO - Timeline processing complete: 4 downloads initiated
+2025-04-03 08:39:08,278 - INFO - Monitoring downloads in C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs
+2025-04-03 08:39:13,034 - INFO - Downloads complete. Total files: 3
+2025-04-03 08:39:13,412 - INFO - Navigating to Broker tools...
+2025-04-03 08:39:21,373 - INFO - Clicked 'Personal details' button 1 of 2.
+2025-04-03 08:39:21,374 - ERROR - Error: name 'fields' is not defined
+2025-04-03 08:39:25,006 - INFO - 127.0.0.1 - - [03/Apr/2025 08:39:25] "[35m[1mPOST /process-url HTTP/1.1[0m" 500 -
+2025-04-03 08:39:51,079 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-03 08:39:55,239 - INFO -  * Restarting with stat
+2025-04-03 08:39:57,272 - WARNING -  * Debugger is active!
+2025-04-03 08:39:57,281 - INFO -  * Debugger PIN: 699-806-219
+2025-04-03 08:39:58,323 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-03 08:39:58,435 - INFO -  * Restarting with stat
+2025-04-03 08:40:00,723 - WARNING -  * Debugger is active!
+2025-04-03 08:40:00,732 - INFO -  * Debugger PIN: 699-806-219
+2025-04-03 08:40:17,608 - INFO - 127.0.0.1 - - [03/Apr/2025 08:40:17] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-03 08:40:17,874 - INFO - ====== WebDriver manager ======
+2025-04-03 08:40:20,238 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-03 08:40:21,490 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-03 08:40:22,518 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-03 08:40:33,846 - INFO - Navigating to login page...
+2025-04-03 08:40:34,390 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-03 08:41:04,417 - INFO - Login successful
+2025-04-03 08:41:12,007 - INFO - Navigating to target page...
+2025-04-03 08:41:14,740 - INFO - Clicked Documents button
+2025-04-03 08:41:24,945 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Emma Douglas
+2025-04-03 08:41:30,604 - INFO - Starting document processing...
+2025-04-03 08:41:30,688 - INFO - Starting enhanced scroll operation...
+2025-04-03 08:41:32,861 - INFO - Scroll attempt 1: Height = 2811
+2025-04-03 08:41:34,871 - INFO - Scroll attempt 2: Height = 3070
+2025-04-03 08:41:36,882 - INFO - Scroll attempt 3: Height = 3070
+2025-04-03 08:41:38,892 - INFO - Scroll attempt 4: Height = 3070
+2025-04-03 08:41:40,903 - INFO - Reached bottom after 5 attempts
+2025-04-03 08:41:43,904 - INFO - Starting optimized timeline processing...
+2025-04-03 08:41:43,930 - INFO - Found 28 total timeline events
+2025-04-03 08:41:44,607 - INFO - Found 4 events with labels
+2025-04-03 08:41:44,608 - INFO - Processing batch 1 of 1
+2025-04-03 08:41:45,779 - INFO - Successfully initiated download 1
+2025-04-03 08:41:49,299 - INFO - Successfully initiated download 2
+2025-04-03 08:41:53,718 - INFO - Successfully initiated download 3
+2025-04-03 08:41:56,858 - INFO - Successfully initiated download 4
+2025-04-03 08:41:58,860 - INFO - Processing progress: 100.0% (4 downloads)
+2025-04-03 08:42:04,873 - INFO - Timeline processing complete: 4 downloads initiated
+2025-04-03 08:42:04,874 - INFO - Monitoring downloads in C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs
+2025-04-03 08:42:09,627 - INFO - Downloads complete. Total files: 3
+2025-04-03 08:42:09,881 - INFO - Navigating to Broker tools...
+2025-04-03 08:42:17,592 - ERROR - Error: name 'loggin' is not defined
+2025-04-03 08:42:20,097 - INFO - 127.0.0.1 - - [03/Apr/2025 08:42:20] "[35m[1mPOST /process-url HTTP/1.1[0m" 500 -
+2025-04-03 08:42:28,931 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-03 08:42:33,123 - INFO -  * Restarting with stat
+2025-04-03 08:42:35,871 - WARNING -  * Debugger is active!
+2025-04-03 08:42:35,891 - INFO -  * Debugger PIN: 699-806-219
+2025-04-03 08:42:46,075 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-03 08:42:46,216 - INFO -  * Restarting with stat
+2025-04-03 08:42:49,377 - WARNING -  * Debugger is active!
+2025-04-03 08:42:49,389 - INFO -  * Debugger PIN: 699-806-219
+2025-04-03 08:42:53,936 - INFO - 127.0.0.1 - - [03/Apr/2025 08:42:53] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-03 08:42:54,204 - INFO - ====== WebDriver manager ======
+2025-04-03 08:42:56,423 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-03 08:42:57,461 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-03 08:42:58,324 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-03 08:43:09,515 - INFO - Navigating to login page...
+2025-04-03 08:43:09,623 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-03 08:43:39,646 - INFO - Login successful
+2025-04-03 08:43:44,928 - INFO - Navigating to target page...
+2025-04-03 08:43:50,079 - INFO - Clicked Documents button
+2025-04-03 08:44:00,261 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Emma Douglas
+2025-04-03 08:44:05,688 - INFO - Starting document processing...
+2025-04-03 08:44:05,708 - INFO - Starting enhanced scroll operation...
+2025-04-03 08:44:07,742 - INFO - Scroll attempt 1: Height = 2811
+2025-04-03 08:44:09,753 - INFO - Scroll attempt 2: Height = 3070
+2025-04-03 08:44:11,765 - INFO - Scroll attempt 3: Height = 3070
+2025-04-03 08:44:13,774 - INFO - Scroll attempt 4: Height = 3070
+2025-04-03 08:44:15,784 - INFO - Reached bottom after 5 attempts
+2025-04-03 08:44:18,786 - INFO - Starting optimized timeline processing...
+2025-04-03 08:44:18,812 - INFO - Found 28 total timeline events
+2025-04-03 08:44:19,450 - INFO - Found 4 events with labels
+2025-04-03 08:44:19,450 - INFO - Processing batch 1 of 1
+2025-04-03 08:44:20,576 - INFO - Successfully initiated download 1
+2025-04-03 08:44:24,418 - INFO - Successfully initiated download 2
+2025-04-03 08:44:27,555 - INFO - Successfully initiated download 3
+2025-04-03 08:44:30,910 - INFO - Successfully initiated download 4
+2025-04-03 08:44:32,911 - INFO - Processing progress: 100.0% (4 downloads)
+2025-04-03 08:44:38,923 - INFO - Timeline processing complete: 4 downloads initiated
+2025-04-03 08:44:38,924 - INFO - Monitoring downloads in C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs
+2025-04-03 08:44:43,677 - INFO - Downloads complete. Total files: 3
+2025-04-03 08:44:44,068 - INFO - Navigating to Broker tools...
+2025-04-03 08:44:51,947 - INFO - [<selenium.webdriver.remote.webelement.WebElement (session="bbd8030267298702003d02db3025e4ae", element="f.B27D696A1A48C44CF4F5258323D809E3.d.4151C97EF44CB7AFADF2E6D634E518E4.e.738")>, <selenium.webdriver.remote.webelement.WebElement (session="bbd8030267298702003d02db3025e4ae", element="f.B27D696A1A48C44CF4F5258323D809E3.d.4151C97EF44CB7AFADF2E6D634E518E4.e.739")>]
+2025-04-03 08:46:32,351 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-04-03 08:46:32,351 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-03 08:46:32,355 - INFO -  * Restarting with stat
+2025-04-03 08:46:34,548 - WARNING -  * Debugger is active!
+2025-04-03 08:46:34,564 - INFO -  * Debugger PIN: 699-806-219
+2025-04-03 08:46:43,353 - INFO - 127.0.0.1 - - [03/Apr/2025 08:46:43] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-03 08:46:43,630 - INFO - ====== WebDriver manager ======
+2025-04-03 08:46:46,677 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-03 08:46:47,727 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-03 08:46:48,797 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-03 08:47:02,150 - INFO - Navigating to login page...
+2025-04-03 08:47:02,171 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-03 08:47:32,193 - INFO - Login successful
+2025-04-03 08:47:38,922 - INFO - Navigating to target page...
+2025-04-03 08:47:41,759 - INFO - Clicked Documents button
+2025-04-03 08:47:51,950 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Emma Douglas
+2025-04-03 08:47:57,659 - INFO - Starting document processing...
+2025-04-03 08:47:57,689 - INFO - Starting enhanced scroll operation...
+2025-04-03 08:47:59,740 - INFO - Scroll attempt 1: Height = 2811
+2025-04-03 08:48:01,751 - INFO - Scroll attempt 2: Height = 3070
+2025-04-03 08:48:03,761 - INFO - Scroll attempt 3: Height = 3070
+2025-04-03 08:48:05,771 - INFO - Scroll attempt 4: Height = 3070
+2025-04-03 08:48:07,813 - INFO - Reached bottom after 5 attempts
+2025-04-03 08:48:10,815 - INFO - Starting optimized timeline processing...
+2025-04-03 08:48:10,839 - INFO - Found 28 total timeline events
+2025-04-03 08:48:11,545 - INFO - Found 4 events with labels
+2025-04-03 08:48:11,546 - INFO - Processing batch 1 of 1
+2025-04-03 08:48:12,692 - INFO - Successfully initiated download 1
+2025-04-03 08:48:15,993 - INFO - Successfully initiated download 2
+2025-04-03 08:48:19,156 - INFO - Successfully initiated download 3
+2025-04-03 08:48:22,314 - INFO - Successfully initiated download 4
+2025-04-03 08:48:24,316 - INFO - Processing progress: 100.0% (4 downloads)
+2025-04-03 08:48:30,420 - INFO - Timeline processing complete: 4 downloads initiated
+2025-04-03 08:48:30,421 - INFO - Monitoring downloads in C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs
+2025-04-03 08:48:35,174 - INFO - Downloads complete. Total files: 3
+2025-04-03 08:48:35,449 - INFO - Navigating to Broker tools...
+2025-04-03 08:48:44,355 - INFO - Clicked 'Personal details' button 1 of 2.
+2025-04-03 08:48:45,959 - INFO - Clicked 'Personal details' button 2 of 2.
+2025-04-03 08:48:45,961 - INFO - 127.0.0.1 - - [03/Apr/2025 08:48:45] "POST /process-url HTTP/1.1" 200 -
+2025-04-04 06:51:36,213 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 06:51:36,823 - INFO -  * Restarting with stat
+2025-04-04 06:51:42,001 - WARNING -  * Debugger is active!
+2025-04-04 06:51:42,012 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 07:26:35,110 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 07:26:35,261 - INFO -  * Restarting with stat
+2025-04-04 07:26:37,597 - WARNING -  * Debugger is active!
+2025-04-04 07:26:37,608 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 07:27:24,040 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 07:27:24,156 - INFO -  * Restarting with stat
+2025-04-04 07:27:26,383 - WARNING -  * Debugger is active!
+2025-04-04 07:27:26,393 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 07:27:52,662 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 07:27:52,765 - INFO -  * Restarting with stat
+2025-04-04 07:27:55,020 - WARNING -  * Debugger is active!
+2025-04-04 07:27:55,033 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 07:33:37,042 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 07:33:37,154 - INFO -  * Restarting with stat
+2025-04-04 07:52:30,926 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-04-04 07:52:30,927 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-04 07:52:30,932 - INFO -  * Restarting with stat
+2025-04-04 07:52:33,335 - WARNING -  * Debugger is active!
+2025-04-04 07:52:33,347 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 07:53:10,084 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-04-04 07:53:10,085 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-04 07:53:10,090 - INFO -  * Restarting with stat
+2025-04-04 07:53:12,057 - WARNING -  * Debugger is active!
+2025-04-04 07:53:12,065 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 07:53:12,099 - INFO - 127.0.0.1 - - [04/Apr/2025 07:53:12] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-04 07:53:12,105 - INFO - ====== WebDriver manager ======
+2025-04-04 07:53:16,532 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 07:53:17,885 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 07:53:18,611 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 07:53:21,074 - INFO - WebDriver version 134.0.6998.165 selected
+2025-04-04 07:53:21,079 - INFO - Modern chrome version https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.165/win32/chromedriver-win32.zip
+2025-04-04 07:53:21,080 - INFO - About to download new driver from https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.165/win32/chromedriver-win32.zip
+2025-04-04 07:53:22,331 - INFO - Driver downloading response is 200
+2025-04-04 07:53:25,676 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 07:53:27,900 - INFO - Driver has been saved in cache [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165]
+2025-04-04 07:53:44,646 - INFO - Navigating to login page...
+2025-04-04 07:53:44,720 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-04 07:54:14,746 - INFO - Login successful
+2025-04-04 07:54:20,053 - INFO - Navigating to target page...
+2025-04-04 07:54:24,160 - INFO - Clicked Documents button
+2025-04-04 07:54:34,354 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Emma Douglas
+2025-04-04 07:54:40,323 - INFO - Navigating to Broker tools...
+2025-04-04 07:54:46,930 - INFO - Clicked 'Personal details' button 1 of 2.
+2025-04-04 07:54:47,283 - ERROR - Error: 'Select' object has no attribute 'title_dropdown'
+2025-04-04 07:54:49,951 - INFO - 127.0.0.1 - - [04/Apr/2025 07:54:49] "[35m[1mPOST /process-url HTTP/1.1[0m" 500 -
+2025-04-04 08:11:30,509 - INFO - 127.0.0.1 - - [04/Apr/2025 08:11:30] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-04 08:11:30,774 - INFO - ====== WebDriver manager ======
+2025-04-04 08:11:33,155 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 08:11:38,125 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 08:11:39,116 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-04 08:11:50,510 - INFO - Navigating to login page...
+2025-04-04 08:11:50,535 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-04 08:12:20,560 - INFO - Login successful
+2025-04-04 08:12:25,271 - INFO - Navigating to target page...
+2025-04-04 08:12:31,037 - INFO - Clicked Documents button
+2025-04-04 08:12:41,285 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Emma Douglas
+2025-04-04 08:12:47,222 - INFO - Navigating to Broker tools...
+2025-04-04 08:12:52,899 - INFO - Clicked 'Personal details' button 1 of 2.
+2025-04-04 08:12:53,049 - ERROR - Error: 'Select' object has no attribute 'title_dropdown'
+2025-04-04 08:12:55,604 - INFO - 127.0.0.1 - - [04/Apr/2025 08:12:55] "[35m[1mPOST /process-url HTTP/1.1[0m" 500 -
+2025-04-04 08:14:27,270 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 08:14:31,583 - INFO -  * Restarting with stat
+2025-04-04 08:14:34,655 - WARNING -  * Debugger is active!
+2025-04-04 08:14:34,664 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 08:15:07,181 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 08:15:07,299 - INFO -  * Restarting with stat
+2025-04-04 08:15:11,201 - WARNING -  * Debugger is active!
+2025-04-04 08:15:11,212 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 08:15:11,236 - INFO - 127.0.0.1 - - [04/Apr/2025 08:15:11] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-04 08:15:11,242 - INFO - ====== WebDriver manager ======
+2025-04-04 08:15:13,229 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 08:15:14,074 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 08:15:14,896 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-04 08:15:25,522 - INFO - Navigating to login page...
+2025-04-04 08:15:25,549 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-04 08:15:55,574 - INFO - Login successful
+2025-04-04 08:16:00,341 - INFO - Navigating to target page...
+2025-04-04 08:16:04,896 - INFO - Clicked Documents button
+2025-04-04 08:16:15,372 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Emma Douglas
+2025-04-04 08:16:21,174 - INFO - Navigating to Broker tools...
+2025-04-04 08:16:26,981 - INFO - Clicked 'Personal details' button 1 of 2.
+2025-04-04 08:16:27,817 - INFO - Applicant 1 Details: {'Title': 'Ms', 'First Name': 'Emma', 'Middle Name': '', 'Preferred Name': 'Emma', 'Previous Name': '', 'Gender': 'Female', 'Date of Birth': '24/09/1986'}
+2025-04-04 08:16:29,169 - INFO - Clicked 'Personal details' button 2 of 2.
+2025-04-04 08:16:30,455 - INFO - Applicant 2 Details: {'Title': 'Mr', 'First Name': 'Cameron', 'Middle Name': 'Wallace', 'Preferred Name': 'Cameron', 'Previous Name': '', 'Gender': 'Male', 'Date of Birth': '26/03/1982'}
+2025-04-04 08:16:30,457 - INFO - 127.0.0.1 - - [04/Apr/2025 08:16:30] "POST /process-url HTTP/1.1" 200 -
+2025-04-04 08:17:40,361 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 08:17:40,488 - INFO -  * Restarting with stat
+2025-04-04 08:25:15,328 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-04-04 08:25:15,328 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-04 08:25:15,335 - INFO -  * Restarting with stat
+2025-04-04 08:25:20,275 - WARNING -  * Debugger is active!
+2025-04-04 08:25:20,297 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 08:25:42,461 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-04-04 08:25:42,462 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-04 08:25:42,465 - INFO -  * Restarting with stat
+2025-04-04 08:25:44,457 - WARNING -  * Debugger is active!
+2025-04-04 08:25:44,466 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 08:25:44,494 - INFO - 127.0.0.1 - - [04/Apr/2025 08:25:44] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-04 08:25:44,504 - INFO - ====== WebDriver manager ======
+2025-04-04 08:25:46,505 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 08:25:47,134 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 08:25:47,863 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-04 08:25:59,283 - INFO - Navigating to login page...
+2025-04-04 08:25:59,330 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-04 08:26:29,357 - INFO - Login successful
+2025-04-04 08:26:34,371 - INFO - Navigating to target page...
+2025-04-04 08:26:38,488 - INFO - Clicked Documents button
+2025-04-04 08:26:48,643 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Emma Douglas
+2025-04-04 08:26:54,628 - INFO - Navigating to Broker tools...
+2025-04-04 08:27:01,088 - INFO - Clicked 'Personal details' button 1 of 2.
+2025-04-04 08:27:02,321 - INFO - Applicant 1 Details: [{'Personal Details': {'Title': 'Ms', 'First Name': 'Emma', 'Middle Name': '', 'Sur Name': 'Douglas', 'Preferred Name': 'Emma', 'Previous Name': '', 'Gender': 'Female', 'Date of Birth': '24/09/1986'}, 'Contact Details': {'Prefix 1': '61', 'Mobile Number': '', 'Prefix 2': '61', 'Home Number': '', 'Prefix 3': '61', 'Work Number': '', 'Email 1': 'william.badenhorst@wbhsgroup.com', 'Email 2': '', 'Website': ''}}]
+2025-04-04 08:27:03,666 - INFO - Clicked 'Personal details' button 2 of 2.
+2025-04-04 08:27:05,194 - INFO - Applicant 2 Details: [{'Personal Details': {'Title': 'Mr', 'First Name': 'Cameron', 'Middle Name': 'Wallace', 'Sur Name': 'Hugh', 'Preferred Name': 'Cameron', 'Previous Name': '', 'Gender': 'Male', 'Date of Birth': '26/03/1982'}, 'Contact Details': {'Prefix 1': '61', 'Mobile Number': '', 'Prefix 2': '61', 'Home Number': '', 'Prefix 3': '61', 'Work Number': '', 'Email 1': 'william.badenhorst@wbhsgroup.com', 'Email 2': '', 'Website': ''}}]
+2025-04-04 08:27:05,196 - INFO - 127.0.0.1 - - [04/Apr/2025 08:27:05] "POST /process-url HTTP/1.1" 200 -
+2025-04-04 08:27:38,804 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 08:27:38,913 - INFO -  * Restarting with stat
+2025-04-04 08:27:41,341 - WARNING -  * Debugger is active!
+2025-04-04 08:27:41,353 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 08:34:11,161 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 08:34:11,265 - INFO -  * Restarting with stat
+2025-04-04 08:34:52,991 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-04-04 08:34:52,992 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-04 08:34:52,995 - INFO -  * Restarting with stat
+2025-04-04 08:34:55,202 - WARNING -  * Debugger is active!
+2025-04-04 08:34:55,216 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 08:35:24,315 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-04-04 08:35:24,316 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-04 08:35:24,319 - INFO -  * Restarting with stat
+2025-04-04 08:35:26,239 - WARNING -  * Debugger is active!
+2025-04-04 08:35:26,247 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 08:35:26,275 - INFO - 127.0.0.1 - - [04/Apr/2025 08:35:26] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-04 08:35:26,282 - INFO - ====== WebDriver manager ======
+2025-04-04 08:35:28,006 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 08:35:28,669 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 08:35:29,477 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-04 08:35:40,567 - INFO - Navigating to login page...
+2025-04-04 08:35:40,598 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-04 08:36:10,621 - INFO - Login successful
+2025-04-04 08:36:16,313 - INFO - Navigating to target page...
+2025-04-04 08:36:20,598 - INFO - Clicked Documents button
+2025-04-04 08:36:30,789 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Emma Douglas
+2025-04-04 08:36:36,758 - INFO - Navigating to Broker tools...
+2025-04-04 08:36:42,518 - INFO - Clicked 'Personal details' button 1 of 2.
+2025-04-04 08:36:44,781 - INFO - Applicant 1 Details: [{'Personal Details': {'Title': 'Ms', 'First Name': 'Emma', 'Middle Name': '', 'Sur Name': 'Douglas', 'Preferred Name': 'Emma', 'Previous Name': '', 'Gender': 'Female', 'Date of Birth': '24/09/1986'}, 'Contact Details': {'Prefix 1': '61', 'Mobile Number': '', 'Prefix 2': '61', 'Home Number': '', 'Prefix 3': '61', 'Work Number': '', 'Email 1': 'william.badenhorst@wbhsgroup.com', 'Email 2': '', 'Website': ''}, 'Current Address': {'Searc Current Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage', 'From Date': '24/09/1986'}}]
+2025-04-04 08:36:46,425 - INFO - Clicked 'Personal details' button 2 of 2.
+2025-04-04 08:36:48,675 - INFO - Applicant 2 Details: [{'Personal Details': {'Title': 'Mr', 'First Name': 'Cameron', 'Middle Name': 'Wallace', 'Sur Name': 'Hugh', 'Preferred Name': 'Cameron', 'Previous Name': '', 'Gender': 'Male', 'Date of Birth': '26/03/1982'}, 'Contact Details': {'Prefix 1': '61', 'Mobile Number': '', 'Prefix 2': '61', 'Home Number': '', 'Prefix 3': '61', 'Work Number': '', 'Email 1': 'william.badenhorst@wbhsgroup.com', 'Email 2': '', 'Website': ''}, 'Current Address': {'Searc Current Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage', 'From Date': '26/03/1982'}}]
+2025-04-04 08:36:48,889 - INFO - 127.0.0.1 - - [04/Apr/2025 08:36:48] "[35m[1mPOST /process-url HTTP/1.1[0m" 500 -
+2025-04-04 08:37:14,574 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 08:37:14,726 - INFO -  * Restarting with stat
+2025-04-04 08:37:17,907 - WARNING -  * Debugger is active!
+2025-04-04 08:37:17,918 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 08:37:46,211 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 08:37:46,375 - INFO -  * Restarting with stat
+2025-04-04 08:37:50,310 - WARNING -  * Debugger is active!
+2025-04-04 08:37:50,318 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 08:38:16,585 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 08:38:16,767 - INFO -  * Restarting with stat
+2025-04-04 08:38:19,391 - WARNING -  * Debugger is active!
+2025-04-04 08:38:19,401 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 09:17:33,602 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 09:17:33,765 - INFO -  * Restarting with stat
+2025-04-04 09:17:37,222 - WARNING -  * Debugger is active!
+2025-04-04 09:17:37,231 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 09:18:42,088 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 09:18:42,216 - INFO -  * Restarting with stat
+2025-04-04 09:18:45,563 - WARNING -  * Debugger is active!
+2025-04-04 09:18:45,575 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 09:18:55,900 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 09:18:56,026 - INFO -  * Restarting with stat
+2025-04-04 09:18:58,855 - WARNING -  * Debugger is active!
+2025-04-04 09:18:58,864 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 09:19:01,751 - INFO - 127.0.0.1 - - [04/Apr/2025 09:19:01] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-04 09:19:02,003 - INFO - ====== WebDriver manager ======
+2025-04-04 09:19:05,182 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 09:19:06,334 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 09:19:07,151 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-04 09:19:20,499 - INFO - Navigating to login page...
+2025-04-04 09:19:20,524 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-04 09:19:50,550 - INFO - Login successful
+2025-04-04 09:19:55,162 - INFO - Navigating to target page...
+2025-04-04 09:20:01,660 - INFO - Clicked Documents button
+2025-04-04 09:20:11,871 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Emma Douglas
+2025-04-04 09:20:17,633 - INFO - Navigating to Broker tools...
+2025-04-04 09:20:23,245 - INFO - Clicked 'Personal details' button 1 of 2.
+2025-04-04 09:20:25,051 - ERROR - Error: Message: no such element: Unable to locate element: {"method":"xpath","selector":"//input[@id='input_3718']"}
+  (Session info: chrome=134.0.6998.178); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x00EEC7F3+24435]
+	(No symbol) [0x00E72074]
+	(No symbol) [0x00D406E3]
+	(No symbol) [0x00D88B39]
+	(No symbol) [0x00D88E8B]
+	(No symbol) [0x00DD1AC2]
+	(No symbol) [0x00DAD804]
+	(No symbol) [0x00DCF20A]
+	(No symbol) [0x00DAD5B6]
+	(No symbol) [0x00D7C54F]
+	(No symbol) [0x00D7D894]
+	GetHandleVerifier [0x011F70A3+3213347]
+	GetHandleVerifier [0x0120B0C9+3295305]
+	GetHandleVerifier [0x0120558C+3271948]
+	GetHandleVerifier [0x00F87360+658144]
+	(No symbol) [0x00E7B27D]
+	(No symbol) [0x00E78208]
+	(No symbol) [0x00E783A9]
+	(No symbol) [0x00E6AAC0]
+	BaseThreadInitThunk [0x75CFFCC9+25]
+	RtlGetAppContainerNamedObjectPath [0x774B82AE+286]
+	RtlGetAppContainerNamedObjectPath [0x774B827E+238]
+
+2025-04-04 09:20:27,774 - INFO - 127.0.0.1 - - [04/Apr/2025 09:20:27] "[35m[1mPOST /process-url HTTP/1.1[0m" 500 -
+2025-04-04 09:21:00,799 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-04-04 09:21:00,800 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-04 09:21:00,806 - INFO -  * Restarting with stat
+2025-04-04 09:21:02,796 - WARNING -  * Debugger is active!
+2025-04-04 09:21:02,805 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 09:21:02,835 - INFO - 127.0.0.1 - - [04/Apr/2025 09:21:02] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-04 09:21:02,844 - INFO - ====== WebDriver manager ======
+2025-04-04 09:21:04,888 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 09:21:05,540 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 09:21:06,195 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-04 09:21:21,662 - INFO - Navigating to login page...
+2025-04-04 09:21:22,001 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-04 09:21:52,027 - INFO - Login successful
+2025-04-04 09:21:58,481 - INFO - Navigating to target page...
+2025-04-04 09:22:01,485 - INFO - Clicked Documents button
+2025-04-04 09:22:11,662 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Emma Douglas
+2025-04-04 09:22:17,434 - INFO - Navigating to Broker tools...
+2025-04-04 09:22:23,105 - INFO - Clicked 'Personal details' button 1 of 2.
+2025-04-04 09:22:24,768 - ERROR - Error: Message: no such element: Unable to locate element: {"method":"xpath","selector":"//input[@id='input_3718']"}
+  (Session info: chrome=134.0.6998.178); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x00EEC7F3+24435]
+	(No symbol) [0x00E72074]
+	(No symbol) [0x00D406E3]
+	(No symbol) [0x00D88B39]
+	(No symbol) [0x00D88E8B]
+	(No symbol) [0x00DD1AC2]
+	(No symbol) [0x00DAD804]
+	(No symbol) [0x00DCF20A]
+	(No symbol) [0x00DAD5B6]
+	(No symbol) [0x00D7C54F]
+	(No symbol) [0x00D7D894]
+	GetHandleVerifier [0x011F70A3+3213347]
+	GetHandleVerifier [0x0120B0C9+3295305]
+	GetHandleVerifier [0x0120558C+3271948]
+	GetHandleVerifier [0x00F87360+658144]
+	(No symbol) [0x00E7B27D]
+	(No symbol) [0x00E78208]
+	(No symbol) [0x00E783A9]
+	(No symbol) [0x00E6AAC0]
+	BaseThreadInitThunk [0x75CFFCC9+25]
+	RtlGetAppContainerNamedObjectPath [0x774B82AE+286]
+	RtlGetAppContainerNamedObjectPath [0x774B827E+238]
+
+2025-04-04 09:22:27,498 - INFO - 127.0.0.1 - - [04/Apr/2025 09:22:27] "[35m[1mPOST /process-url HTTP/1.1[0m" 500 -
+2025-04-04 09:22:49,543 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 09:22:49,671 - INFO -  * Restarting with stat
+2025-04-04 09:22:52,473 - WARNING -  * Debugger is active!
+2025-04-04 09:22:52,483 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 09:22:58,575 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 09:22:58,764 - INFO -  * Restarting with stat
+2025-04-04 09:23:01,140 - WARNING -  * Debugger is active!
+2025-04-04 09:23:01,148 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 09:24:03,770 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 09:24:03,918 - INFO -  * Restarting with stat
+2025-04-04 09:24:06,766 - WARNING -  * Debugger is active!
+2025-04-04 09:24:06,775 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 09:24:12,020 - INFO - 127.0.0.1 - - [04/Apr/2025 09:24:12] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-04 09:24:12,293 - INFO - ====== WebDriver manager ======
+2025-04-04 09:24:14,277 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 09:24:15,086 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 09:24:15,928 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-04 09:24:28,865 - INFO - Navigating to login page...
+2025-04-04 09:24:28,893 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-04 09:24:58,915 - INFO - Login successful
+2025-04-04 09:25:04,066 - INFO - Navigating to target page...
+2025-04-04 09:25:08,320 - INFO - Clicked Documents button
+2025-04-04 09:25:18,505 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Emma Douglas
+2025-04-04 09:25:24,210 - INFO - Navigating to Broker tools...
+2025-04-04 09:25:30,032 - INFO - Clicked 'Personal details' button 1 of 2.
+2025-04-04 09:25:32,402 - INFO - Applicant 1 Details: [{'Personal Details': {'Title': 'Ms', 'First Name': 'Emma', 'Middle Name': '', 'Sur Name': 'Douglas', 'Preferred Name': 'Emma', 'Previous Name': '', 'Gender': 'Female', 'Date of Birth': '24/09/1986'}, 'Contact Details': {'Prefix 1': '61', 'Mobile Number': '', 'Prefix 2': '61', 'Home Number': '', 'Prefix 3': '61', 'Work Number': '', 'Email 1': 'william.badenhorst@wbhsgroup.com', 'Email 2': '', 'Website': ''}, 'Current Address': {'Searc Current Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage', 'From Date': '24/09/1986'}, 'Previous Address': {'Search Previous Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Renting', 'From Date': '24/09/1986'}}]
+2025-04-04 09:25:33,763 - INFO - Clicked 'Personal details' button 2 of 2.
+2025-04-04 09:25:36,809 - INFO - Applicant 2 Details: [{'Personal Details': {'Title': 'Mr', 'First Name': 'Cameron', 'Middle Name': 'Wallace', 'Sur Name': 'Hugh', 'Preferred Name': 'Cameron', 'Previous Name': '', 'Gender': 'Male', 'Date of Birth': '26/03/1982'}, 'Contact Details': {'Prefix 1': '61', 'Mobile Number': '', 'Prefix 2': '61', 'Home Number': '', 'Prefix 3': '61', 'Work Number': '', 'Email 1': 'william.badenhorst@wbhsgroup.com', 'Email 2': '', 'Website': ''}, 'Current Address': {'Searc Current Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage', 'From Date': '26/03/1982'}, 'Previous Address': {'Search Previous Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Renting', 'From Date': '26/03/1982'}}]
+2025-04-04 09:25:36,812 - INFO - 127.0.0.1 - - [04/Apr/2025 09:25:36] "POST /process-url HTTP/1.1" 200 -
+2025-04-04 09:29:37,871 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 09:29:37,975 - INFO -  * Restarting with stat
+2025-04-04 09:29:41,083 - WARNING -  * Debugger is active!
+2025-04-04 09:29:41,109 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 09:31:38,602 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 09:31:38,763 - INFO -  * Restarting with stat
+2025-04-04 09:31:41,402 - WARNING -  * Debugger is active!
+2025-04-04 09:31:41,412 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 09:37:24,971 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 09:37:25,113 - INFO -  * Restarting with stat
+2025-04-04 09:37:27,531 - WARNING -  * Debugger is active!
+2025-04-04 09:37:27,543 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 09:40:47,924 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 09:40:48,049 - INFO -  * Restarting with stat
+2025-04-04 09:41:13,710 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-04-04 09:41:13,713 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-04 09:41:13,717 - INFO -  * Restarting with stat
+2025-04-04 09:41:16,823 - WARNING -  * Debugger is active!
+2025-04-04 09:41:16,836 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 09:41:20,229 - INFO - 127.0.0.1 - - [04/Apr/2025 09:41:20] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-04 09:41:20,483 - INFO - ====== WebDriver manager ======
+2025-04-04 09:41:23,001 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 09:41:23,721 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 09:41:24,579 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-04 09:41:35,883 - INFO - Navigating to login page...
+2025-04-04 09:41:35,909 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-04 09:42:05,933 - INFO - Login successful
+2025-04-04 09:42:13,566 - INFO - Navigating to target page...
+2025-04-04 09:42:17,026 - INFO - Clicked Documents button
+2025-04-04 09:42:27,231 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Emma Douglas
+2025-04-04 09:42:33,065 - INFO - Navigating to Broker tools...
+2025-04-04 09:42:39,728 - INFO - Clicked 'Personal details' button 1 of 2.
+2025-04-04 09:42:43,406 - INFO - Applicant 1 Details: [{'Personal Details': {'Title': 'Ms', 'First Name': 'Emma', 'Middle Name': '', 'Sur Name': 'Douglas', 'Preferred Name': 'Emma', 'Previous Name': '', 'Gender': 'Female', 'Date of Birth': '24/09/1986'}, 'Contact Details': {'Prefix 1': '61', 'Mobile Number': '', 'Prefix 2': '61', 'Home Number': '', 'Prefix 3': '61', 'Work Number': '', 'Email 1': 'william.badenhorst@wbhsgroup.com', 'Email 2': '', 'Website': ''}, 'Current Address': {'Search Current Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Previous Address': {'Search Previous Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Renting'}, 'Mailing Address': {'Search Mailing Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726'}}]
+2025-04-04 09:42:44,762 - INFO - Clicked 'Personal details' button 2 of 2.
+2025-04-04 09:42:48,273 - INFO - Applicant 2 Details: [{'Personal Details': {'Title': 'Mr', 'First Name': 'Cameron', 'Middle Name': 'Wallace', 'Sur Name': 'Hugh', 'Preferred Name': 'Cameron', 'Previous Name': '', 'Gender': 'Male', 'Date of Birth': '26/03/1982'}, 'Contact Details': {'Prefix 1': '61', 'Mobile Number': '', 'Prefix 2': '61', 'Home Number': '', 'Prefix 3': '61', 'Work Number': '', 'Email 1': 'william.badenhorst@wbhsgroup.com', 'Email 2': '', 'Website': ''}, 'Current Address': {'Search Current Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Previous Address': {'Search Previous Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Renting'}, 'Mailing Address': {'Search Mailing Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726'}}]
+2025-04-04 09:42:48,277 - INFO - 127.0.0.1 - - [04/Apr/2025 09:42:48] "POST /process-url HTTP/1.1" 200 -
+2025-04-04 09:46:33,473 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 09:46:33,597 - INFO -  * Restarting with stat
+2025-04-04 09:46:39,046 - WARNING -  * Debugger is active!
+2025-04-04 09:46:39,072 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 09:47:20,629 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 09:47:20,731 - INFO -  * Restarting with stat
+2025-04-04 09:47:23,326 - WARNING -  * Debugger is active!
+2025-04-04 09:47:23,339 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 09:48:35,645 - INFO - 127.0.0.1 - - [04/Apr/2025 09:48:35] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-04 09:48:35,913 - INFO - ====== WebDriver manager ======
+2025-04-04 09:48:38,160 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 09:48:39,214 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 09:48:40,332 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-04 09:48:52,358 - INFO - Navigating to login page...
+2025-04-04 09:48:52,404 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-04 09:49:22,428 - INFO - Login successful
+2025-04-04 09:49:27,331 - INFO - Navigating to target page...
+2025-04-04 09:49:32,407 - INFO - Clicked Documents button
+2025-04-04 09:49:42,629 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Emma Douglas
+2025-04-04 09:49:48,619 - INFO - Navigating to Broker tools...
+2025-04-04 09:49:54,393 - INFO - Clicked 'Personal details' button 1 of 2.
+2025-04-04 09:49:58,269 - INFO - Applicant 1 Details: [{'Personal Details': {'Title': 'Ms', 'First Name': 'Emma', 'Middle Name': '', 'Sur Name': 'Douglas', 'Preferred Name': 'Emma', 'Previous Name': '', 'Gender': 'Female', 'Date of Birth': '24/09/1986'}, 'Contact Details': {'Prefix 1': '61', 'Mobile Number': '', 'Prefix 2': '61', 'Home Number': '', 'Prefix 3': '61', 'Work Number': '', 'Email 1': 'william.badenhorst@wbhsgroup.com', 'Email 2': '', 'Website': ''}, 'Current Address': {'Search Current Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Previous Address': {'Search Previous Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Renting'}, 'Mailing Address': {'Search Mailing Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726'}, 'Post Settlement Address': {'Search Post Settlement Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Identification': {}}]
+2025-04-04 09:49:59,758 - INFO - Clicked 'Personal details' button 2 of 2.
+2025-04-04 09:50:03,676 - INFO - Applicant 2 Details: [{'Personal Details': {'Title': 'Mr', 'First Name': 'Cameron', 'Middle Name': 'Wallace', 'Sur Name': 'Hugh', 'Preferred Name': 'Cameron', 'Previous Name': '', 'Gender': 'Male', 'Date of Birth': '26/03/1982'}, 'Contact Details': {'Prefix 1': '61', 'Mobile Number': '', 'Prefix 2': '61', 'Home Number': '', 'Prefix 3': '61', 'Work Number': '', 'Email 1': 'william.badenhorst@wbhsgroup.com', 'Email 2': '', 'Website': ''}, 'Current Address': {'Search Current Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Previous Address': {'Search Previous Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Renting'}, 'Mailing Address': {'Search Mailing Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726'}, 'Post Settlement Address': {'Search Post Settlement Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Identification': {}}]
+2025-04-04 09:50:03,680 - INFO - 127.0.0.1 - - [04/Apr/2025 09:50:03] "POST /process-url HTTP/1.1" 200 -
+2025-04-04 09:50:31,557 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 09:50:31,685 - INFO -  * Restarting with stat
+2025-04-04 09:50:34,931 - WARNING -  * Debugger is active!
+2025-04-04 09:50:34,941 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 09:56:05,982 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 09:56:06,086 - INFO -  * Restarting with stat
+2025-04-04 09:56:09,040 - WARNING -  * Debugger is active!
+2025-04-04 09:56:09,050 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 10:00:31,492 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 10:00:31,611 - INFO -  * Restarting with stat
+2025-04-04 10:00:34,470 - WARNING -  * Debugger is active!
+2025-04-04 10:00:34,480 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 10:00:56,727 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 10:00:56,834 - INFO -  * Restarting with stat
+2025-04-04 10:00:59,999 - WARNING -  * Debugger is active!
+2025-04-04 10:01:00,011 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 10:01:12,027 - INFO - 127.0.0.1 - - [04/Apr/2025 10:01:12] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-04 10:01:12,280 - INFO - ====== WebDriver manager ======
+2025-04-04 10:01:15,003 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 10:01:15,788 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 10:01:16,545 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-04 10:01:28,156 - INFO - Navigating to login page...
+2025-04-04 10:01:28,190 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-04 10:01:58,219 - INFO - Login successful
+2025-04-04 10:02:03,123 - INFO - Navigating to target page...
+2025-04-04 10:02:09,232 - INFO - Clicked Documents button
+2025-04-04 10:02:19,488 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Emma Douglas
+2025-04-04 10:02:25,212 - INFO - Navigating to Broker tools...
+2025-04-04 10:02:31,184 - INFO - Clicked 'Personal details' button 1 of 2.
+2025-04-04 10:02:35,795 - INFO - Applicant 1 Details: [{'Personal Details': {'Title': 'Ms', 'First Name': 'Emma', 'Middle Name': '', 'Sur Name': 'Douglas', 'Preferred Name': 'Emma', 'Previous Name': '', 'Gender': 'Female', 'Date of Birth': '24/09/1986'}, 'Contact Details': {'Prefix 1': '61', 'Mobile Number': '', 'Prefix 2': '61', 'Home Number': '', 'Prefix 3': '61', 'Work Number': '', 'Email 1': 'william.badenhorst@wbhsgroup.com', 'Email 2': '', 'Website': ''}, 'Current Address': {'Search Current Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Previous Address': {'Search Previous Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Renting'}, 'Mailing Address': {'Search Mailing Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726'}, 'Post Settlement Address': {'Search Post Settlement Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Identification': {'Country of Residency': 'Australia', 'Country of Tax Residence': 'Australia', 'Citizenship': 'Australia', 'Residency Status': 'Citizen', 'Country of Birth': 'Australia', 'City of Birth': 'Perth', 'Driver License Details': {'Driver License Type': 'Full', 'Driver License Number': '4635579', 'Driver License Card Number': 'L034131136', 'Driver License Name on Document': 'Emma Douglas', 'Driver License State of Issue': 'Western Australia'}, 'Passport Details': {'Passport Number': 'PA2075580', 'Passport Name on Document': 'Emma Douglas', 'Passport Issue Country': 'Australia'}, 'Medicare Details': {'Medicare Number': '6206407185', 'Medicare Reference Number': '1', 'Medicare Name on Card': 'Emma Douglas', 'Medicare Card Color': 'Green'}}}]
+2025-04-04 10:02:37,432 - INFO - Clicked 'Personal details' button 2 of 2.
+2025-04-04 10:02:42,790 - INFO - Applicant 2 Details: [{'Personal Details': {'Title': 'Mr', 'First Name': 'Cameron', 'Middle Name': 'Wallace', 'Sur Name': 'Hugh', 'Preferred Name': 'Cameron', 'Previous Name': '', 'Gender': 'Male', 'Date of Birth': '26/03/1982'}, 'Contact Details': {'Prefix 1': '61', 'Mobile Number': '', 'Prefix 2': '61', 'Home Number': '', 'Prefix 3': '61', 'Work Number': '', 'Email 1': 'william.badenhorst@wbhsgroup.com', 'Email 2': '', 'Website': ''}, 'Current Address': {'Search Current Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Previous Address': {'Search Previous Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Renting'}, 'Mailing Address': {'Search Mailing Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726'}, 'Post Settlement Address': {'Search Post Settlement Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Identification': {'Country of Residency': 'Australia', 'Country of Tax Residence': 'Australia', 'Citizenship': 'Australia', 'Residency Status': 'Citizen', 'Country of Birth': 'Australia', 'City of Birth': 'Subiaco', 'Driver License Details': {'Driver License Type': 'Full', 'Driver License Number': '4348780', 'Driver License Card Number': 'D8842012', 'Driver License Name on Document': 'Cameron Wallace Hugh', 'Driver License State of Issue': 'Western Australia'}, 'Passport Details': {'Passport Number': 'N7579512', 'Passport Name on Document': 'Cameron Wallace Hugh', 'Passport Issue Country': 'Australia'}, 'Medicare Details': {'Medicare Number': '6191399597', 'Medicare Reference Number': '1', 'Medicare Name on Card': 'Cameron W Hugh', 'Medicare Card Color': 'Green'}}}]
+2025-04-04 10:02:45,352 - INFO - 127.0.0.1 - - [04/Apr/2025 10:02:45] "POST /process-url HTTP/1.1" 200 -
+2025-04-04 10:32:43,445 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 10:32:43,709 - INFO -  * Restarting with stat
+2025-04-04 10:32:46,727 - WARNING -  * Debugger is active!
+2025-04-04 10:32:46,737 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 10:33:11,155 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 10:33:11,265 - INFO -  * Restarting with stat
+2025-04-04 10:33:14,393 - WARNING -  * Debugger is active!
+2025-04-04 10:33:14,401 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 10:33:51,945 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 10:33:52,282 - INFO -  * Restarting with stat
+2025-04-04 10:33:56,969 - WARNING -  * Debugger is active!
+2025-04-04 10:33:56,984 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 10:33:59,047 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 10:33:59,169 - INFO -  * Restarting with stat
+2025-04-04 10:34:02,081 - WARNING -  * Debugger is active!
+2025-04-04 10:34:02,092 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 10:34:19,816 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 10:34:19,930 - INFO -  * Restarting with stat
+2025-04-04 10:34:22,120 - WARNING -  * Debugger is active!
+2025-04-04 10:34:22,129 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 10:37:04,164 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 10:37:04,400 - INFO -  * Restarting with stat
+2025-04-04 10:37:42,914 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-04-04 10:37:42,915 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-04 10:37:42,921 - INFO -  * Restarting with stat
+2025-04-04 10:37:49,242 - WARNING -  * Debugger is active!
+2025-04-04 10:37:49,257 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 10:38:03,074 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-04-04 10:38:03,075 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-04 10:38:03,083 - INFO -  * Restarting with stat
+2025-04-04 10:38:05,148 - WARNING -  * Debugger is active!
+2025-04-04 10:38:05,157 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 10:38:07,829 - INFO - 127.0.0.1 - - [04/Apr/2025 10:38:07] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-04 10:38:08,241 - INFO - ====== WebDriver manager ======
+2025-04-04 10:38:11,289 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 10:38:12,592 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 10:38:13,594 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-04 10:38:26,586 - INFO - Navigating to login page...
+2025-04-04 10:38:26,610 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-04 10:38:43,386 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-04-04 10:38:43,387 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-04 10:38:43,391 - INFO -  * Restarting with stat
+2025-04-04 10:38:45,954 - WARNING -  * Debugger is active!
+2025-04-04 10:38:45,963 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 10:38:45,988 - INFO - 127.0.0.1 - - [04/Apr/2025 10:38:45] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-04 10:38:45,997 - INFO - ====== WebDriver manager ======
+2025-04-04 10:38:48,006 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 10:38:48,855 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 10:38:49,601 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-04 10:38:58,403 - INFO - Navigating to login page...
+2025-04-04 10:38:58,446 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-04 10:39:28,469 - INFO - Login successful
+2025-04-04 10:39:35,870 - INFO - Navigating to target page...
+2025-04-04 10:39:38,625 - INFO - Clicked Documents button
+2025-04-04 10:39:48,828 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Emma Douglas
+2025-04-04 10:39:54,590 - INFO - Navigating to Broker tools...
+2025-04-04 10:40:00,401 - INFO - Clicked 'Personal details' button 1 of 2.
+2025-04-04 10:40:05,939 - ERROR - Error: name 'idx' is not defined
+2025-04-04 10:40:08,442 - INFO - 127.0.0.1 - - [04/Apr/2025 10:40:08] "[35m[1mPOST /process-url HTTP/1.1[0m" 500 -
+2025-04-04 10:41:08,159 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-04-04 10:41:08,160 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-04 10:41:08,163 - INFO -  * Restarting with stat
+2025-04-04 10:41:10,265 - WARNING -  * Debugger is active!
+2025-04-04 10:41:10,287 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 10:41:11,864 - INFO - 127.0.0.1 - - [04/Apr/2025 10:41:11] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-04 10:41:12,101 - INFO - ====== WebDriver manager ======
+2025-04-04 10:41:14,405 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 10:41:15,385 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 10:41:16,110 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-04 10:41:28,015 - INFO - Navigating to login page...
+2025-04-04 10:41:28,521 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-04 10:41:58,543 - INFO - Login successful
+2025-04-04 10:42:03,573 - INFO - Navigating to target page...
+2025-04-04 10:42:07,821 - INFO - Clicked Documents button
+2025-04-04 10:42:17,987 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Emma Douglas
+2025-04-04 10:42:23,672 - INFO - Navigating to Broker tools...
+2025-04-04 10:42:29,807 - INFO - Clicked 'Personal details' button 1 of 2.
+2025-04-04 10:42:34,743 - INFO - Applicant 1 Details: {'Personal Details': {'Title': 'Ms', 'First Name': 'Emma', 'Middle Name': '', 'Sur Name': 'Douglas', 'Preferred Name': 'Emma', 'Previous Name': '', 'Gender': 'Female', 'Date of Birth': '24/09/1986'}, 'Contact Details': {'Prefix 1': '61', 'Mobile Number': '', 'Prefix 2': '61', 'Home Number': '', 'Prefix 3': '61', 'Work Number': '', 'Email 1': 'william.badenhorst@wbhsgroup.com', 'Email 2': '', 'Website': ''}, 'Current Address': {'Search Current Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Previous Address': {'Search Previous Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Renting'}, 'Mailing Address': {'Search Mailing Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726'}, 'Post Settlement Address': {'Search Post Settlement Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Identification': {'Country of Residency': 'Australia', 'Country of Tax Residence': 'Australia', 'Citizenship': 'Australia', 'Residency Status': 'Citizen', 'Country of Birth': 'Australia', 'City of Birth': 'Perth', 'Driver License Details': {'Driver License Type': 'Full', 'Driver License Number': '4635579', 'Driver License Card Number': 'L034131136', 'Driver License Name on Document': 'Emma Douglas', 'Driver License State of Issue': 'Western Australia'}, 'Passport Details': {'Passport Number': 'PA2075580', 'Passport Name on Document': 'Emma Douglas', 'Passport Issue Country': 'Australia'}, 'Medicare Details': {'Medicare Number': '6206407185', 'Medicare Reference Number': '1', 'Medicare Name on Card': 'Emma Douglas', 'Medicare Card Color': 'Green'}}, 'Family Relations': {"Mother's Maiden Name": 'Hill', 'Marital Status': 'De Facto', 'Spouse Name': {'First Name': 'Cameron', 'Surname': 'Hugh'}, 'Number of Dependents': '2'}, 'Dependents': [{'Name': 'Alice Hu-Douglas', 'Age': ''}, {'Name': 'Lucy Hu-Douglas', 'Age': ''}]}
+2025-04-04 10:42:36,204 - INFO - Clicked 'Personal details' button 2 of 2.
+2025-04-04 10:42:41,583 - INFO - Applicant 2 Details: {'Personal Details': {'Title': 'Mr', 'First Name': 'Cameron', 'Middle Name': 'Wallace', 'Sur Name': 'Hugh', 'Preferred Name': 'Cameron', 'Previous Name': '', 'Gender': 'Male', 'Date of Birth': '26/03/1982'}, 'Contact Details': {'Prefix 1': '61', 'Mobile Number': '', 'Prefix 2': '61', 'Home Number': '', 'Prefix 3': '61', 'Work Number': '', 'Email 1': 'william.badenhorst@wbhsgroup.com', 'Email 2': '', 'Website': ''}, 'Current Address': {'Search Current Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Previous Address': {'Search Previous Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Renting'}, 'Mailing Address': {'Search Mailing Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726'}, 'Post Settlement Address': {'Search Post Settlement Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Identification': {'Country of Residency': 'Australia', 'Country of Tax Residence': 'Australia', 'Citizenship': 'Australia', 'Residency Status': 'Citizen', 'Country of Birth': 'Australia', 'City of Birth': 'Subiaco', 'Driver License Details': {'Driver License Type': 'Full', 'Driver License Number': '4348780', 'Driver License Card Number': 'D8842012', 'Driver License Name on Document': 'Cameron Wallace Hugh', 'Driver License State of Issue': 'Western Australia'}, 'Passport Details': {'Passport Number': 'N7579512', 'Passport Name on Document': 'Cameron Wallace Hugh', 'Passport Issue Country': 'Australia'}, 'Medicare Details': {'Medicare Number': '6191399597', 'Medicare Reference Number': '1', 'Medicare Name on Card': 'Cameron W Hugh', 'Medicare Card Color': 'Green'}}, 'Family Relations': {"Mother's Maiden Name": 'None', 'Marital Status': 'De Facto', 'Spouse Name': {'First Name': 'Emma', 'Surname': 'Douglas'}, 'Number of Dependents': '0'}, 'Dependents': []}
+2025-04-04 10:42:44,140 - INFO - 127.0.0.1 - - [04/Apr/2025 10:42:44] "POST /process-url HTTP/1.1" 200 -
+2025-04-04 10:47:08,797 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 10:47:08,934 - INFO -  * Restarting with stat
+2025-04-04 10:47:12,311 - WARNING -  * Debugger is active!
+2025-04-04 10:47:12,322 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 10:47:35,118 - INFO - 127.0.0.1 - - [04/Apr/2025 10:47:35] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-04 10:47:35,365 - INFO - ====== WebDriver manager ======
+2025-04-04 10:47:37,996 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 10:47:39,021 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 10:47:39,945 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-04 10:47:47,041 - INFO - Navigating to login page...
+2025-04-04 10:47:58,404 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-04 10:48:28,435 - INFO - Login successful
+2025-04-04 10:48:34,128 - INFO - Navigating to target page...
+2025-04-04 10:48:39,738 - INFO - Clicked Documents button
+2025-04-04 10:48:50,003 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Emma Douglas
+2025-04-04 10:48:56,108 - INFO - Navigating to Broker tools...
+2025-04-04 10:49:02,297 - INFO - Clicked 'Personal details' button 1 of 2.
+2025-04-04 10:49:07,141 - INFO - Applicant 1 Details: {'Personal Details': {'Title': 'Ms', 'First Name': 'Emma', 'Middle Name': '', 'Sur Name': 'Douglas', 'Preferred Name': 'Emma', 'Previous Name': '', 'Gender': 'Female', 'Date of Birth': '24/09/1986'}, 'Contact Details': {'Prefix 1': '61', 'Mobile Number': '', 'Prefix 2': '61', 'Home Number': '', 'Prefix 3': '61', 'Work Number': '', 'Email 1': 'william.badenhorst@wbhsgroup.com', 'Email 2': '', 'Website': ''}, 'Current Address': {'Search Current Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Previous Address': {'Search Previous Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Renting'}, 'Mailing Address': {'Search Mailing Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726'}, 'Post Settlement Address': {'Search Post Settlement Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Identification': {'Country of Residency': 'Australia', 'Country of Tax Residence': 'Australia', 'Citizenship': 'Australia', 'Residency Status': 'Citizen', 'Country of Birth': 'Australia', 'City of Birth': 'Perth', 'Driver License Details': {'Driver License Type': 'Full', 'Driver License Number': '4635579', 'Driver License Card Number': 'L034131136', 'Driver License Name on Document': 'Emma Douglas', 'Driver License State of Issue': 'Western Australia'}, 'Passport Details': {'Passport Number': 'PA2075580', 'Passport Name on Document': 'Emma Douglas', 'Passport Issue Country': 'Australia'}, 'Medicare Details': {'Medicare Number': '6206407185', 'Medicare Reference Number': '1', 'Medicare Name on Card': 'Emma Douglas', 'Medicare Card Color': 'Green'}}, 'Family Relations': {"Mother's Maiden Name": 'Hill', 'Marital Status': 'De Facto', 'Spouse Name': {'First Name': 'Cameron', 'Surname': 'Hugh'}, 'Number of Dependents': '2'}, 'Dependents': [{'Name': 'Alice Hu-Douglas', 'Age': '6 years, 5 months'}, {'Name': 'Lucy Hu-Douglas', 'Age': '4 years, 5 months'}]}
+2025-04-04 10:49:08,553 - INFO - Clicked 'Personal details' button 2 of 2.
+2025-04-04 10:49:13,677 - INFO - Applicant 2 Details: {'Personal Details': {'Title': 'Mr', 'First Name': 'Cameron', 'Middle Name': 'Wallace', 'Sur Name': 'Hugh', 'Preferred Name': 'Cameron', 'Previous Name': '', 'Gender': 'Male', 'Date of Birth': '26/03/1982'}, 'Contact Details': {'Prefix 1': '61', 'Mobile Number': '', 'Prefix 2': '61', 'Home Number': '', 'Prefix 3': '61', 'Work Number': '', 'Email 1': 'william.badenhorst@wbhsgroup.com', 'Email 2': '', 'Website': ''}, 'Current Address': {'Search Current Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Previous Address': {'Search Previous Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Renting'}, 'Mailing Address': {'Search Mailing Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726'}, 'Post Settlement Address': {'Search Post Settlement Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Identification': {'Country of Residency': 'Australia', 'Country of Tax Residence': 'Australia', 'Citizenship': 'Australia', 'Residency Status': 'Citizen', 'Country of Birth': 'Australia', 'City of Birth': 'Subiaco', 'Driver License Details': {'Driver License Type': 'Full', 'Driver License Number': '4348780', 'Driver License Card Number': 'D8842012', 'Driver License Name on Document': 'Cameron Wallace Hugh', 'Driver License State of Issue': 'Western Australia'}, 'Passport Details': {'Passport Number': 'N7579512', 'Passport Name on Document': 'Cameron Wallace Hugh', 'Passport Issue Country': 'Australia'}, 'Medicare Details': {'Medicare Number': '6191399597', 'Medicare Reference Number': '1', 'Medicare Name on Card': 'Cameron W Hugh', 'Medicare Card Color': 'Green'}}, 'Family Relations': {"Mother's Maiden Name": 'None', 'Marital Status': 'De Facto', 'Spouse Name': {'First Name': 'Emma', 'Surname': 'Douglas'}, 'Number of Dependents': '0'}, 'Dependents': []}
+2025-04-04 10:49:16,210 - INFO - 127.0.0.1 - - [04/Apr/2025 10:49:16] "POST /process-url HTTP/1.1" 200 -
+2025-04-04 10:52:17,268 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 10:52:17,435 - INFO -  * Restarting with stat
+2025-04-04 10:52:20,461 - WARNING -  * Debugger is active!
+2025-04-04 10:52:20,471 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 10:55:27,693 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 10:55:27,803 - INFO -  * Restarting with stat
+2025-04-04 10:55:30,995 - WARNING -  * Debugger is active!
+2025-04-04 10:55:31,003 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 15:54:16,284 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 15:54:16,824 - INFO -  * Restarting with stat
+2025-04-04 15:57:17,677 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-04-04 15:57:17,677 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-04 15:57:17,682 - INFO -  * Restarting with stat
+2025-04-04 15:57:20,074 - WARNING -  * Debugger is active!
+2025-04-04 15:57:20,085 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 15:57:30,215 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 15:57:30,314 - INFO -  * Restarting with stat
+2025-04-04 15:57:33,222 - WARNING -  * Debugger is active!
+2025-04-04 15:57:33,231 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 15:57:43,059 - INFO - 127.0.0.1 - - [04/Apr/2025 15:57:43] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-04 15:57:43,314 - INFO - ====== WebDriver manager ======
+2025-04-04 15:57:48,585 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 15:57:49,866 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 15:57:50,924 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-04 15:58:06,370 - INFO - Navigating to login page...
+2025-04-04 15:58:06,398 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-04 15:58:36,431 - INFO - Login successful
+2025-04-04 15:58:41,227 - INFO - Navigating to target page...
+2025-04-04 15:58:46,325 - INFO - Clicked Documents button
+2025-04-04 15:58:56,513 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Emma Douglas
+2025-04-04 15:59:02,426 - INFO - Navigating to Broker tools...
+2025-04-04 15:59:08,172 - INFO - Clicked 'Personal details' button 1 of 2.
+2025-04-04 15:59:08,876 - ERROR - Error: Message: invalid selector: Unable to locate an element with the xpath expression //div[@ng-repeat='employment in $ctrl.contact.person.employments | orderBy:[$index, '!isCurrent', 'startDate']'] because of the following error:
+SyntaxError: Failed to execute 'evaluate' on 'Document': The string '//div[@ng-repeat='employment in $ctrl.contact.person.employments | orderBy:[$index, '!isCurrent', 'startDate']']' is not a valid XPath expression.
+  (Session info: chrome=134.0.6998.178); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#invalid-selector-exception
+Stacktrace:
+	GetHandleVerifier [0x0035C7F3+24435]
+	(No symbol) [0x002E2074]
+	(No symbol) [0x001B06E3]
+	(No symbol) [0x001B70D7]
+	(No symbol) [0x001B935A]
+	(No symbol) [0x001B93D7]
+	(No symbol) [0x001F83C1]
+	(No symbol) [0x001F8E8B]
+	(No symbol) [0x00241AFC]
+	(No symbol) [0x0021D804]
+	(No symbol) [0x0023F20A]
+	(No symbol) [0x0021D5B6]
+	(No symbol) [0x001EC54F]
+	(No symbol) [0x001ED894]
+	GetHandleVerifier [0x006670A3+3213347]
+	GetHandleVerifier [0x0067B0C9+3295305]
+	GetHandleVerifier [0x0067558C+3271948]
+	GetHandleVerifier [0x003F7360+658144]
+	(No symbol) [0x002EB27D]
+	(No symbol) [0x002E8208]
+	(No symbol) [0x002E83A9]
+	(No symbol) [0x002DAAC0]
+	BaseThreadInitThunk [0x75CFFCC9+25]
+	RtlGetAppContainerNamedObjectPath [0x774B82AE+286]
+	RtlGetAppContainerNamedObjectPath [0x774B827E+238]
+	(No symbol) [0x00000000]
+
+2025-04-04 15:59:12,156 - INFO - 127.0.0.1 - - [04/Apr/2025 15:59:12] "[35m[1mPOST /process-url HTTP/1.1[0m" 500 -
+2025-04-04 16:01:51,562 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 16:01:51,686 - INFO -  * Restarting with stat
+2025-04-04 16:01:54,889 - WARNING -  * Debugger is active!
+2025-04-04 16:01:54,898 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 16:02:01,090 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-04-04 16:02:01,145 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-04 16:02:01,293 - INFO -  * Restarting with stat
+2025-04-04 16:02:03,932 - WARNING -  * Debugger is active!
+2025-04-04 16:02:03,941 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 16:02:03,971 - INFO - 127.0.0.1 - - [04/Apr/2025 16:02:03] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-04 16:02:03,979 - INFO - ====== WebDriver manager ======
+2025-04-04 16:02:06,361 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 16:02:07,396 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 16:02:08,412 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-04 16:02:21,185 - INFO - Navigating to login page...
+2025-04-04 16:02:21,250 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-04 16:02:51,275 - INFO - Login successful
+2025-04-04 16:02:55,896 - INFO - Navigating to target page...
+2025-04-04 16:03:00,163 - INFO - Clicked Documents button
+2025-04-04 16:03:10,335 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Emma Douglas
+2025-04-04 16:03:16,104 - INFO - Navigating to Broker tools...
+2025-04-04 16:03:21,983 - INFO - Clicked 'Personal details' button 1 of 2.
+2025-04-04 16:03:27,778 - ERROR - Error: Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="fl-input-6542"]"}
+  (Session info: chrome=134.0.6998.178); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x0035C7F3+24435]
+	(No symbol) [0x002E2074]
+	(No symbol) [0x001B06E3]
+	(No symbol) [0x001F8B39]
+	(No symbol) [0x001F8E8B]
+	(No symbol) [0x00241AC2]
+	(No symbol) [0x0021D804]
+	(No symbol) [0x0023F20A]
+	(No symbol) [0x0021D5B6]
+	(No symbol) [0x001EC54F]
+	(No symbol) [0x001ED894]
+	GetHandleVerifier [0x006670A3+3213347]
+	GetHandleVerifier [0x0067B0C9+3295305]
+	GetHandleVerifier [0x0067558C+3271948]
+	GetHandleVerifier [0x003F7360+658144]
+	(No symbol) [0x002EB27D]
+	(No symbol) [0x002E8208]
+	(No symbol) [0x002E83A9]
+	(No symbol) [0x002DAAC0]
+	BaseThreadInitThunk [0x75CFFCC9+25]
+	RtlGetAppContainerNamedObjectPath [0x774B82AE+286]
+	RtlGetAppContainerNamedObjectPath [0x774B827E+238]
+	(No symbol) [0x00000000]
+
+2025-04-04 16:03:30,493 - INFO - 127.0.0.1 - - [04/Apr/2025 16:03:30] "[35m[1mPOST /process-url HTTP/1.1[0m" 500 -
+2025-04-04 16:07:36,046 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-04-04 16:07:36,046 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-04 16:07:36,051 - INFO -  * Restarting with stat
+2025-04-04 16:07:38,084 - WARNING -  * Debugger is active!
+2025-04-04 16:07:38,094 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 16:07:44,496 - INFO - 127.0.0.1 - - [04/Apr/2025 16:07:44] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-04 16:07:44,659 - INFO - ====== WebDriver manager ======
+2025-04-04 16:07:47,587 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 16:07:48,226 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 16:07:49,066 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-04 16:08:00,080 - INFO - Navigating to login page...
+2025-04-04 16:08:00,100 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-04 16:08:30,123 - INFO - Login successful
+2025-04-04 16:08:34,723 - INFO - Navigating to target page...
+2025-04-04 16:08:40,022 - INFO - Clicked Documents button
+2025-04-04 16:08:50,247 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Emma Douglas
+2025-04-04 16:08:55,997 - INFO - Navigating to Broker tools...
+2025-04-04 16:09:02,244 - INFO - Clicked 'Personal details' button 1 of 2.
+2025-04-04 16:09:08,633 - INFO - Applicant 1 Details: {'Personal Details': {'Title': 'Ms', 'First Name': 'Emma', 'Middle Name': '', 'Sur Name': 'Douglas', 'Preferred Name': 'Emma', 'Previous Name': '', 'Gender': 'Female', 'Date of Birth': '24/09/1986'}, 'Contact Details': {'Prefix 1': '61', 'Mobile Number': '', 'Prefix 2': '61', 'Home Number': '', 'Prefix 3': '61', 'Work Number': '', 'Email 1': 'william.badenhorst@wbhsgroup.com', 'Email 2': '', 'Website': ''}, 'Current Address': {'Search Current Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Previous Address': {'Search Previous Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Renting'}, 'Mailing Address': {'Search Mailing Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726'}, 'Post Settlement Address': {'Search Post Settlement Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Identification': {'Country of Residency': 'Australia', 'Country of Tax Residence': 'Australia', 'Citizenship': 'Australia', 'Residency Status': 'Citizen', 'Country of Birth': 'Australia', 'City of Birth': 'Perth', 'Driver License Details': {'Driver License Type': 'Full', 'Driver License Number': '4635579', 'Driver License Card Number': 'L034131136', 'Driver License Name on Document': 'Emma Douglas', 'Driver License State of Issue': 'Western Australia'}, 'Passport Details': {'Passport Number': 'PA2075580', 'Passport Name on Document': 'Emma Douglas', 'Passport Issue Country': 'Australia'}, 'Medicare Details': {'Medicare Number': '6206407185', 'Medicare Reference Number': '1', 'Medicare Name on Card': 'Emma Douglas', 'Medicare Card Color': 'Green'}}, 'Family Relations': {"Mother's Maiden Name": 'Hill', 'Marital Status': 'De Facto', 'Spouse Name': {'First Name': 'Cameron', 'Surname': 'Hugh'}, 'Number of Dependents': '2'}, 'Dependents': [{'Name': 'Alice Hu-Douglas', 'Age': '6 years, 5 months'}, {'Name': 'Lucy Hu-Douglas', 'Age': '4 years, 5 months'}], 'Next of Kin': {'Full Name': 'Laurence Douglas', 'Relationship': 'Father', 'Phone Prefix': '61', 'Phone Number': ''}, 'Next of Kin Address': {'Search Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726'}, 'Current Employer': [], 'Previous Employer': [{'Employer Name': None, 'Job Title': 'Research Coordinator', 'Employment Type': 'object:3133', 'Employment Priority': 'object:3161', 'Employment Basis': 'object:3166', 'Employer Contact First Name': 'Erin', 'Employer Contact Surname': 'Palmer', 'Employer Phone Prefix': '61', 'Employer Phone': '0893810714', 'Employer Type': 'Private', 'Employer ABN': None, 'Employer ACN': None, 'ABS Occupation Code': None, 'ANZSCO Industry Code': None}, {'Employer Name': None, 'Job Title': 'Senior Project Officer', 'Employment Type': 'object:3133', 'Employment Priority': 'object:3162', 'Employment Basis': 'object:3166', 'Employer Contact First Name': 'Mikhalina', 'Employer Contact Surname': 'Dombrovskaya', 'Employer Phone Prefix': '61', 'Employer Phone': '892224222', 'Employer Type': 'Private', 'Employer ABN': None, 'Employer ACN': None, 'ABS Occupation Code': None, 'ANZSCO Industry Code': None}]}
+2025-04-04 16:09:10,034 - INFO - Clicked 'Personal details' button 2 of 2.
+2025-04-04 16:09:16,365 - INFO - Applicant 2 Details: {'Personal Details': {'Title': 'Mr', 'First Name': 'Cameron', 'Middle Name': 'Wallace', 'Sur Name': 'Hugh', 'Preferred Name': 'Cameron', 'Previous Name': '', 'Gender': 'Male', 'Date of Birth': '26/03/1982'}, 'Contact Details': {'Prefix 1': '61', 'Mobile Number': '', 'Prefix 2': '61', 'Home Number': '', 'Prefix 3': '61', 'Work Number': '', 'Email 1': 'william.badenhorst@wbhsgroup.com', 'Email 2': '', 'Website': ''}, 'Current Address': {'Search Current Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Previous Address': {'Search Previous Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Renting'}, 'Mailing Address': {'Search Mailing Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726'}, 'Post Settlement Address': {'Search Post Settlement Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Identification': {'Country of Residency': 'Australia', 'Country of Tax Residence': 'Australia', 'Citizenship': 'Australia', 'Residency Status': 'Citizen', 'Country of Birth': 'Australia', 'City of Birth': 'Subiaco', 'Driver License Details': {'Driver License Type': 'Full', 'Driver License Number': '4348780', 'Driver License Card Number': 'D8842012', 'Driver License Name on Document': 'Cameron Wallace Hugh', 'Driver License State of Issue': 'Western Australia'}, 'Passport Details': {'Passport Number': 'N7579512', 'Passport Name on Document': 'Cameron Wallace Hugh', 'Passport Issue Country': 'Australia'}, 'Medicare Details': {'Medicare Number': '6191399597', 'Medicare Reference Number': '1', 'Medicare Name on Card': 'Cameron W Hugh', 'Medicare Card Color': 'Green'}}, 'Family Relations': {"Mother's Maiden Name": 'None', 'Marital Status': 'De Facto', 'Spouse Name': {'First Name': 'Emma', 'Surname': 'Douglas'}, 'Number of Dependents': '0'}, 'Dependents': [], 'Next of Kin': {'Full Name': '', 'Relationship': 'Select one', 'Phone Prefix': '61', 'Phone Number': ''}, 'Next of Kin Address': {'Search Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726'}, 'Current Employer': [], 'Previous Employer': [{'Employer Name': None, 'Job Title': 'Project Coordinator', 'Employment Type': 'object:3133', 'Employment Priority': 'object:3161', 'Employment Basis': 'object:3165', 'Employer Contact First Name': 'Daniel', 'Employer Contact Surname': 'Oades', 'Employer Phone Prefix': '61', 'Employer Phone': '0427798492', 'Employer Type': 'Private', 'Employer ABN': None, 'Employer ACN': None, 'ABS Occupation Code': None, 'ANZSCO Industry Code': None}, {'Employer Name': None, 'Job Title': 'Project Coordinator', 'Employment Type': 'object:3133', 'Employment Priority': 'object:3162', 'Employment Basis': 'object:3165', 'Employer Contact First Name': 'Nikkie', 'Employer Contact Surname': 'Elozovich', 'Employer Phone Prefix': '61', 'Employer Phone': '447337834', 'Employer Type': 'Private', 'Employer ABN': None, 'Employer ACN': None, 'ABS Occupation Code': None, 'ANZSCO Industry Code': None}, {'Employer Name': None, 'Job Title': 'Project Coordinator', 'Employment Type': 'object:3133', 'Employment Priority': 'object:3161', 'Employment Basis': 'object:3165', 'Employer Contact First Name': 'Daniel', 'Employer Contact Surname': 'Oades', 'Employer Phone Prefix': '61', 'Employer Phone': '0427798492', 'Employer Type': 'Private', 'Employer ABN': None, 'Employer ACN': None, 'ABS Occupation Code': None, 'ANZSCO Industry Code': None}]}
+2025-04-04 16:09:18,906 - INFO - 127.0.0.1 - - [04/Apr/2025 16:09:18] "POST /process-url HTTP/1.1" 200 -
+2025-04-04 16:16:18,628 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 16:16:18,757 - INFO -  * Restarting with stat
+2025-04-04 16:16:21,440 - WARNING -  * Debugger is active!
+2025-04-04 16:16:21,450 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 16:16:27,528 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 16:16:27,647 - INFO -  * Restarting with stat
+2025-04-04 16:16:29,908 - WARNING -  * Debugger is active!
+2025-04-04 16:16:29,917 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 16:17:22,356 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 16:17:22,465 - INFO -  * Restarting with stat
+2025-04-04 16:17:25,038 - WARNING -  * Debugger is active!
+2025-04-04 16:17:25,048 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 16:18:09,480 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 16:18:09,593 - INFO -  * Restarting with stat
+2025-04-04 16:18:12,856 - WARNING -  * Debugger is active!
+2025-04-04 16:18:12,869 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 16:21:48,969 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-04 16:21:49,139 - INFO -  * Restarting with stat
+2025-04-04 16:22:05,854 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-04-04 16:22:05,854 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-04 16:22:05,860 - INFO -  * Restarting with stat
+2025-04-04 16:22:13,611 - WARNING -  * Debugger is active!
+2025-04-04 16:22:13,629 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 16:23:18,884 - INFO - 127.0.0.1 - - [04/Apr/2025 16:23:18] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-04 16:23:19,144 - INFO - ====== WebDriver manager ======
+2025-04-04 16:23:22,780 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 16:23:23,864 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 16:23:24,502 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-04 16:23:42,779 - INFO - Navigating to login page...
+2025-04-04 16:23:42,840 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-04 16:24:12,864 - INFO - Login successful
+2025-04-04 16:24:17,592 - INFO - Navigating to target page...
+2025-04-04 16:24:21,738 - INFO - Clicked Documents button
+2025-04-04 16:24:31,941 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Emma Douglas
+2025-04-04 16:24:37,977 - INFO - Navigating to Broker tools...
+2025-04-04 16:24:43,998 - INFO - Clicked 'Personal details' button 1 of 2.
+2025-04-04 16:24:50,923 - INFO - Applicant 1 Details: {'Personal Details': {'Title': 'Ms', 'First Name': 'Emma', 'Middle Name': '', 'Sur Name': 'Douglas', 'Preferred Name': 'Emma', 'Previous Name': '', 'Gender': 'Female', 'Date of Birth': '24/09/1986'}, 'Contact Details': {'Prefix 1': '61', 'Mobile Number': '', 'Prefix 2': '61', 'Home Number': '', 'Prefix 3': '61', 'Work Number': '', 'Email 1': 'william.badenhorst@wbhsgroup.com', 'Email 2': '', 'Website': ''}, 'Current Address': {'Search Current Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Previous Address': {'Search Previous Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Renting'}, 'Mailing Address': {'Search Mailing Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726'}, 'Post Settlement Address': {'Search Post Settlement Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Identification': {'Country of Residency': 'Australia', 'Country of Tax Residence': 'Australia', 'Citizenship': 'Australia', 'Residency Status': 'Citizen', 'Country of Birth': 'Australia', 'City of Birth': 'Perth', 'Driver License Details': {'Driver License Type': 'Full', 'Driver License Number': '4635579', 'Driver License Card Number': 'L034131136', 'Driver License Name on Document': 'Emma Douglas', 'Driver License State of Issue': 'Western Australia'}, 'Passport Details': {'Passport Number': 'PA2075580', 'Passport Name on Document': 'Emma Douglas', 'Passport Issue Country': 'Australia'}, 'Medicare Details': {'Medicare Number': '6206407185', 'Medicare Reference Number': '1', 'Medicare Name on Card': 'Emma Douglas', 'Medicare Card Color': 'Green'}}, 'Family Relations': {"Mother's Maiden Name": 'Hill', 'Marital Status': 'De Facto', 'Spouse Name': {'First Name': 'Cameron', 'Surname': 'Hugh'}, 'Number of Dependents': '2'}, 'Dependents': [{'Name': 'Alice Hu-Douglas', 'Age': '6 years, 5 months'}, {'Name': 'Lucy Hu-Douglas', 'Age': '4 years, 5 months'}], 'Next of Kin': {'Full Name': 'Laurence Douglas', 'Relationship': 'Father', 'Phone Prefix': '61', 'Phone Number': ''}, 'Next of Kin Address': {'Search Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726'}, 'Current Employer': [{'Employment Status': 'Current employer', 'Employment Type': 'Salaried employee', 'Employment Priority': 'Primary employment', 'Employment Basis': 'Part time', 'Occupation': 'Research Coordinator', 'Employer Name': 'Lions Eye Institute Limited', 'Title': 'Ms', 'Employer Contact First Name': 'Erin', 'Employer Contact Surname': 'Palmer', 'Prefix': '61', 'Employer Phone': '0893810714', 'Employer Type': 'Private', 'Employer ABN': '48106521439', 'Employer ACN': '106521439', 'ABS Occupation Code': ' ', 'ANZSCO Industry Code': ' '}], 'Previous Employer': [{'Employment Status': 'Current employer', 'Employment Type': 'Salaried employee', 'Employment Priority': 'Primary employment', 'Employment Basis': 'Part time', 'Occupation': 'Research Coordinator', 'Employer Name': 'Lions Eye Institute Limited', 'Title': 'Ms', 'Employer Contact First Name': 'Erin', 'Employer Contact Surname': 'Palmer', 'Prefix': '61', 'Employer Phone': '0893810714', 'Employer Type': 'Private', 'Employer ABN': '48106521439', 'Employer ACN': '106521439', 'ABS Occupation Code': ' ', 'ANZSCO Industry Code': ' '}]}
+2025-04-04 16:24:52,449 - INFO - Clicked 'Personal details' button 2 of 2.
+2025-04-04 16:25:00,710 - INFO - Applicant 2 Details: {'Personal Details': {'Title': 'Mr', 'First Name': 'Cameron', 'Middle Name': 'Wallace', 'Sur Name': 'Hugh', 'Preferred Name': 'Cameron', 'Previous Name': '', 'Gender': 'Male', 'Date of Birth': '26/03/1982'}, 'Contact Details': {'Prefix 1': '61', 'Mobile Number': '', 'Prefix 2': '61', 'Home Number': '', 'Prefix 3': '61', 'Work Number': '', 'Email 1': 'william.badenhorst@wbhsgroup.com', 'Email 2': '', 'Website': ''}, 'Current Address': {'Search Current Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Previous Address': {'Search Previous Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Renting'}, 'Mailing Address': {'Search Mailing Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726'}, 'Post Settlement Address': {'Search Post Settlement Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Identification': {'Country of Residency': 'Australia', 'Country of Tax Residence': 'Australia', 'Citizenship': 'Australia', 'Residency Status': 'Citizen', 'Country of Birth': 'Australia', 'City of Birth': 'Subiaco', 'Driver License Details': {'Driver License Type': 'Full', 'Driver License Number': '4348780', 'Driver License Card Number': 'D8842012', 'Driver License Name on Document': 'Cameron Wallace Hugh', 'Driver License State of Issue': 'Western Australia'}, 'Passport Details': {'Passport Number': 'N7579512', 'Passport Name on Document': 'Cameron Wallace Hugh', 'Passport Issue Country': 'Australia'}, 'Medicare Details': {'Medicare Number': '6191399597', 'Medicare Reference Number': '1', 'Medicare Name on Card': 'Cameron W Hugh', 'Medicare Card Color': 'Green'}}, 'Family Relations': {"Mother's Maiden Name": 'None', 'Marital Status': 'De Facto', 'Spouse Name': {'First Name': 'Emma', 'Surname': 'Douglas'}, 'Number of Dependents': '0'}, 'Dependents': [], 'Next of Kin': {'Full Name': '', 'Relationship': 'Select one', 'Phone Prefix': '61', 'Phone Number': ''}, 'Next of Kin Address': {'Search Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726'}, 'Current Employer': [{'Employment Status': 'Current employer', 'Employment Type': 'Salaried employee', 'Employment Priority': 'Primary employment', 'Employment Basis': 'Full time', 'Occupation': 'Project Coordinator', 'Employer Name': 'KIMBERLEY LAND COUNCIL ABORIGINAL CORPORATION', 'Title': 'Mr', 'Employer Contact First Name': 'Daniel', 'Employer Contact Surname': 'Oades', 'Prefix': '61', 'Employer Phone': '0427798492', 'Employer Type': 'Private', 'Employer ABN': '96724252047', 'Employer ACN': '', 'ABS Occupation Code': ' ', 'ANZSCO Industry Code': ' '}], 'Previous Employer': [{'Employment Status': 'Current employer', 'Employment Type': 'Salaried employee', 'Employment Priority': 'Primary employment', 'Employment Basis': 'Full time', 'Occupation': 'Project Coordinator', 'Employer Name': 'KIMBERLEY LAND COUNCIL ABORIGINAL CORPORATION', 'Title': 'Mr', 'Employer Contact First Name': 'Daniel', 'Employer Contact Surname': 'Oades', 'Prefix': '61', 'Employer Phone': '0427798492', 'Employer Type': 'Private', 'Employer ABN': '96724252047', 'Employer ACN': '', 'ABS Occupation Code': ' ', 'ANZSCO Industry Code': ' '}, {'Employment Status': 'Current employer', 'Employment Type': 'Salaried employee', 'Employment Priority': 'Primary employment', 'Employment Basis': 'Full time', 'Occupation': 'Project Coordinator', 'Employer Name': 'KIMBERLEY LAND COUNCIL ABORIGINAL CORPORATION', 'Title': 'Mr', 'Employer Contact First Name': 'Daniel', 'Employer Contact Surname': 'Oades', 'Prefix': '61', 'Employer Phone': '0427798492', 'Employer Type': 'Private', 'Employer ABN': '96724252047', 'Employer ACN': '', 'ABS Occupation Code': ' ', 'ANZSCO Industry Code': ' '}]}
+2025-04-04 16:25:04,126 - INFO - 127.0.0.1 - - [04/Apr/2025 16:25:04] "POST /process-url HTTP/1.1" 200 -
+2025-04-04 16:59:36,543 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-04-04 16:59:36,544 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-04 16:59:36,548 - INFO -  * Restarting with stat
+2025-04-04 16:59:39,758 - WARNING -  * Debugger is active!
+2025-04-04 16:59:39,771 - INFO -  * Debugger PIN: 699-806-219
+2025-04-04 16:59:43,639 - INFO - 127.0.0.1 - - [04/Apr/2025 16:59:43] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-04 16:59:43,887 - INFO - ====== WebDriver manager ======
+2025-04-04 16:59:47,063 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 16:59:47,898 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-04 16:59:48,918 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-04 17:00:01,499 - INFO - Navigating to login page...
+2025-04-04 17:00:01,553 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-04 17:00:31,576 - INFO - Login successful
+2025-04-04 17:00:36,285 - INFO - Navigating to target page...
+2025-04-04 17:00:41,925 - INFO - Clicked Documents button
+2025-04-04 17:00:52,136 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Emma Douglas
+2025-04-04 17:00:57,971 - INFO - Navigating to Broker tools...
+2025-04-04 17:01:04,463 - INFO - Clicked 'Personal details' button 1 of 2.
+2025-04-04 17:01:11,757 - INFO - Applicant 1 Details: {'Personal Details': {'Title': 'Ms', 'First Name': 'Emma', 'Middle Name': '', 'Sur Name': 'Douglas', 'Preferred Name': 'Emma', 'Previous Name': '', 'Gender': 'Female', 'Date of Birth': '24/09/1986'}, 'Contact Details': {'Prefix 1': '61', 'Mobile Number': '', 'Prefix 2': '61', 'Home Number': '', 'Prefix 3': '61', 'Work Number': '', 'Email 1': 'william.badenhorst@wbhsgroup.com', 'Email 2': '', 'Website': ''}, 'Current Address': {'Search Current Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Previous Address': {'Search Previous Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Renting'}, 'Mailing Address': {'Search Mailing Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726'}, 'Post Settlement Address': {'Search Post Settlement Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Identification': {'Country of Residency': 'Australia', 'Country of Tax Residence': 'Australia', 'Citizenship': 'Australia', 'Residency Status': 'Citizen', 'Country of Birth': 'Australia', 'City of Birth': 'Perth', 'Driver License Details': {'Driver License Type': 'Full', 'Driver License Number': '4635579', 'Driver License Card Number': 'L034131136', 'Driver License Name on Document': 'Emma Douglas', 'Driver License State of Issue': 'Western Australia'}, 'Passport Details': {'Passport Number': 'PA2075580', 'Passport Name on Document': 'Emma Douglas', 'Passport Issue Country': 'Australia'}, 'Medicare Details': {'Medicare Number': '6206407185', 'Medicare Reference Number': '1', 'Medicare Name on Card': 'Emma Douglas', 'Medicare Card Color': 'Green'}}, 'Family Relations': {"Mother's Maiden Name": 'Hill', 'Marital Status': 'De Facto', 'Spouse Name': {'First Name': 'Cameron', 'Surname': 'Hugh'}, 'Number of Dependents': '2'}, 'Dependents': [{'Name': 'Alice Hu-Douglas', 'Age': '6 years, 5 months'}, {'Name': 'Lucy Hu-Douglas', 'Age': '4 years, 5 months'}], 'Next of Kin': {'Full Name': 'Laurence Douglas', 'Relationship': 'Father', 'Phone Prefix': '61', 'Phone Number': ''}, 'Next of Kin Address': {'Search Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726'}, 'Current Employer': [{'Employment Status': 'Current employer', 'Employment Type': 'Salaried employee', 'Employment Priority': 'Primary employment', 'Employment Basis': 'Part time', 'Occupation': 'Research Coordinator', 'Employer Name': 'Lions Eye Institute Limited', 'Title': 'Ms', 'Employer Contact First Name': 'Erin', 'Employer Contact Surname': 'Palmer', 'Prefix': '61', 'Employer Phone': '0893810714', 'Employer Type': 'Private', 'Employer ABN': '48106521439', 'Employer ACN': '106521439', 'ABS Occupation Code': ' ', 'ANZSCO Industry Code': ' '}], 'Previous Employer': [{'Employment Status': 'Current employer', 'Employment Type': 'Salaried employee', 'Employment Priority': 'Primary employment', 'Employment Basis': 'Part time', 'Occupation': 'Research Coordinator', 'Employer Name': 'Lions Eye Institute Limited', 'Title': 'Ms', 'Employer Contact First Name': 'Erin', 'Employer Contact Surname': 'Palmer', 'Prefix': '61', 'Employer Phone': '0893810714', 'Employer Type': 'Private', 'Employer ABN': '48106521439', 'Employer ACN': '106521439', 'ABS Occupation Code': ' ', 'ANZSCO Industry Code': ' '}]}
+2025-04-04 17:01:13,234 - INFO - Clicked 'Personal details' button 2 of 2.
+2025-04-04 17:01:21,552 - INFO - Applicant 2 Details: {'Personal Details': {'Title': 'Mr', 'First Name': 'Cameron', 'Middle Name': 'Wallace', 'Sur Name': 'Hugh', 'Preferred Name': 'Cameron', 'Previous Name': '', 'Gender': 'Male', 'Date of Birth': '26/03/1982'}, 'Contact Details': {'Prefix 1': '61', 'Mobile Number': '', 'Prefix 2': '61', 'Home Number': '', 'Prefix 3': '61', 'Work Number': '', 'Email 1': 'william.badenhorst@wbhsgroup.com', 'Email 2': '', 'Website': ''}, 'Current Address': {'Search Current Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Previous Address': {'Search Previous Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Renting'}, 'Mailing Address': {'Search Mailing Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726'}, 'Post Settlement Address': {'Search Post Settlement Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Rd', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726', 'Residential Status': 'Own Home - Mortgage'}, 'Identification': {'Country of Residency': 'Australia', 'Country of Tax Residence': 'Australia', 'Citizenship': 'Australia', 'Residency Status': 'Citizen', 'Country of Birth': 'Australia', 'City of Birth': 'Subiaco', 'Driver License Details': {'Driver License Type': 'Full', 'Driver License Number': '4348780', 'Driver License Card Number': 'D8842012', 'Driver License Name on Document': 'Cameron Wallace Hugh', 'Driver License State of Issue': 'Western Australia'}, 'Passport Details': {'Passport Number': 'N7579512', 'Passport Name on Document': 'Cameron Wallace Hugh', 'Passport Issue Country': 'Australia'}, 'Medicare Details': {'Medicare Number': '6191399597', 'Medicare Reference Number': '1', 'Medicare Name on Card': 'Cameron W Hugh', 'Medicare Card Color': 'Green'}}, 'Family Relations': {"Mother's Maiden Name": 'None', 'Marital Status': 'De Facto', 'Spouse Name': {'First Name': 'Emma', 'Surname': 'Douglas'}, 'Number of Dependents': '0'}, 'Dependents': [], 'Next of Kin': {'Full Name': '', 'Relationship': 'Select one', 'Phone Prefix': '61', 'Phone Number': ''}, 'Next of Kin Address': {'Search Address': '', 'Unit Number': '', 'Street Number': '20', 'Street Name': 'Wakayama', 'Street Type': 'Cres', 'Country': 'Australia', 'Town': 'CABLE BEACH', 'State': 'Western Australia', 'Postal Code': '6726'}, 'Current Employer': [{'Employment Status': 'Current employer', 'Employment Type': 'Salaried employee', 'Employment Priority': 'Primary employment', 'Employment Basis': 'Full time', 'Occupation': 'Project Coordinator', 'Employer Name': 'KIMBERLEY LAND COUNCIL ABORIGINAL CORPORATION', 'Title': 'Mr', 'Employer Contact First Name': 'Daniel', 'Employer Contact Surname': 'Oades', 'Prefix': '61', 'Employer Phone': '0427798492', 'Employer Type': 'Private', 'Employer ABN': '96724252047', 'Employer ACN': '', 'ABS Occupation Code': ' ', 'ANZSCO Industry Code': ' '}], 'Previous Employer': [{'Employment Status': 'Current employer', 'Employment Type': 'Salaried employee', 'Employment Priority': 'Primary employment', 'Employment Basis': 'Full time', 'Occupation': 'Project Coordinator', 'Employer Name': 'KIMBERLEY LAND COUNCIL ABORIGINAL CORPORATION', 'Title': 'Mr', 'Employer Contact First Name': 'Daniel', 'Employer Contact Surname': 'Oades', 'Prefix': '61', 'Employer Phone': '0427798492', 'Employer Type': 'Private', 'Employer ABN': '96724252047', 'Employer ACN': '', 'ABS Occupation Code': ' ', 'ANZSCO Industry Code': ' '}, {'Employment Status': 'Current employer', 'Employment Type': 'Salaried employee', 'Employment Priority': 'Primary employment', 'Employment Basis': 'Full time', 'Occupation': 'Project Coordinator', 'Employer Name': 'KIMBERLEY LAND COUNCIL ABORIGINAL CORPORATION', 'Title': 'Mr', 'Employer Contact First Name': 'Daniel', 'Employer Contact Surname': 'Oades', 'Prefix': '61', 'Employer Phone': '0427798492', 'Employer Type': 'Private', 'Employer ABN': '96724252047', 'Employer ACN': '', 'ABS Occupation Code': ' ', 'ANZSCO Industry Code': ' '}]}
+2025-04-04 17:01:24,459 - INFO - 127.0.0.1 - - [04/Apr/2025 17:01:24] "POST /process-url HTTP/1.1" 200 -
