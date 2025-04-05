@@ -1486,7 +1486,7 @@ def process_url():
             lender_element = active_driver.find_element(By.XPATH, "//span[@ng-bind=\"::Model.currentLender.getName()\"]")
             lender = lender_element.get_attribute("innerText").strip()
         except Exception as e:
-            print(f"Error getting lender data: {str(e)}")
+            lender = None
 
         # Get loan security addresses
         loan_security_addresses = None  # Initialize as None
@@ -1503,7 +1503,7 @@ def process_url():
             if addresses:
                 loan_security_addresses = ", ".join(addresses)
         except Exception as e:
-            print(f"Error getting addresses: {str(e)}")
+            loan_security_addresses = None
    
         deal_value = None
         try:
@@ -1516,7 +1516,7 @@ def process_url():
                 # Remove the dollar sign and commas, then convert to float
                 deal_value = float(deal_value.replace("$", "").replace(",", ""))
         except Exception as e:
-            print(f"Error getting deal value data: {str(e)}")
+            deal_value = None
 
         total_loan_amount = None
         try:
@@ -1524,7 +1524,7 @@ def process_url():
                 "//ticket-basic-info-value[@ng-bind='Model.preferredProductTotalLoanAmount.formatWithCurrency(CurrentCurrency())']")
             total_loan_amount = total_loan_amount_element.get_attribute("innerText").strip()
         except Exception as e:
-            print(f"Error getting total loan amount data: {str(e)}")
+            total_loan_amount = None
 
         estimated_settlement_date = None
         try:
@@ -1532,7 +1532,7 @@ def process_url():
                 "//span[@ng-bind='Model.currentTicket.getDueDate(CurrentTimeZone(), CurrentOrganizationDateTimeLocale())']")
             estimated_settlement_date = settlement_element.get_attribute("innerText").strip()
         except Exception as e:
-            print(f"Error getting settlement date data: {str(e)}")
+            estimated_settlement_date = None
 
         deal_owner = None
         try:
@@ -1540,7 +1540,7 @@ def process_url():
                 "//span[@ng-bind=\"getAccount(Model.currentTicket.idOwner).getName()\"]")
             deal_owner = deal_owner_element.get_attribute("innerText").strip()
         except Exception as e:
-            print(f"Error getting deal owner data: {str(e)}")
+            deal_owner = None
         
         try:
             logging.info("Starting document processing...")

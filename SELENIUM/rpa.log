@@ -5931,3 +5931,454 @@ Stacktrace:
 2025-03-21 06:23:54,037 - INFO -  * Restarting with stat
 2025-03-21 06:23:56,017 - WARNING -  * Debugger is active!
 2025-03-21 06:23:56,049 - INFO -  * Debugger PIN: 361-797-060
+2025-03-25 13:31:29,287 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-03-25 13:31:29,288 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-25 13:31:29,316 - INFO -  * Restarting with stat
+2025-03-25 13:31:32,703 - WARNING -  * Debugger is active!
+2025-03-25 13:31:32,720 - INFO -  * Debugger PIN: 361-797-060
+2025-03-26 14:03:17,282 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-03-26 14:03:17,294 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-26 14:03:17,300 - INFO -  * Restarting with stat
+2025-03-26 14:03:22,883 - WARNING -  * Debugger is active!
+2025-03-26 14:03:22,904 - INFO -  * Debugger PIN: 361-797-060
+2025-03-26 14:05:36,100 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-03-26 14:05:36,101 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-26 14:05:36,105 - INFO -  * Restarting with stat
+2025-03-26 14:05:39,232 - WARNING -  * Debugger is active!
+2025-03-26 14:05:39,242 - INFO -  * Debugger PIN: 361-797-060
+2025-03-26 14:06:17,820 - INFO - 127.0.0.1 - - [26/Mar/2025 14:06:17] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-03-26 14:06:18,076 - INFO - ====== WebDriver manager ======
+2025-03-26 14:06:20,404 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-26 14:06:20,832 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-26 14:06:21,133 - INFO - There is no [win64] chromedriver "134.0.6998.165" for browser google-chrome "134.0.6998" in cache
+2025-03-26 14:06:21,133 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-26 14:06:21,840 - INFO - WebDriver version 134.0.6998.165 selected
+2025-03-26 14:06:21,847 - INFO - Modern chrome version https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.165/win32/chromedriver-win32.zip
+2025-03-26 14:06:21,847 - INFO - About to download new driver from https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.165/win32/chromedriver-win32.zip
+2025-03-26 14:06:22,193 - INFO - Driver downloading response is 200
+2025-03-26 14:06:23,626 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-26 14:06:26,436 - INFO - Driver has been saved in cache [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165]
+2025-03-26 14:06:46,251 - INFO - Navigating to login page...
+2025-03-26 14:06:46,343 - INFO - Login page loaded. Waiting for user authentication...
+2025-03-26 14:07:16,389 - INFO - Login successful
+2025-03-26 14:07:20,201 - INFO - Navigating to target page...
+2025-03-26 14:07:23,180 - INFO - Clicked Documents button
+2025-03-26 14:07:33,331 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Simon Charly
+2025-03-26 14:07:38,808 - INFO - Starting document processing...
+2025-03-26 14:07:38,830 - INFO - Starting enhanced scroll operation...
+2025-03-26 14:07:40,865 - INFO - Scroll attempt 1: Height = 2811
+2025-03-26 14:07:42,875 - INFO - Scroll attempt 2: Height = 4830
+2025-03-26 14:07:44,893 - INFO - Scroll attempt 3: Height = 4830
+2025-03-26 14:07:46,905 - INFO - Scroll attempt 4: Height = 4830
+2025-03-26 14:07:48,916 - INFO - Reached bottom after 5 attempts
+2025-03-26 14:07:51,917 - INFO - Starting optimized timeline processing...
+2025-03-26 14:07:51,949 - INFO - Found 48 total timeline events
+2025-03-26 14:07:53,375 - INFO - Found 1 events with labels
+2025-03-26 14:07:53,376 - INFO - Processing batch 1 of 1
+2025-03-26 14:07:54,561 - INFO - Successfully initiated download 1
+2025-03-26 14:07:56,563 - INFO - Processing progress: 100.0% (1 downloads)
+2025-03-26 14:08:02,631 - INFO - Timeline processing complete: 1 downloads initiated
+2025-03-26 14:08:02,631 - INFO - Monitoring downloads in C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs
+2025-03-26 14:08:07,385 - INFO - Downloads complete. Total files: 2
+2025-03-26 14:08:20,163 - INFO - Application records created: 1
+2025-03-26 14:08:20,174 - INFO - File selector GUI launched as separate process
+2025-03-26 14:08:20,176 - INFO - 127.0.0.1 - - [26/Mar/2025 14:08:20] "POST /process-url HTTP/1.1" 200 -
+2025-03-26 14:12:22,500 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-03-26 14:12:22,501 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-26 14:12:22,506 - INFO -  * Restarting with stat
+2025-03-26 14:12:24,748 - WARNING -  * Debugger is active!
+2025-03-26 14:12:24,761 - INFO -  * Debugger PIN: 361-797-060
+2025-03-26 16:59:22,546 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-03-26 16:59:22,547 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-26 16:59:22,551 - INFO -  * Restarting with stat
+2025-03-26 16:59:27,050 - WARNING -  * Debugger is active!
+2025-03-26 16:59:27,072 - INFO -  * Debugger PIN: 361-797-060
+2025-03-26 17:00:00,374 - INFO - 127.0.0.1 - - [26/Mar/2025 17:00:00] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-03-26 17:00:00,634 - INFO - ====== WebDriver manager ======
+2025-03-26 17:00:02,544 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-26 17:00:02,983 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-26 17:00:03,291 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-03-26 17:00:14,995 - INFO - Navigating to login page...
+2025-03-26 17:00:15,029 - INFO - Login page loaded. Waiting for user authentication...
+2025-03-26 17:00:45,058 - INFO - Login successful
+2025-03-26 17:00:50,494 - INFO - Navigating to target page...
+2025-03-26 17:00:54,870 - INFO - Clicked Documents button
+2025-03-26 17:01:05,590 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Simon Charly
+2025-03-26 17:01:11,093 - INFO - Starting document processing...
+2025-03-26 17:01:11,143 - INFO - Starting enhanced scroll operation...
+2025-03-26 17:01:13,181 - INFO - Scroll attempt 1: Height = 2811
+2025-03-26 17:01:15,253 - INFO - Scroll attempt 2: Height = 4830
+2025-03-26 17:01:17,267 - INFO - Scroll attempt 3: Height = 4830
+2025-03-26 17:01:19,358 - INFO - Scroll attempt 4: Height = 4830
+2025-03-26 17:01:21,407 - INFO - Reached bottom after 5 attempts
+2025-03-26 17:01:24,408 - INFO - Starting optimized timeline processing...
+2025-03-26 17:01:24,459 - INFO - Found 48 total timeline events
+2025-03-26 17:01:26,005 - INFO - Found 1 events with labels
+2025-03-26 17:01:26,006 - INFO - Processing batch 1 of 1
+2025-03-26 17:01:27,237 - INFO - Successfully initiated download 1
+2025-03-26 17:01:29,239 - INFO - Processing progress: 100.0% (1 downloads)
+2025-03-26 17:01:35,259 - INFO - Timeline processing complete: 1 downloads initiated
+2025-03-26 17:01:35,260 - INFO - Monitoring downloads in C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs
+2025-03-26 17:01:40,013 - INFO - Downloads complete. Total files: 2
+2025-03-26 17:01:50,499 - INFO - Application records created: 1
+2025-03-26 17:01:50,512 - INFO - File selector GUI launched as separate process
+2025-03-26 17:01:50,515 - INFO - 127.0.0.1 - - [26/Mar/2025 17:01:50] "POST /process-url HTTP/1.1" 200 -
+2025-03-26 17:19:36,878 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-03-26 17:19:41,067 - INFO -  * Restarting with stat
+2025-03-26 17:19:44,293 - WARNING -  * Debugger is active!
+2025-03-26 17:19:44,302 - INFO -  * Debugger PIN: 361-797-060
+2025-03-26 17:20:15,887 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-03-26 17:20:16,099 - INFO -  * Restarting with stat
+2025-03-26 17:20:18,690 - WARNING -  * Debugger is active!
+2025-03-26 17:20:18,702 - INFO -  * Debugger PIN: 361-797-060
+2025-03-26 17:20:41,900 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-03-26 17:20:42,003 - INFO -  * Restarting with stat
+2025-03-26 17:20:44,571 - WARNING -  * Debugger is active!
+2025-03-26 17:20:44,583 - INFO -  * Debugger PIN: 361-797-060
+2025-03-26 17:25:15,128 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-03-26 17:25:15,285 - INFO -  * Restarting with stat
+2025-03-26 17:25:18,346 - WARNING -  * Debugger is active!
+2025-03-26 17:25:18,358 - INFO -  * Debugger PIN: 361-797-060
+2025-03-26 17:25:31,538 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-03-26 17:25:31,644 - INFO -  * Restarting with stat
+2025-03-26 17:25:34,399 - WARNING -  * Debugger is active!
+2025-03-26 17:25:34,408 - INFO -  * Debugger PIN: 361-797-060
+2025-03-26 17:26:03,767 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-03-26 17:26:03,892 - INFO -  * Restarting with stat
+2025-03-26 17:26:06,565 - WARNING -  * Debugger is active!
+2025-03-26 17:26:06,580 - INFO -  * Debugger PIN: 361-797-060
+2025-03-26 17:27:22,366 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-03-26 17:27:22,474 - INFO -  * Restarting with stat
+2025-03-26 17:27:24,774 - WARNING -  * Debugger is active!
+2025-03-26 17:27:24,782 - INFO -  * Debugger PIN: 361-797-060
+2025-03-26 17:27:43,970 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-03-26 17:27:44,072 - INFO -  * Restarting with stat
+2025-03-26 17:27:46,596 - WARNING -  * Debugger is active!
+2025-03-26 17:27:46,609 - INFO -  * Debugger PIN: 361-797-060
+2025-03-26 17:28:28,041 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-03-26 17:28:28,217 - INFO -  * Restarting with stat
+2025-03-26 17:28:30,613 - WARNING -  * Debugger is active!
+2025-03-26 17:28:30,626 - INFO -  * Debugger PIN: 361-797-060
+2025-03-26 17:28:54,887 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-03-26 17:28:54,990 - INFO -  * Restarting with stat
+2025-03-26 17:29:01,408 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-03-26 17:29:01,410 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-26 17:29:01,414 - INFO -  * Restarting with stat
+2025-03-26 17:29:04,612 - WARNING -  * Debugger is active!
+2025-03-26 17:29:04,629 - INFO -  * Debugger PIN: 361-797-060
+2025-03-26 17:30:03,075 - INFO - 127.0.0.1 - - [26/Mar/2025 17:30:03] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-03-26 17:30:03,323 - INFO - ====== WebDriver manager ======
+2025-03-26 17:30:05,685 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-26 17:30:06,069 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-26 17:30:06,390 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-03-26 17:30:18,162 - INFO - Navigating to login page...
+2025-03-26 17:30:20,314 - INFO - Login page loaded. Waiting for user authentication...
+2025-03-26 17:30:50,340 - INFO - Login successful
+2025-03-26 17:30:53,444 - INFO - Navigating to target page...
+2025-03-26 17:30:56,901 - INFO - Clicked Documents button
+2025-03-26 17:31:07,028 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Simon Charly
+2025-03-26 17:31:12,489 - INFO - Starting document processing...
+2025-03-26 17:31:12,520 - INFO - Starting enhanced scroll operation...
+2025-03-26 17:31:14,547 - INFO - Scroll attempt 1: Height = 2811
+2025-03-26 17:31:16,565 - INFO - Scroll attempt 2: Height = 4830
+2025-03-26 17:31:18,578 - INFO - Scroll attempt 3: Height = 4830
+2025-03-26 17:31:20,590 - INFO - Scroll attempt 4: Height = 4830
+2025-03-26 17:31:22,603 - INFO - Reached bottom after 5 attempts
+2025-03-26 17:31:25,604 - INFO - Starting optimized timeline processing...
+2025-03-26 17:31:25,639 - INFO - Found 48 total timeline events
+2025-03-26 17:31:26,943 - INFO - Found 1 events with labels
+2025-03-26 17:31:26,944 - INFO - Processing batch 1 of 1
+2025-03-26 17:31:28,083 - INFO - Successfully initiated download 1
+2025-03-26 17:31:30,085 - INFO - Processing progress: 100.0% (1 downloads)
+2025-03-26 17:31:36,201 - INFO - Timeline processing complete: 1 downloads initiated
+2025-03-26 17:31:36,202 - INFO - Monitoring downloads in C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs
+2025-03-26 17:31:40,956 - INFO - Downloads complete. Total files: 2
+2025-03-26 17:31:51,967 - INFO - Application records created: 1
+2025-03-26 17:31:53,279 - INFO - Application records created: 1
+2025-03-26 17:31:53,291 - INFO - File selector GUI launched as separate process
+2025-03-26 17:31:53,294 - INFO - 127.0.0.1 - - [26/Mar/2025 17:31:53] "POST /process-url HTTP/1.1" 200 -
+2025-03-26 17:36:30,926 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-03-26 17:36:35,116 - INFO -  * Restarting with stat
+2025-03-26 17:36:37,690 - WARNING -  * Debugger is active!
+2025-03-26 17:36:37,699 - INFO -  * Debugger PIN: 361-797-060
+2025-03-26 18:12:34,220 - INFO - 127.0.0.1 - - [26/Mar/2025 18:12:34] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-03-26 18:12:34,411 - INFO - ====== WebDriver manager ======
+2025-03-26 18:12:39,389 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-26 18:12:39,799 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-26 18:12:40,036 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-03-26 18:12:52,816 - INFO - Navigating to login page...
+2025-03-26 18:12:52,891 - INFO - Login page loaded. Waiting for user authentication...
+2025-03-26 18:13:22,938 - INFO - Login successful
+2025-03-26 18:13:28,240 - INFO - Navigating to target page...
+2025-03-26 18:13:34,497 - INFO - Clicked Documents button
+2025-03-26 18:13:44,696 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Simon Charly
+2025-03-26 18:13:50,286 - INFO - Starting document processing...
+2025-03-26 18:13:50,312 - INFO - Starting enhanced scroll operation...
+2025-03-26 18:13:52,336 - INFO - Scroll attempt 1: Height = 2811
+2025-03-26 18:13:54,355 - INFO - Scroll attempt 2: Height = 4830
+2025-03-26 18:13:56,367 - INFO - Scroll attempt 3: Height = 4830
+2025-03-26 18:13:58,388 - INFO - Scroll attempt 4: Height = 4830
+2025-03-26 18:14:00,398 - INFO - Reached bottom after 5 attempts
+2025-03-26 18:14:03,399 - INFO - Starting optimized timeline processing...
+2025-03-26 18:14:03,438 - INFO - Found 48 total timeline events
+2025-03-26 18:14:04,740 - INFO - Found 1 events with labels
+2025-03-26 18:14:04,741 - INFO - Processing batch 1 of 1
+2025-03-26 18:14:05,885 - INFO - Successfully initiated download 1
+2025-03-26 18:14:07,888 - INFO - Processing progress: 100.0% (1 downloads)
+2025-03-26 18:14:14,097 - INFO - Timeline processing complete: 1 downloads initiated
+2025-03-26 18:14:14,105 - INFO - Monitoring downloads in C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs
+2025-03-26 18:14:18,858 - INFO - Downloads complete. Total files: 2
+2025-03-26 18:14:31,191 - INFO - Application records created: 1
+2025-03-26 18:14:31,219 - INFO - File selector GUI launched as separate process
+2025-03-26 18:14:31,230 - INFO - 127.0.0.1 - - [26/Mar/2025 18:14:31] "POST /process-url HTTP/1.1" 200 -
+2025-03-27 05:48:29,219 - INFO - 127.0.0.1 - - [27/Mar/2025 05:48:29] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-03-27 05:48:34,079 - INFO - ====== WebDriver manager ======
+2025-03-27 05:48:41,128 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-27 05:48:41,604 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-27 05:48:41,921 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-27 05:48:42,679 - INFO - WebDriver version 134.0.6998.165 selected
+2025-03-27 05:48:42,688 - INFO - Modern chrome version https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.165/win32/chromedriver-win32.zip
+2025-03-27 05:48:42,692 - INFO - About to download new driver from https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.165/win32/chromedriver-win32.zip
+2025-03-27 05:48:43,047 - INFO - Driver downloading response is 200
+2025-03-27 05:48:44,243 - INFO - Get LATEST chromedriver version for google-chrome
+2025-03-27 05:48:46,267 - INFO - Driver has been saved in cache [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165]
+2025-03-27 05:48:59,119 - INFO - Navigating to login page...
+2025-03-27 05:48:59,158 - INFO - Login page loaded. Waiting for user authentication...
+2025-03-27 05:49:29,218 - INFO - Login successful
+2025-03-27 05:49:33,511 - INFO - Navigating to target page...
+2025-03-27 05:49:37,217 - INFO - Clicked Documents button
+2025-03-27 05:49:47,370 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Simon Charly
+2025-03-27 05:49:52,988 - INFO - Starting document processing...
+2025-03-27 05:49:53,033 - INFO - Starting enhanced scroll operation...
+2025-03-27 05:49:55,095 - INFO - Scroll attempt 1: Height = 2811
+2025-03-27 05:49:57,436 - INFO - Scroll attempt 2: Height = 4830
+2025-03-27 05:49:59,450 - INFO - Scroll attempt 3: Height = 4830
+2025-03-27 05:50:01,750 - INFO - Scroll attempt 4: Height = 4830
+2025-03-27 05:50:03,769 - INFO - Reached bottom after 5 attempts
+2025-03-27 05:50:06,772 - INFO - Starting optimized timeline processing...
+2025-03-27 05:50:06,812 - INFO - Found 48 total timeline events
+2025-03-27 05:50:08,552 - INFO - Found 1 events with labels
+2025-03-27 05:50:08,613 - INFO - Processing batch 1 of 1
+2025-03-27 05:50:09,828 - INFO - Successfully initiated download 1
+2025-03-27 05:50:11,829 - INFO - Processing progress: 100.0% (1 downloads)
+2025-03-27 05:50:17,956 - INFO - Timeline processing complete: 1 downloads initiated
+2025-03-27 05:50:17,959 - INFO - Monitoring downloads in C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs
+2025-03-27 05:50:22,717 - INFO - Downloads complete. Total files: 2
+2025-03-27 05:50:34,734 - INFO - Application records created: 1
+2025-03-27 05:50:34,753 - INFO - File selector GUI launched as separate process
+2025-03-27 05:50:34,758 - INFO - 127.0.0.1 - - [27/Mar/2025 05:50:34] "POST /process-url HTTP/1.1" 200 -
+2025-04-02 09:06:41,020 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-04-02 09:06:41,022 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-02 09:06:41,030 - INFO -  * Restarting with stat
+2025-04-02 09:06:52,564 - WARNING -  * Debugger is active!
+2025-04-02 09:06:52,655 - INFO -  * Debugger PIN: 361-797-060
+2025-04-02 09:06:52,801 - INFO - 127.0.0.1 - - [02/Apr/2025 09:06:52] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-02 09:06:53,127 - INFO - ====== WebDriver manager ======
+2025-04-02 09:06:58,031 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-02 09:06:58,391 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-02 09:06:58,760 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-02 09:06:59,642 - INFO - WebDriver version 134.0.6998.165 selected
+2025-04-02 09:06:59,786 - INFO - Modern chrome version https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.165/win32/chromedriver-win32.zip
+2025-04-02 09:06:59,847 - INFO - About to download new driver from https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.165/win32/chromedriver-win32.zip
+2025-04-02 09:07:00,281 - INFO - Driver downloading response is 200
+2025-04-02 09:07:01,466 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-02 09:07:04,163 - INFO - Driver has been saved in cache [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165]
+2025-04-02 09:07:30,726 - INFO - Navigating to login page...
+2025-04-02 09:07:30,853 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-02 09:08:00,938 - INFO - Login successful
+2025-04-02 09:08:18,546 - INFO - Navigating to target page...
+2025-04-02 09:08:25,144 - INFO - Clicked Documents button
+2025-04-02 09:08:35,753 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Simon Charly
+2025-04-02 09:08:41,958 - INFO - Starting document processing...
+2025-04-02 09:08:42,025 - INFO - Starting enhanced scroll operation...
+2025-04-02 09:08:44,153 - INFO - Scroll attempt 1: Height = 2811
+2025-04-02 09:08:46,899 - INFO - Scroll attempt 2: Height = 4830
+2025-04-02 09:08:48,913 - INFO - Scroll attempt 3: Height = 4830
+2025-04-02 09:08:50,927 - INFO - Scroll attempt 4: Height = 4830
+2025-04-02 09:08:52,941 - INFO - Reached bottom after 5 attempts
+2025-04-02 09:08:55,945 - INFO - Starting optimized timeline processing...
+2025-04-02 09:08:55,987 - INFO - Found 48 total timeline events
+2025-04-02 09:08:58,169 - INFO - Found 1 events with labels
+2025-04-02 09:08:58,170 - INFO - Processing batch 1 of 1
+2025-04-02 09:08:59,411 - INFO - Successfully initiated download 1
+2025-04-02 09:09:01,413 - INFO - Processing progress: 100.0% (1 downloads)
+2025-04-02 09:09:07,543 - INFO - Timeline processing complete: 1 downloads initiated
+2025-04-02 09:09:07,545 - INFO - Monitoring downloads in C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs
+2025-04-02 09:09:12,306 - INFO - Downloads complete. Total files: 2
+2025-04-02 09:09:16,548 - INFO - File selector GUI launched as separate process
+2025-04-02 09:09:16,550 - INFO - 127.0.0.1 - - [02/Apr/2025 09:09:16] "POST /process-url HTTP/1.1" 200 -
+2025-04-02 09:24:13,240 - INFO - 127.0.0.1 - - [02/Apr/2025 09:24:13] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-02 09:24:13,508 - INFO - ====== WebDriver manager ======
+2025-04-02 09:24:16,605 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-02 09:24:21,317 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-02 09:24:21,684 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-02 09:24:36,597 - INFO - Navigating to login page...
+2025-04-02 09:24:36,737 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-02 09:25:06,762 - INFO - Login successful
+2025-04-02 09:25:11,353 - INFO - Navigating to target page...
+2025-04-02 09:25:15,662 - INFO - Clicked Documents button
+2025-04-02 09:25:25,808 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Simon Charly
+2025-04-02 09:25:31,205 - INFO - Starting document processing...
+2025-04-02 09:25:31,226 - INFO - Starting enhanced scroll operation...
+2025-04-02 09:25:33,253 - INFO - Scroll attempt 1: Height = 2811
+2025-04-02 09:25:35,264 - INFO - Scroll attempt 2: Height = 4830
+2025-04-02 09:25:37,276 - INFO - Scroll attempt 3: Height = 4830
+2025-04-02 09:25:39,288 - INFO - Scroll attempt 4: Height = 4830
+2025-04-02 09:25:41,300 - INFO - Reached bottom after 5 attempts
+2025-04-02 09:25:44,301 - INFO - Starting optimized timeline processing...
+2025-04-02 09:25:44,333 - INFO - Found 48 total timeline events
+2025-04-02 09:25:45,580 - INFO - Found 1 events with labels
+2025-04-02 09:25:45,581 - INFO - Processing batch 1 of 1
+2025-04-02 09:25:46,731 - INFO - Successfully initiated download 1
+2025-04-02 09:25:48,734 - INFO - Processing progress: 100.0% (1 downloads)
+2025-04-02 09:25:54,760 - INFO - Timeline processing complete: 1 downloads initiated
+2025-04-02 09:25:54,761 - INFO - Monitoring downloads in C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs
+2025-04-02 09:25:59,515 - INFO - Downloads complete. Total files: 2
+2025-04-02 09:26:10,973 - INFO - Application records created: 1
+2025-04-02 09:26:10,979 - INFO - File selector GUI launched as separate process
+2025-04-02 09:26:10,981 - INFO - 127.0.0.1 - - [02/Apr/2025 09:26:10] "POST /process-url HTTP/1.1" 200 -
+2025-04-02 09:45:56,981 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-02 09:46:01,678 - INFO -  * Restarting with stat
+2025-04-02 09:46:04,305 - WARNING -  * Debugger is active!
+2025-04-02 09:46:04,316 - INFO -  * Debugger PIN: 361-797-060
+2025-04-02 09:46:56,361 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-02 09:46:56,489 - INFO -  * Restarting with stat
+2025-04-02 09:47:00,703 - WARNING -  * Debugger is active!
+2025-04-02 09:47:00,724 - INFO -  * Debugger PIN: 361-797-060
+2025-04-02 10:51:58,689 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-02 10:51:59,066 - INFO -  * Restarting with stat
+2025-04-02 10:52:02,719 - WARNING -  * Debugger is active!
+2025-04-02 10:52:02,734 - INFO -  * Debugger PIN: 361-797-060
+2025-04-02 10:52:09,841 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-02 10:52:09,973 - INFO -  * Restarting with stat
+2025-04-02 10:52:12,461 - WARNING -  * Debugger is active!
+2025-04-02 10:52:12,470 - INFO -  * Debugger PIN: 361-797-060
+2025-04-02 10:52:19,569 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-02 10:52:19,707 - INFO -  * Restarting with stat
+2025-04-02 10:52:22,523 - WARNING -  * Debugger is active!
+2025-04-02 10:52:22,533 - INFO -  * Debugger PIN: 361-797-060
+2025-04-02 10:52:33,650 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-02 10:52:33,766 - INFO -  * Restarting with stat
+2025-04-02 10:52:36,287 - WARNING -  * Debugger is active!
+2025-04-02 10:52:36,299 - INFO -  * Debugger PIN: 361-797-060
+2025-04-02 10:52:40,381 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-02 10:52:40,508 - INFO -  * Restarting with stat
+2025-04-02 10:52:43,101 - WARNING -  * Debugger is active!
+2025-04-02 10:52:43,111 - INFO -  * Debugger PIN: 361-797-060
+2025-04-02 10:53:56,798 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-02 10:53:56,924 - INFO -  * Restarting with stat
+2025-04-02 10:54:07,508 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:2500
+ * Running on http://10.2.0.2:2500
+2025-04-02 10:54:07,508 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-02 10:54:07,512 - INFO -  * Restarting with stat
+2025-04-02 10:54:09,931 - WARNING -  * Debugger is active!
+2025-04-02 10:54:09,940 - INFO -  * Debugger PIN: 361-797-060
+2025-04-02 10:54:13,545 - INFO - 127.0.0.1 - - [02/Apr/2025 10:54:13] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-02 10:54:13,813 - INFO - ====== WebDriver manager ======
+2025-04-02 10:54:16,224 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-02 10:54:16,578 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-02 10:54:16,885 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-02 10:54:29,248 - INFO - Navigating to login page...
+2025-04-02 10:54:29,490 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-02 10:54:59,520 - INFO - Login successful
+2025-04-02 10:55:03,808 - INFO - Navigating to target page...
+2025-04-02 10:55:06,389 - INFO - Clicked Documents button
+2025-04-02 10:55:16,479 - INFO - Folder created for the first applicant: Emma Douglas
+2025-04-02 10:55:21,818 - INFO - Starting document processing...
+2025-04-02 10:55:21,836 - INFO - Starting enhanced scroll operation...
+2025-04-02 10:55:23,855 - INFO - Scroll attempt 1: Height = 889
+2025-04-02 10:55:25,867 - INFO - Scroll attempt 2: Height = 889
+2025-04-02 10:55:27,879 - INFO - Scroll attempt 3: Height = 889
+2025-04-02 10:55:29,891 - INFO - Reached bottom after 4 attempts
+2025-04-02 10:55:32,893 - INFO - Starting optimized timeline processing...
+2025-04-02 10:55:52,944 - ERROR - Timeout waiting for timeline events
+2025-04-02 10:55:52,945 - ERROR - No timeline events found
+2025-04-02 10:55:52,945 - ERROR - Document processing failed: Failed to process timeline events
+2025-04-02 10:55:55,427 - INFO - 127.0.0.1 - - [02/Apr/2025 10:55:55] "[35m[1mPOST /process-url HTTP/1.1[0m" 500 -
+2025-04-02 10:57:09,246 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\test.py', reloading
+2025-04-02 10:57:13,429 - INFO -  * Restarting with stat
+2025-04-02 10:57:16,508 - WARNING -  * Debugger is active!
+2025-04-02 10:57:16,517 - INFO -  * Debugger PIN: 361-797-060
+2025-04-02 10:57:33,569 - INFO - 127.0.0.1 - - [02/Apr/2025 10:57:33] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-02 10:57:33,831 - INFO - ====== WebDriver manager ======
+2025-04-02 10:57:35,989 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-02 10:57:36,218 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-02 10:57:36,524 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-02 10:57:44,764 - INFO - Navigating to login page...
+2025-04-02 10:57:45,174 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-02 10:58:15,196 - INFO - Login successful
+2025-04-02 10:58:18,677 - INFO - Navigating to target page...
+2025-04-02 10:58:20,919 - INFO - Clicked Documents button
+2025-04-02 10:58:31,026 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Emma Douglas
+2025-04-02 10:58:36,366 - INFO - Starting document processing...
+2025-04-02 10:58:36,385 - INFO - Starting enhanced scroll operation...
+2025-04-02 10:58:38,413 - INFO - Scroll attempt 1: Height = 889
+2025-04-02 10:58:40,424 - INFO - Scroll attempt 2: Height = 889
+2025-04-02 10:58:42,437 - INFO - Scroll attempt 3: Height = 889
+2025-04-02 10:58:44,450 - INFO - Reached bottom after 4 attempts
+2025-04-02 10:58:47,451 - INFO - Starting optimized timeline processing...
+2025-04-02 10:59:07,825 - ERROR - Timeout waiting for timeline events
+2025-04-02 10:59:07,826 - ERROR - No timeline events found
+2025-04-02 10:59:07,826 - ERROR - Document processing failed: Failed to process timeline events
+2025-04-02 10:59:10,244 - INFO - 127.0.0.1 - - [02/Apr/2025 10:59:10] "[35m[1mPOST /process-url HTTP/1.1[0m" 500 -
+2025-04-02 11:30:03,962 - INFO - 127.0.0.1 - - [02/Apr/2025 11:30:03] "OPTIONS /process-url HTTP/1.1" 200 -
+2025-04-02 11:30:04,224 - INFO - ====== WebDriver manager ======
+2025-04-02 11:30:06,452 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-02 11:30:10,766 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-02 11:30:11,059 - INFO - Driver [C:\Users\Hello World!\.wdm\drivers\chromedriver\win64\134.0.6998.165\chromedriver-win32/chromedriver.exe] found in cache
+2025-04-02 11:30:20,555 - INFO - Navigating to login page...
+2025-04-02 11:30:20,608 - INFO - Login page loaded. Waiting for user authentication...
+2025-04-02 11:30:50,636 - INFO - Login successful
+2025-04-02 11:30:55,199 - INFO - Navigating to target page...
+2025-04-02 11:30:59,054 - INFO - Clicked Documents button
+2025-04-02 11:31:09,232 - INFO - Using existing folder: C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs\Emma Douglas
+2025-04-02 11:31:14,693 - INFO - Starting document processing...
+2025-04-02 11:31:14,716 - INFO - Starting enhanced scroll operation...
+2025-04-02 11:31:16,761 - INFO - Scroll attempt 1: Height = 2811
+2025-04-02 11:31:18,775 - INFO - Scroll attempt 2: Height = 3070
+2025-04-02 11:31:20,787 - INFO - Scroll attempt 3: Height = 3070
+2025-04-02 11:31:22,806 - INFO - Scroll attempt 4: Height = 3070
+2025-04-02 11:31:24,817 - INFO - Reached bottom after 5 attempts
+2025-04-02 11:31:27,819 - INFO - Starting optimized timeline processing...
+2025-04-02 11:31:27,846 - INFO - Found 28 total timeline events
+2025-04-02 11:31:28,497 - INFO - Found 4 events with labels
+2025-04-02 11:31:28,498 - INFO - Processing batch 1 of 1
+2025-04-02 11:31:29,638 - INFO - Successfully initiated download 1
+2025-04-02 11:31:33,287 - INFO - Successfully initiated download 2
+2025-04-02 11:31:36,756 - INFO - Successfully initiated download 3
+2025-04-02 11:31:39,972 - INFO - Successfully initiated download 4
+2025-04-02 11:31:41,973 - INFO - Processing progress: 100.0% (4 downloads)
+2025-04-02 11:31:47,990 - INFO - Timeline processing complete: 4 downloads initiated
+2025-04-02 11:31:47,990 - INFO - Monitoring downloads in C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs
+2025-04-02 11:31:52,745 - INFO - Downloads complete. Total files: 3
+2025-04-02 11:32:02,961 - INFO - Application records created: 1
+2025-04-02 11:32:02,981 - INFO - File selector GUI launched as separate process
+2025-04-02 11:32:02,984 - INFO - 127.0.0.1 - - [02/Apr/2025 11:32:02] "POST /process-url HTTP/1.1" 200 -
+2025-04-02 12:51:38,637 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\backup.py', reloading
+2025-04-02 12:51:43,156 - INFO -  * Restarting with stat
+2025-04-02 12:51:46,042 - WARNING -  * Debugger is active!
+2025-04-02 12:51:46,054 - INFO -  * Debugger PIN: 361-797-060
+2025-04-02 12:51:51,190 - INFO -  * Detected change in 'C:\\Users\\Hello World!\\Desktop\\COMPLETE\\selenium\\rpa.py', reloading
