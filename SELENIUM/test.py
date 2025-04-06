@@ -1563,50 +1563,50 @@ def process_url():
         except Exception as e:
             estimated_settlement_date = None
 
-        # deal_owner = None
-        # try:
-        #     deal_owner_element = active_driver.find_element(By.XPATH, 
-        #         "//span[@ng-bind=\"getAccount(Model.currentTicket.idOwner).getName()\"]")
-        #     deal_owner = deal_owner_element.get_attribute("innerText").strip()
-        # except Exception as e:
-        #     deal_owner = None
+        deal_owner = None
+        try:
+            deal_owner_element = active_driver.find_element(By.XPATH, 
+                "//span[@ng-bind=\"getAccount(Model.currentTicket.idOwner).getName()\"]")
+            deal_owner = deal_owner_element.get_attribute("innerText").strip()
+        except Exception as e:
+            deal_owner = None
         
-        # try:
-        #     logging.info("Starting document processing...")
+        try:
+            logging.info("Starting document processing...")
             
-        #     # Find the scrollable container with retry mechanism
-        #     max_attempts = 3
-        #     scroll_container = None
+            # Find the scrollable container with retry mechanism
+            max_attempts = 3
+            scroll_container = None
             
-        #     for attempt in range(max_attempts):
-        #         try:
-        #             scroll_container = wait.until(
-        #                 EC.presence_of_element_located((By.CSS_SELECTOR, "md-content[md-scroll-y]"))
-        #             )
-        #             break
-        #         except Exception as e:
-        #             if attempt == max_attempts - 1:
-        #                 raise Exception("Failed to find scrollable container")
-        #             time.sleep(2)
+            for attempt in range(max_attempts):
+                try:
+                    scroll_container = wait.until(
+                        EC.presence_of_element_located((By.CSS_SELECTOR, "md-content[md-scroll-y]"))
+                    )
+                    break
+                except Exception as e:
+                    if attempt == max_attempts - 1:
+                        raise Exception("Failed to find scrollable container")
+                    time.sleep(2)
             
-        #     # Perform scrolling with enhanced stability
-        #     if scroll_container:
-        #         if scroll_down_until_bottom(active_driver, scroll_container):
-        #             # Process timeline events if scrolling was successful
-        #             if not process_timeline_events(active_driver):
-        #                 raise Exception("Failed to process timeline events")
+            # Perform scrolling with enhanced stability
+            if scroll_container:
+                if scroll_down_until_bottom(active_driver, scroll_container):
+                    # Process timeline events if scrolling was successful
+                    if not process_timeline_events(active_driver):
+                        raise Exception("Failed to process timeline events")
                     
-        #             # Wait for downloads to complete
-        #             if not wait_for_downloads(DOWNLOAD_PATH):
-        #                 logging.warning("Some downloads may not have completed")
-        #         else:
-        #             raise Exception("Failed to scroll the page")
-        #     else:
-        #         raise Exception("Could not locate scrollable container")
+                    # Wait for downloads to complete
+                    if not wait_for_downloads(DOWNLOAD_PATH):
+                        logging.warning("Some downloads may not have completed")
+                else:
+                    raise Exception("Failed to scroll the page")
+            else:
+                raise Exception("Could not locate scrollable container")
             
-        # except Exception as e:
-        #     logging.error(f"Document processing failed: {str(e)}")
-        #     raise
+        except Exception as e:
+            logging.error(f"Document processing failed: {str(e)}")
+            raise
 
         # This will extract fact find
         try:
@@ -1621,7 +1621,7 @@ def process_url():
 
             # Get all "Personal details" buttons
             buttons = active_driver.find_elements(By.XPATH, "//div[@class='group-items']//button//span[@ng-bind='contact.getName()']")
-            
+            income_button = active_driver.find_element(By.XPATH, '//button[@ng-click="showSection(\'income\')"]')
             applicants = []
             for i, button in enumerate(buttons):
                 button.click()
@@ -1670,16 +1670,15 @@ def process_url():
                         "ABS Occupation Code": active_driver.find_element(By.XPATH, "//input[@aria-label='ABS occupation code']").get_attribute("value"),
                         "ANZSCO Industry Code": active_driver.find_element(By.XPATH, "//input[@aria-label='ANZSCO industry code']").get_attribute("value"),
                         "Employer Address": {
-                            "Search Employer Address":,
-                            "Unit Number":,
-                            "Street Number":,
-                            "Street Name":,
-                            "Street Type":,
-                            "Country":,
-                            "Town":,
-                            "State":,
-                            "Postal Code":,
-
+                            "Search Employer Address": employment.find_element(By.XPATH, ".//input[@aria-label='Search employer address']").get_attribute("value"),
+                            "Unit Number": employment.find_element(By.XPATH, ".//input[@ng-model='$ctrl.address.suiteNumber']").get_attribute("value"),
+                            "Street Number": employment.find_element(By.XPATH, ".//input[@ng-model='$ctrl.address.streetNumber']").get_attribute("value"),
+                            "Street Name": employment.find_element(By.XPATH, ".//input[@ng-model='$ctrl.address.street']").get_attribute("value"),
+                            "Street Type": employment.find_element(By.XPATH, ".//input[@aria-label='Street type']").get_attribute("value"),
+                            "Country": Select(employment.find_element(By.XPATH, ".//select[@ng-model='$ctrl.address.country']")).first_selected_option.text,
+                            "Town": employment.find_element(By.XPATH, ".//input[@ng-model='$ctrl.address.suburb']").get_attribute("value"),
+                            "State": Select(employment.find_element(By.XPATH, ".//select[@ng-model='$ctrl.address.state']")).first_selected_option.text,
+                            "Postal Code": employment.find_element(By.XPATH, ".//input[@ng-model='$ctrl.address.postCode']").get_attribute("value")
                         }
                     }
 
@@ -1813,82 +1812,116 @@ def process_url():
                     "Current Employer": current_employer,
                     "Previous Employer": previous_employer,
                     "SoW": {
-                        "Source of Wealth":,
-                        "Source of Funds For This Application":
+                        "Source of Wealth": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.contact.person.information.sourceOfWealth']")).first_selected_option.text,
+                        "Source of Funds for This Application": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.contact.person.information.sourceOfFunds']")).first_selected_option.text
                     }
-
                 }
                 applicants.append(applicant_data)
                 logging.info(f"Applicant {i+1} Details: {applicant_data}")
+
+            income_button.click()
+
+            WebDriverWait(active_driver, 10).until(
+                EC.presence_of_all_elements_located((By.XPATH, '//st-block[@ng-if="$ctrl.isReady && $ctrl.income.length"]'))
+            )
+       
+            income_blocks = active_driver.find_elements(By.XPATH,'//st-block[@ng-repeat="income in $ctrl.income | orderBy:\'incomeType.weight\'"]')
+            income = []
+            for idx, block in enumerate(income_blocks, start=1):
+                logging.info(f"'Applicant' {idx}")
+
+                income_data = {
+                    "Applicant Income": {
+                        "Gross Salary": block.find_element(By.CSS_SELECTOR, 'input[ng-model="$ctrl.income.payg.grossSalary"]').get_attribute("value"),
+                        "Gross Salary Freq": Select(block.find_element(By.CSS_SELECTOR, 'select[ng-model="$ctrl.income.payg.grossSalaryFrequency"]')).first_selected_option.text,
+                        "Allowance": block.find_element(By.CSS_SELECTOR, 'input[ng-model="$ctrl.income.payg.allowance"]').get_attribute("value"),
+                        "Allowance Freq": Select(block.find_element(By.CSS_SELECTOR, 'select[ng-model="$ctrl.income.payg.allowanceFrequency"]')).first_selected_option.text,
+                        "Bonus": block.find_element(By.CSS_SELECTOR, 'input[ng-model="$ctrl.income.payg.bonus"]').get_attribute("value"),
+                        "Bonus Freq": Select(block.find_element(By.CSS_SELECTOR, 'select[ng-model="$ctrl.income.payg.bonusFrequency"]')).first_selected_option.text,
+                        "Commission": block.find_element(By.CSS_SELECTOR, 'input[ng-model="$ctrl.income.payg.commission"]').get_attribute("value"),
+                        "Commission Freq": Select(block.find_element(By.CSS_SELECTOR, 'select[ng-model="$ctrl.income.payg.commissionFrequency"]')).first_selected_option.text,
+                        "Overtime Essential": block.find_element(By.CSS_SELECTOR, 'input[ng-model="$ctrl.income.payg.overtimeEssential"]').get_attribute("value"),
+                        "Overtime Essential Freq": Select(block.find_element(By.CSS_SELECTOR, 'select[ng-model="$ctrl.income.payg.overtimeEssentialFrequency"]')).first_selected_option.text,
+                        "Overtime Non Essential": block.find_element(By.CSS_SELECTOR, 'input[ng-model="$ctrl.income.payg.overtimeNonEssential"]').get_attribute("value"),
+                        "Overtime Non Essential Freq": Select(block.find_element(By.CSS_SELECTOR, 'select[ng-model="$ctrl.income.payg.overtimeNonEssentialFrequency"]')).first_selected_option.text,
+                        "Linked Contact": Select(block.find_element(By.CSS_SELECTOR, 'select[ng-model="$ctrl.income.idContact"]')).first_selected_option.text,
+                        "Linked Employer": block.find_element(By.CSS_SELECTOR, 'span[ng-bind="employment.getEmployerName() || \'N/A\'"]').text,
+                    },
+                
+                }
+                income.append(income_data)
+                logging.info(f"Applicant {idx+1} Income: {income_data}")
+
+
         except Exception as e:
             logging.error(f"Error: {e}")
             raise
 
-        # POST the data to the apitable endpoint
-        # applicant_api_url = os.getenv("APPLICANT_HUB_URL")
-        # lender_api_url = os.getenv("LENDER_HUB_URL")
-        # headers = {
-        #     "Content-Type": "application/json",
-        #     "Authorization": f"Bearer {os.getenv('API_KEY')}"
-        # }
+        POST the data to the apitable endpoint
+        applicant_api_url = os.getenv("APPLICANT_HUB_URL")
+        lender_api_url = os.getenv("LENDER_HUB_URL")
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.getenv('API_KEY')}"
+        }
 
-        # applicant_details = []
-        # lender_details = []
+        applicant_details = []
+        lender_details = []
 
-        # # Loop over each applicant
-        # for applicant in applicants:
-        #     # Create JSON structure for each applicant
-        #     applicant_data = {
-        #         "records": [
-        #             {
-        #                 "fields": {
-        #                     "Application Hub": None,
-        #                     "Title": None,
-        #                     "First Name": applicant["applicant_name"].split()[0] if applicant.get("applicant_name") else None,
-        #                     "Middle Name": applicant["applicant_name"].split()[1] if len(applicant["applicant_name"].split()) > 2 else None,
-        #                     "Last Name": applicant["applicant_name"].split()[-1] if applicant.get("applicant_name") else None,
-        #                     "Date of Birth": None,
-        #                     "Residential Address": loan_security_addresses if loan_security_addresses else None,
-        #                     "Primary Contact Number": applicant.get("contact_number") if applicant.get("contact_number") else None,
-        #                     "Secondary Contact Number": None,
-        #                     "Email Address": applicant.get("email") if applicant.get("email") else None,
-        #                     "Marital Status": None,
-        #                     "Savings": None,
-        #                     "Income": None,
-        #                     "Housing Loans": None,
-        #                     "Vehicle Loans": None,
-        #                     "Personal Loans": None,
-        #                     "Total Liabilities": None,
-        #                     "Employment Status": None,
-        #                     "Employer": None
-        #                 }
-        #             }
-        #         ],
-        #         "fieldKey": "name"
-        #     }
+        # Loop over each applicant
+        for applicant in applicants:
+            # Create JSON structure for each applicant
+            applicant_data = {
+                "records": [
+                    {
+                        "fields": {
+                            "Application Hub": None,
+                            "Title": None,
+                            "First Name": applicant["applicant_name"].split()[0] if applicant.get("applicant_name") else None,
+                            "Middle Name": applicant["applicant_name"].split()[1] if len(applicant["applicant_name"].split()) > 2 else None,
+                            "Last Name": applicant["applicant_name"].split()[-1] if applicant.get("applicant_name") else None,
+                            "Date of Birth": None,
+                            "Residential Address": loan_security_addresses if loan_security_addresses else None,
+                            "Primary Contact Number": applicant.get("contact_number") if applicant.get("contact_number") else None,
+                            "Secondary Contact Number": None,
+                            "Email Address": applicant.get("email") if applicant.get("email") else None,
+                            "Marital Status": None,
+                            "Savings": None,
+                            "Income": None,
+                            "Housing Loans": None,
+                            "Vehicle Loans": None,
+                            "Personal Loans": None,
+                            "Total Liabilities": None,
+                            "Employment Status": None,
+                            "Employer": None
+                        }
+                    }
+                ],
+                "fieldKey": "name"
+            }
 
-        #     applicant_details.append(applicant_data)
+            applicant_details.append(applicant_data)
 
-        #     lender_data = {}
-        #     # Post lender data only once
-        #     if lender:
-        #         lender_data = {
-        #             "records": [
-        #                 {
-        #                     "fields": {
-        #                         "Company Name": lender,
-        #                         "Contact": None,
-        #                         "Website": None,
-        #                         "Phone Number": None,
-        #                     }
-        #                 }
-        #             ],
-        #             "fieldKey": "name"
-        #         }
+            lender_data = {}
+            # Post lender data only once
+            if lender:
+                lender_data = {
+                    "records": [
+                        {
+                            "fields": {
+                                "Company Name": lender,
+                                "Contact": None,
+                                "Website": None,
+                                "Phone Number": None,
+                            }
+                        }
+                    ],
+                    "fieldKey": "name"
+                }
             
-        #     lender_details.append(lender_data)
+            lender_details.append(lender_data)
 
-        # process_applicants(applicant_details, lender_details, applicant_api_url, lender_api_url, headers)
+        process_applicants(applicant_details, lender_details, applicant_api_url, lender_api_url, headers)
 
         return jsonify({"message": "URL processed successfully!"}), 200
 
