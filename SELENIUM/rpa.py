@@ -27,6 +27,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
 from dotenv import load_dotenv
+from fact_find import extract_fact_find
 
 load_dotenv()
 
@@ -1608,7 +1609,7 @@ def process_url():
             logging.error(f"Document processing failed: {str(e)}")
             raise
 
-        # This will extract fact find
+        # Check if there is a brooker tools button if not then skip
         try:
             # Click "Broker tools" button
             active_driver.find_element(By.XPATH, "//button[@ng-click='gotToHomeLoanTools()']").click()
@@ -1619,245 +1620,13 @@ def process_url():
                 EC.presence_of_element_located((By.CLASS_NAME, "group-items"))
             )
 
-            # Get all "Personal details" buttons
-            buttons = active_driver.find_elements(By.XPATH, "//div[@class='group-items']//button//span[@ng-bind='contact.getName()']")
-            income_button = active_driver.find_element(By.XPATH, '//button[@ng-click="showSection(\'income\')"]')
-            applicants = []
-            for i, button in enumerate(buttons):
-                button.click()
-                logging.info(f"Clicked 'Personal details' button {i+1} of {len(buttons)}.")
-
-                num_dependents = int(Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.contact.person.information.numberOfDependents']")).first_selected_option.text)
-                age_containers = active_driver.find_elements(By.XPATH, "//md-input-container[label[contains(text(), 'Age of dependant')]]")
-                employment_containers = active_driver.find_elements(By.XPATH, "//div[contains(@ng-repeat, 'employment in $ctrl.contact.person.employments')]")
-                dependents = []
-                current_employer = []
-                previous_employer = []
-                for d_idx in range(num_dependents):
-                    name_xpath = f"(//input[@ng-model='dependent.name'])[{d_idx + 1}]"
-                    name = active_driver.find_element(By.XPATH, name_xpath).get_attribute("value")
-
-                    # Get the corresponding md-input-container and find its input
-                    age_input = age_containers[d_idx].find_element(By.TAG_NAME, "input")
-                    age = age_input.get_attribute("value")
-
-                    dependents.append({
-                        "Name": name,
-                        "Age": age
-                    })
-                
-                for employment in employment_containers:
-                    # Check if employment is Current or Previous
-                    status_element = employment.find_element(By.XPATH, ".//em[@ng-bind=\"$ctrl.employment.isCurrent ? 'Current employer' : 'Previous employer'\"]")
-                    status_value = status_element.text.strip()
-                    is_current = status_value.lower() == "current employer"
-
-                    employer_info = {
-                        "Employment Status": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.employment.isCurrent']")).first_selected_option.text,
-                        "Employment Type": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.employment.type']")).first_selected_option.text,
-                        "Employment Priority": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.employment.status']")).first_selected_option.text,
-                        "Employment Basis": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.employment.basis']")).first_selected_option.text,
-                        "Occupation": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.employment.role']").get_attribute("value"),
-                        "Employer Name": active_driver.find_element(By.XPATH, "//input[@aria-label='Employer name']").get_attribute("value"),
-                        "Title": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.employment.employerContactTitle']")).first_selected_option.text,
-                        "Employer Contact First Name": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.employment.employerContactFirstName']").get_attribute("value"),
-                        "Employer Contact Surname": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.employment.employerContactSurname']").get_attribute("value"),
-                        "Prefix": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.employment.employerPhoneCode']").get_attribute("value"),
-                        "Employer Phone": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.employment.employerPhone']").get_attribute("value"),
-                        "Employer Type": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.employment.employerType']")).first_selected_option.text,
-                        "Employer ABN": active_driver.find_element(By.XPATH, "//input[@aria-label='Employer ABN']").get_attribute("value"),
-                        "Employer ACN": active_driver.find_element(By.XPATH, "//input[@aria-label='Employer ACN']").get_attribute("value"),
-                        "ABS Occupation Code": active_driver.find_element(By.XPATH, "//input[@aria-label='ABS occupation code']").get_attribute("value"),
-                        "ANZSCO Industry Code": active_driver.find_element(By.XPATH, "//input[@aria-label='ANZSCO industry code']").get_attribute("value"),
-                        "Employer Address": {
-                            "Search Employer Address": employment.find_element(By.XPATH, ".//input[@aria-label='Search employer address']").get_attribute("value"),
-                            "Unit Number": employment.find_element(By.XPATH, ".//input[@ng-model='$ctrl.address.suiteNumber']").get_attribute("value"),
-                            "Street Number": employment.find_element(By.XPATH, ".//input[@ng-model='$ctrl.address.streetNumber']").get_attribute("value"),
-                            "Street Name": employment.find_element(By.XPATH, ".//input[@ng-model='$ctrl.address.street']").get_attribute("value"),
-                            "Street Type": employment.find_element(By.XPATH, ".//input[@aria-label='Street type']").get_attribute("value"),
-                            "Country": Select(employment.find_element(By.XPATH, ".//select[@ng-model='$ctrl.address.country']")).first_selected_option.text,
-                            "Town": employment.find_element(By.XPATH, ".//input[@ng-model='$ctrl.address.suburb']").get_attribute("value"),
-                            "State": Select(employment.find_element(By.XPATH, ".//select[@ng-model='$ctrl.address.state']")).first_selected_option.text,
-                            "Postal Code": employment.find_element(By.XPATH, ".//input[@ng-model='$ctrl.address.postCode']").get_attribute("value")
-                        }
-                    }
-
-                    if is_current:
-                        current_employer.append(employer_info)
-                    else:
-                        previous_employer.append(employer_info)
-
-                applicant_data = {
-                    "Personal Details": {
-                        "Title": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.contact.person.information.title']")).first_selected_option.text,
-                        "First Name": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.contact.person.information.firstName']").get_attribute("value"),
-                        "Middle Name": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.contact.person.information.middleName']").get_attribute("value"),
-                        "Sur Name": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.contact.person.information.familyName']").get_attribute("value"),
-                        "Preferred Name": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.contact.person.information.preferredName']").get_attribute("value"),
-                        "Previous Name": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.contact.person.information.previousName']").get_attribute("value"),
-                        "Gender": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.contact.person.information.gender']")).first_selected_option.text,
-                        "Date of Birth": active_driver.find_element(By.XPATH, "//input[@placeholder='DD/MM/YYYY']").get_attribute("value")
-                    },
-                    "Contact Details": {
-                        "Prefix 1": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.contact.person.contact.primaryCode']").get_attribute("value"),
-                        "Mobile Number": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.contact.person.contact.primary']").get_attribute("value"),
-                        "Prefix 2": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.contact.person.contact.homeCode']").get_attribute("value"),
-                        "Home Number": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.contact.person.contact.home']").get_attribute("value"),
-                        "Prefix 3": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.contact.person.contact.workCode']").get_attribute("value"),
-                        "Work Number": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.contact.person.contact.work']").get_attribute("value"),
-                        "Email 1": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.contact.person.contact.email']").get_attribute("value"),
-                        "Email 2": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.contact.person.contact.secondaryEmail']").get_attribute("value"),
-                        "Website": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.contact.person.contact.website']").get_attribute("value")
-                    },
-                    "Current Address": {
-                        "Search Current Address": active_driver.find_element(By.XPATH, "//input[@aria-label='Search current address']").get_attribute("value"),
-                        "Unit Number": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.address.suiteNumber']").get_attribute("value"),
-                        "Street Number": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.address.streetNumber']").get_attribute("value"),
-                        "Street Name": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.address.street']").get_attribute("value"),
-                        "Street Type": active_driver.find_element(By.XPATH, "//input[@aria-label='Street type']").get_attribute("value"),
-                        "Country": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.address.country']")).first_selected_option.text,
-                        "Town": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.address.suburb']").get_attribute("value"),
-                        "State": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.address.state']")).first_selected_option.text,
-                        "Postal Code": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.address.postCode']").get_attribute("value"),
-                        "Residential Status": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.contact.person.contact.housing']")).first_selected_option.text,
-                    },
-                    "Previous Address": {
-                        "Search Previous Address": active_driver.find_element(By.XPATH, "//input[@aria-label='Search previous address']").get_attribute("value"),
-                        "Unit Number": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.address.suiteNumber']").get_attribute("value"),
-                        "Street Number": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.address.streetNumber']").get_attribute("value"),
-                        "Street Name": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.address.street']").get_attribute("value"),
-                        "Street Type": active_driver.find_elements(By.XPATH, "//input[@aria-label='Street type']")[1].get_attribute("value"),
-                        "Country": Select(active_driver.find_elements(By.XPATH, "//select[@ng-model='$ctrl.address.country']")[1]).first_selected_option.text,
-                        "Town": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.address.suburb']").get_attribute("value"),
-                        "State": Select(active_driver.find_elements(By.XPATH, "//select[@ng-model='$ctrl.address.state']")[1]).first_selected_option.text,
-                        "Postal Code": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.address.postCode']").get_attribute("value"),
-                        "Residential Status": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.contact.person.contact.previousHousing']")).first_selected_option.text,
-                    },
-                    "Mailing Address": {
-                        "Search Mailing Address": active_driver.find_element(By.XPATH, "//input[@aria-label='Search mailing address']").get_attribute("value"),
-                        "Unit Number": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.address.suiteNumber']").get_attribute("value"),
-                        "Street Number": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.address.streetNumber']").get_attribute("value"),
-                        "Street Name": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.address.street']").get_attribute("value"),
-                        "Street Type": active_driver.find_elements(By.XPATH, "//input[@aria-label='Street type']")[0].get_attribute("value"),  # first street type is for mailing
-                        "Country": Select(active_driver.find_elements(By.XPATH, "//select[@ng-model='$ctrl.address.country']")[0]).first_selected_option.text,
-                        "Town": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.address.suburb']").get_attribute("value"),
-                        "State": Select(active_driver.find_elements(By.XPATH, "//select[@ng-model='$ctrl.address.state']")[0]).first_selected_option.text,
-                        "Postal Code": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.address.postCode']").get_attribute("value")
-                    },
-                    "Post Settlement Address": {
-                        "Search Post Settlement Address": active_driver.find_element(By.XPATH, "//input[@aria-label='Search post settlement address']").get_attribute("value"),
-                        "Unit Number": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.address.suiteNumber']").get_attribute("value"),
-                        "Street Number": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.address.streetNumber']").get_attribute("value"),
-                        "Street Name": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.address.street']").get_attribute("value"),
-                        "Street Type": active_driver.find_elements(By.XPATH, "//input[@aria-label='Street type']")[1].get_attribute("value"),  # 2nd instance = post-settlement
-                        "Country": Select(active_driver.find_elements(By.XPATH, "//select[@ng-model='$ctrl.address.country']")[1]).first_selected_option.text,
-                        "Town": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.address.suburb']").get_attribute("value"),
-                        "State": Select(active_driver.find_elements(By.XPATH, "//select[@ng-model='$ctrl.address.state']")[1]).first_selected_option.text,
-                        "Postal Code": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.address.postCode']").get_attribute("value"),
-                        "Residential Status": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.contact.person.contact.settlementHousing']")).first_selected_option.text
-                    },
-                    "Identification": {
-                        "Country of Residency": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.contact.person.information.countryOfResidency']")).first_selected_option.text,
-                        "Country of Tax Residence": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.contact.person.information.countryOfTaxResidence']")).first_selected_option.text,
-                        "Citizenship": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.contact.person.information.citizenship']")).first_selected_option.text,
-                        "Residency Status": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.contact.person.information.residentialStatus']")).first_selected_option.text,
-                        "Country of Birth": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.contact.person.information.countryOfBirth']")).first_selected_option.text,
-                        "City of Birth": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.contact.person.information.cityOfBirth']").get_attribute("value"),
-                        "Driver License Details": {
-                            "Driver License Type": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.contact.person.information.driversLicenseType']")).first_selected_option.text,
-                            "Driver License Number": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.contact.person.information.driversLicenseNumber']").get_attribute("value"),
-                            "Driver License Card Number": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.contact.person.information.driversLicenseCardNumber']").get_attribute("value"),
-                            "Driver License Name on Document": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.contact.person.information.driversLicenseNameOnDocument']").get_attribute("value"),
-                            "Driver License State of Issue": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.contact.person.information.driversLicenseStateOfIssue']")).first_selected_option.text
-                        },
-                        "Passport Details": {
-                            "Passport Number": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.contact.person.information.passportNumber']").get_attribute("value"),
-                            "Passport Name on Document": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.contact.person.information.passportNameOnDocument']").get_attribute("value"),
-                            "Passport Issue Country": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.contact.person.information.passportIssueCountry']")).first_selected_option.text
-                        },
-                        "Medicare Details": {
-                            "Medicare Number": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.contact.person.information.medicareNumber']").get_attribute("value"),
-                            "Medicare Reference Number": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.contact.person.information.medicareReferenceNumber']").get_attribute("value"),
-                            "Medicare Name on Card": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.contact.person.information.medicareNameOnCard']").get_attribute("value"),
-                            "Medicare Card Color": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.contact.person.information.medicareCardColor']")).first_selected_option.text
-                        }
-                    },
-                    "Family Relations": {
-                        "Mother's Maiden Name": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.contact.person.information.mothersMaidenName']").get_attribute("value"),
-                        "Marital Status": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.contact.person.information.maritalStatus']")).first_selected_option.text,
-                        "Spouse Name": {
-                            "First Name": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.contact.name']").get_attribute("value"),
-                            "Surname": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.contact.familyName']").get_attribute("value")
-                        },
-                        "Number of Dependents": str(num_dependents)
-                    },
-                    "Dependents": dependents,
-                    "Next of Kin": {
-                        "Full Name": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.contact.person.information.nextOfKinFullName']").get_attribute("value"),
-                        "Relationship": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.contact.person.information.nextOfKinRelationship']")).first_selected_option.text,
-                        "Phone Prefix": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.contact.person.information.nextOfKinPhoneCode']").get_attribute("value"),
-                        "Phone Number": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.contact.person.information.nextOfKinPhone']").get_attribute("value")
-                    },
-                    "Next of Kin Address": {
-                        "Search Address": active_driver.find_element(By.XPATH, "//input[@aria-label='Search next of kin address']").get_attribute("value"),
-                        "Unit Number": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.address.suiteNumber']").get_attribute("value"),
-                        "Street Number": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.address.streetNumber']").get_attribute("value"),
-                        "Street Name": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.address.street']").get_attribute("value"),
-                        "Street Type": active_driver.find_element(By.XPATH, "//input[@aria-label='Street type']").get_attribute("value"),
-                        "Country": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.address.country']")).first_selected_option.text,
-                        "Town": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.address.suburb']").get_attribute("value"),
-                        "State": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.address.state']")).first_selected_option.text,
-                        "Postal Code": active_driver.find_element(By.XPATH, "//input[@ng-model='$ctrl.address.postCode']").get_attribute("value")
-                    },
-                    "Current Employer": current_employer,
-                    "Previous Employer": previous_employer,
-                    "SoW": {
-                        "Source of Wealth": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.contact.person.information.sourceOfWealth']")).first_selected_option.text,
-                        "Source of Funds for This Application": Select(active_driver.find_element(By.XPATH, "//select[@ng-model='$ctrl.contact.person.information.sourceOfFunds']")).first_selected_option.text
-                    }
-                }
-                applicants.append(applicant_data)
-                logging.info(f"Applicant {i+1} Details: {applicant_data}")
-
-            income_button.click()
-
-            WebDriverWait(active_driver, 10).until(
-                EC.presence_of_all_elements_located((By.XPATH, '//st-block[@ng-if="$ctrl.isReady && $ctrl.income.length"]'))
-            )
-       
-            income_blocks = active_driver.find_elements(By.XPATH,'//st-block[@ng-repeat="income in $ctrl.income | orderBy:\'incomeType.weight\'"]')
-            income = []
-            for idx, block in enumerate(income_blocks, start=1):
-                logging.info(f"'Applicant' {idx}")
-
-                income_data = {
-                    "Applicant Income": {
-                        "Gross Salary": block.find_element(By.CSS_SELECTOR, 'input[ng-model="$ctrl.income.payg.grossSalary"]').get_attribute("value"),
-                        "Gross Salary Freq": Select(block.find_element(By.CSS_SELECTOR, 'select[ng-model="$ctrl.income.payg.grossSalaryFrequency"]')).first_selected_option.text,
-                        "Allowance": block.find_element(By.CSS_SELECTOR, 'input[ng-model="$ctrl.income.payg.allowance"]').get_attribute("value"),
-                        "Allowance Freq": Select(block.find_element(By.CSS_SELECTOR, 'select[ng-model="$ctrl.income.payg.allowanceFrequency"]')).first_selected_option.text,
-                        "Bonus": block.find_element(By.CSS_SELECTOR, 'input[ng-model="$ctrl.income.payg.bonus"]').get_attribute("value"),
-                        "Bonus Freq": Select(block.find_element(By.CSS_SELECTOR, 'select[ng-model="$ctrl.income.payg.bonusFrequency"]')).first_selected_option.text,
-                        "Commission": block.find_element(By.CSS_SELECTOR, 'input[ng-model="$ctrl.income.payg.commission"]').get_attribute("value"),
-                        "Commission Freq": Select(block.find_element(By.CSS_SELECTOR, 'select[ng-model="$ctrl.income.payg.commissionFrequency"]')).first_selected_option.text,
-                        "Overtime Essential": block.find_element(By.CSS_SELECTOR, 'input[ng-model="$ctrl.income.payg.overtimeEssential"]').get_attribute("value"),
-                        "Overtime Essential Freq": Select(block.find_element(By.CSS_SELECTOR, 'select[ng-model="$ctrl.income.payg.overtimeEssentialFrequency"]')).first_selected_option.text,
-                        "Overtime Non Essential": block.find_element(By.CSS_SELECTOR, 'input[ng-model="$ctrl.income.payg.overtimeNonEssential"]').get_attribute("value"),
-                        "Overtime Non Essential Freq": Select(block.find_element(By.CSS_SELECTOR, 'select[ng-model="$ctrl.income.payg.overtimeNonEssentialFrequency"]')).first_selected_option.text,
-                        "Linked Contact": Select(block.find_element(By.CSS_SELECTOR, 'select[ng-model="$ctrl.income.idContact"]')).first_selected_option.text,
-                        "Linked Employer": block.find_element(By.CSS_SELECTOR, 'span[ng-bind="employment.getEmployerName() || \'N/A\'"]').text,
-                    },
-                
-                }
-                income.append(income_data)
-                logging.info(f"Applicant {idx+1} Income: {income_data}")
-
-
-        except Exception as e:
-            logging.error(f"Error: {e}")
+            extract_fact_find(active_driver)
+              
+        except TimeoutException as e:
+            logging.error("Broker tools not found or failed to load. Proceeding to post data.")
             raise
 
-        POST the data to the apitable endpoint
+        # POST the data to the apitable endpoint
         applicant_api_url = os.getenv("APPLICANT_HUB_URL")
         lender_api_url = os.getenv("LENDER_HUB_URL")
         headers = {
@@ -1930,8 +1699,8 @@ def process_url():
         cleanup_previous_process()
         return jsonify({"message": "URL processed unsuccessfully!"}), 500
 
-    # finally:
-    #     active_driver.quit()
+    finally:
+        active_driver.quit()
             
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=2500, debug=True)

@@ -301,3 +301,39 @@
 2025-04-07 06:56:02,498 - INFO - [aitable_notifier.py:148] - Successfully fetched record count: 4
 2025-04-07 06:56:12,505 - INFO - [aitable_notifier.py:207] - Checking for new records...
 2025-04-07 06:56:12,506 - INFO - [aitable_notifier.py:176] - Successfully loaded last record count: 4
+2025-04-07 13:13:41,055 - INFO - [aitable_notifier.py:30] - Successfully initialized winotify for Windows 11 notifications
+2025-04-07 13:13:41,056 - INFO - [aitable_notifier.py:54] - Found icon at: C:\Users\Hello World!\Desktop\COMPLETE\AIBROKER-NOTIF\ka.png
+2025-04-07 13:13:41,057 - INFO - [aitable_notifier.py:238] - Starting AITable Monitor...
+2025-04-07 13:13:41,071 - INFO - [aitable_notifier.py:77] - Successfully sent winotify notification: AI Broker Started
+2025-04-07 13:13:42,435 - INFO - [aitable_notifier.py:148] - Successfully fetched record count: 4
+2025-04-07 13:13:42,438 - INFO - [aitable_notifier.py:163] - Successfully saved record count: 4
+2025-04-07 13:13:52,446 - INFO - [aitable_notifier.py:207] - Checking for new records...
+2025-04-07 13:13:52,447 - INFO - [aitable_notifier.py:176] - Successfully loaded last record count: 4
+2025-04-07 13:13:53,664 - INFO - [aitable_notifier.py:148] - Successfully fetched record count: 4
+2025-04-07 13:14:03,776 - INFO - [aitable_notifier.py:207] - Checking for new records...
+2025-04-07 13:14:03,777 - INFO - [aitable_notifier.py:176] - Successfully loaded last record count: 4
+2025-04-07 13:14:05,152 - INFO - [aitable_notifier.py:148] - Successfully fetched record count: 4
+2025-04-07 13:14:15,233 - INFO - [aitable_notifier.py:207] - Checking for new records...
+2025-04-07 13:14:15,234 - INFO - [aitable_notifier.py:176] - Successfully loaded last record count: 4
+2025-04-07 13:14:16,520 - INFO - [aitable_notifier.py:148] - Successfully fetched record count: 4
+2025-04-07 13:14:26,527 - INFO - [aitable_notifier.py:207] - Checking for new records...
+2025-04-07 13:14:26,527 - INFO - [aitable_notifier.py:176] - Successfully loaded last record count: 4
+2025-04-07 13:14:27,776 - INFO - [aitable_notifier.py:148] - Successfully fetched record count: 4
+2025-04-07 13:14:37,782 - INFO - [aitable_notifier.py:207] - Checking for new records...
+2025-04-07 13:14:37,783 - INFO - [aitable_notifier.py:176] - Successfully loaded last record count: 4
+2025-04-07 13:14:38,973 - INFO - [aitable_notifier.py:148] - Successfully fetched record count: 4
+2025-04-07 13:14:49,000 - INFO - [aitable_notifier.py:207] - Checking for new records...
+2025-04-07 13:14:49,001 - INFO - [aitable_notifier.py:176] - Successfully loaded last record count: 4
+2025-04-07 13:14:50,275 - INFO - [aitable_notifier.py:148] - Successfully fetched record count: 4
+2025-04-07 13:15:00,282 - INFO - [aitable_notifier.py:207] - Checking for new records...
+2025-04-07 13:15:00,283 - INFO - [aitable_notifier.py:176] - Successfully loaded last record count: 4
+2025-04-07 13:15:01,525 - INFO - [aitable_notifier.py:148] - Successfully fetched record count: 4
+2025-04-07 13:15:11,534 - INFO - [aitable_notifier.py:207] - Checking for new records...
+2025-04-07 13:15:11,535 - INFO - [aitable_notifier.py:176] - Successfully loaded last record count: 4
+2025-04-07 13:15:12,866 - INFO - [aitable_notifier.py:148] - Successfully fetched record count: 4
+2025-04-07 13:15:22,885 - INFO - [aitable_notifier.py:207] - Checking for new records...
+2025-04-07 13:15:22,887 - INFO - [aitable_notifier.py:176] - Successfully loaded last record count: 4
+2025-04-07 13:15:24,117 - INFO - [aitable_notifier.py:148] - Successfully fetched record count: 4
+2025-04-07 13:15:34,269 - INFO - [aitable_notifier.py:207] - Checking for new records...
+2025-04-07 13:15:34,304 - INFO - [aitable_notifier.py:176] - Successfully loaded last record count: 4
+2025-04-07 13:15:35,584 - INFO - [aitable_notifier.py:148] - Successfully fetched record count: 4
