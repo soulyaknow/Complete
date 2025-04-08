@@ -159,6 +159,37 @@ def extract_rental_data(block):
         logger.error(f"Error extracting rental data: {str(e)}")
         return None
 
+def get_ownership(block):
+    ownership_data = []
+    try:
+        owner_items = block.find_elements(By.XPATH, ".//content-item")
+        for owner in owner_items:
+            try:
+                name = owner.find_element(By.XPATH, ".//span[1]").text.strip()
+                percent = owner.find_element(By.XPATH, ".//span[2]").text.strip()
+                ownership_data.append({"Name": name, "Percentage": percent})
+            except:
+                continue
+    except:
+        pass
+    return ownership_data
+
+def send_to_n8n(data):
+    url = os.getenv("N8N_FACT_FIND_URL")
+    if not url:
+        logger.error("N8N_FACT_FIND_URL is not set in environment variables.")
+        return False
+
+    try:
+        response = requests.post(url, json=data)
+        response.raise_for_status()
+        logger.info("Successfully sent fact find data to n8n webhook")
+        return True
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Failed to send data to n8n: {e}")
+        logging.error(f"Response: {response.text}")
+        return False
+
 def extract_fact_find(active_driver):
     try:
         logger.info("Starting fact find extraction")
@@ -559,19 +590,293 @@ def extract_fact_find(active_driver):
 
         except Exception as e:
             logger.error(f"Error extracting expenses data: {str(e)}")
-            expense = {"Contact": []}
-
-        # Extract Assets Data
+            expense = []
         
+        # Extract Assets Data
+        try:    
+            assets_button = active_driver.find_element(By.XPATH, "//button[contains(@ng-click, 'showSection') and contains(@ng-click, 'assets')]")
+            assets_button.click()
+
+            wait.until(
+                EC.visibility_of_element_located((By.XPATH, "//st-block-form-header[label/em[text()='Assets']]"))
+            )
+
+            assets = []
+            asset_blocks = active_driver.find_elements(By.XPATH, "//st-block[contains(@ng-repeat, 'asset in')]")
+        
+            for block in asset_blocks:
+                try:
+                    label = block.find_element(By.XPATH, ".//em").text.strip()
+
+                    if label in ["Owner occupier property address", "Investment property address"]:
+                        asset_data = {
+                            "Label": label,
+                            "Address": get_input_value(block, ".//input[@aria-label='Owner occupier property address']"),
+                            "Unit Number": get_input_value(block, ".//input[@ng-model='$ctrl.address.suiteNumber']"),
+                            "Street Number": get_input_value(block, ".//input[@ng-model='$ctrl.address.streetNumber']"),
+                            "Street Name": get_input_value(block, ".//input[@ng-model='$ctrl.address.street']"),
+                            "Street Type": get_input_value(block, ".//input[contains(@aria-label, 'Street type')]"),
+                            "Country": get_select_text(block, ".//select[@ng-model='$ctrl.address.country']"),
+                            "Town": get_input_value(block, ".//input[@ng-model='$ctrl.address.suburb']"),
+                            "State": get_select_text(block, ".//select[@ng-model='$ctrl.address.state']"),
+                            "Postal Code": get_input_value(block, ".//input[@ng-model='$ctrl.address.postCode']"),
+                            "Value": get_input_value(block, ".//input[@ng-model='$ctrl.asset.value']"),
+                            "Property Type": get_select_text(block, ".//select[@ng-model='$ctrl.asset.propertyType']"),
+                            "Zoning": get_select_text(block, ".//select[@ng-model='$ctrl.asset.zoning']"),
+                            "Valuation": get_select_text(block, ".//select[@ng-model='$ctrl.asset.valuation']"),
+                            "Ownership": get_ownership(block)
+                        }
+                        assets.append(asset_data)
+
+                    elif label == "Vehicle make and model":
+                        vehicle_data = {
+                            "Label": label,
+                            "Vehicle Type": get_select_text(block, ".//select[@ng-model='$ctrl.asset.vehicleType']"),
+                            "Make and Model": get_input_value(block, ".//input[@ng-model='$ctrl.asset.name']"),
+                            "Compliance Date": get_input_value(block, ".//input[contains(@class, 'md-datepicker-input')]"),
+                            "Value": get_input_value(block, ".//input[@ng-model='$ctrl.asset.value']"),
+                            "Ownership": get_ownership(block)
+                        }
+                        assets.append(vehicle_data)
+                    
+                    elif label == "Bank account":
+                        bank_data = {
+                            "Label": label,
+                            "Bank": get_select_text(block, ".//md-select[@ng-model='$ctrl.asset.name']"),
+                            "Bank Account Type": get_select_text(block, ".//select[@ng-model='$ctrl.asset.bankAccountType']"),
+                            "BSB": get_input_value(block, ".//input[@ng-model='$ctrl.asset.bankBsb']"),
+                            "Account Number": get_input_value(block, ".//input[@ng-model='$ctrl.asset.bankAccountNumber']"),
+                            "Value": get_input_value(block, ".//input[@ng-model='$ctrl.asset.value']"),
+                            "Ownership": get_ownership(block)
+                        }
+                        assets.append(bank_data)
+                    
+                    elif label == "Home content":
+                        home_content_data = {
+                            "Label": label,
+                            "Description": get_input_value(block, ".//input[@ng-model='$ctrl.asset.name']"),
+                            "Value": get_input_value(block, ".//input[@ng-model='$ctrl.asset.value']"),
+                            "Ownership": get_ownership(block)
+                        }
+                        assets.append(home_content_data)
+                    
+                    elif label == "Super fund institution":
+                        super_data = {
+                            "Label": label,
+                            "Institution": get_input_value(block, ".//input[@ng-model='$ctrl.asset.name']"),
+                            "Membership Number": get_input_value(block, ".//input[@ng-model='$ctrl.asset.membershipNumber']"),
+                            "Value": get_input_value(block, ".//input[@ng-model='$ctrl.asset.value']"),
+                            "Ownership": get_ownership(block)
+                        }
+                        assets.append(super_data)
+
+                    elif label == "Shares":
+                        shares_data = {
+                            "Label": label,
+                            "Shares": get_input_value(block, ".//input[@ng-model='$ctrl.asset.name']"),
+                            "Value": get_input_value(block, ".//input[@ng-model='$ctrl.asset.value']"),
+                            "Ownership": get_ownership(block)
+                        }
+                        assets.append(shares_data)
+
+                    elif label == "Other":
+                        other_data = {
+                            "Label": label,
+                            "Other": get_input_value(block, ".//input[@ng-model='$ctrl.asset.name']"),
+                            "Value": get_input_value(block, ".//input[@ng-model='$ctrl.asset.value']"),
+                            "Ownership": get_ownership(block)
+                        }
+                        assets.append(other_data)
+
+                    elif label == "Balance sheet":
+                        balance_sheet_data = {
+                            "Label": label,
+                            "Item": get_input_value(block, ".//input[@ng-model='$ctrl.asset.name']"),
+                            "As At Date": get_input_value(block, ".//input[contains(@class, 'md-datepicker-input')]"),
+                            "Value": get_input_value(block, ".//input[@ng-model='$ctrl.asset.value']"),
+                            "Ownership": get_ownership(block)
+                        }
+                        assets.append(balance_sheet_data)
+                except Exception as e:
+                    print(f"Error processing asset block: {e}")
+
+            try:
+                total_assets_block = active_driver.find_element(By.XPATH, "//em[text()='Total assets']/ancestor::st-block")
+                contact_blocks = total_assets_block.find_elements(By.XPATH, ".//div[@ng-repeat='contact in $ctrl.contacts']")
+                for contact_block in contact_blocks:
+                    try:
+                        name = contact_block.find_element(By.XPATH, ".//strong").text.strip()
+                        value = contact_block.find_element(By.XPATH, ".//input").get_attribute("value") or ""
+
+                        assets.append({
+                            "Label": "Total assets",
+                            "Contact": name,
+                            "Value": value.strip()
+                        })
+                    except Exception as e:
+                        print(f"Error processing total assets for contact: {e}")
+            except Exception as e:
+                print(f"Couldn't find total assets block: {e}")
+
+        except Exception as e:
+            logger.error(f"Error extracting assets data: {str(e)}")
+            assets = []
+
+        # Extract Liabilities Data
+        try:
+            liabilities_button = active_driver.find_element(By.XPATH, "//button[contains(@class, 'md-button') and .//span[text()='Liabilities']]")
+            liabilities_button.click()
+
+            wait.until(
+                EC.visibility_of_element_located((By.XPATH, "//st-block-form-header[.//em[text()='Liabilities']]"))
+            )
+
+            liabilities = []
+            liabilities_blocks = active_driver.find_elements(By.XPATH, "//st-block[contains(@ng-repeat, 'liability in')]")
+
+            for block in liabilities_blocks:
+                try:
+                    label = block.find_element(By.XPATH, ".//em").text.strip()
+
+                    if label == "Mortgage loan":
+                        mortage_data = {
+                            "Label": label,
+                            "Lender": get_select_text(block, ".//md-select[@ng-model='$ctrl.liability.name']"),
+                            "BSB": get_input_value(block, ".//input[@ng-model='$ctrl.liability.bsb']"),
+                            "Account Number": get_input_value(block, ".//input[@ng-model='$ctrl.liability.accountNumber']"),
+                            "Interest Rate": get_input_value(block, ".//input[@ng-model='$ctrl.liability.interestRate']"),
+                            "Mortgage Type": get_select_text(block, ".//select[@ng-model='$ctrl.liability.mortgageType']"),
+                            "Limit": get_input_value(block, ".//input[@ng-model='$ctrl.liability.limit']"),
+                            "Balance": get_input_value(block, ".//input[@ng-model='$ctrl.liability.balance']"),
+                            "Repayment Monthly": get_input_value(block, ".//input[@ng-model='$ctrl.liability.repayment']"),
+                            "Loan Term Expiry Date": get_input_value(block, ".//input[@placeholder='MM/YYYY']"),
+                            "Repayment Type": get_select_text(block, ".//select[@ng-model='$ctrl.liability.repaymentType']"),
+                            "Linked Asset": get_select_text(block, ".//select[@ng-model='$ctrl.liability.idAsset']"),
+                            "Fixed Expiry Date": get_input_value(block, ".//input[@placeholder='DD/MM/YYYY']"),
+                            "Ownership": get_ownership(block) 
+                        }
+                        liabilities.append(mortage_data)
+                    
+                    elif label == "Credit card":
+                        credit_data = {
+                            "Label": label,
+                            "Lender": get_select_text(block, ".//md-select[@ng-model='$ctrl.liability.name']"),
+                            "Credit Card Type": get_select_text(block, ".//select[@ng-model='$ctrl.liability.creditCardType']"),
+                            "Credit Card Number": get_input_value(block, ".//input[@ng-model='$ctrl.liability.creditCardNumber']"),
+                            "Limit": get_input_value(block, ".//input[@ng-model='$ctrl.liability.limit']"),
+                            "Balance": get_input_value(block, ".//input[@ng-model='$ctrl.liability.balance']"),
+                            "Ownership": get_ownership(block)
+                        }
+                        liabilities.append(credit_data)
+
+                    elif label == "Vehicle loan":
+                        vehicle_data = {
+                            "Label": label,
+                            "Lender": get_select_text(block, ".//md-select[@ng-model='$ctrl.liability.name']"),
+                            "BSB": get_input_value(block, ".//input[@ng-model='$ctrl.liability.bsb']"),
+                            "Account Number": get_input_value(block, ".//input[@ng-model='$ctrl.liability.accountNumber']"),
+                            "Interest Rate": get_input_value(block, ".//input[@ng-model='$ctrl.liability.interestRate']"),
+                            "Net Amount Financed": get_input_value(block, ".//input[@ng-model='$ctrl.liability.limit']"),
+                            "Balance": get_input_value(block, ".//input[@ng-model='$ctrl.liability.balance']"),
+                            "Repayment Monthly": get_input_value(block, ".//input[@ng-model='$ctrl.liability.repayment']"),
+                            "Loan Term Expiry Date": get_input_value(block, ".//input[contains(@placeholder, 'MM/YYYY')]"),
+                            "Linked Asset": get_select_text(block, ".//select[@ng-model='$ctrl.liability.idAsset']"),
+                            "Ownership": get_ownership(block)
+                        }
+                        liabilities.append(vehicle_data)
+
+                    elif label in ["Personal loan", "Other"]:
+                        personal_loan_data = {
+                            "Label": label,
+                            "Lender": get_select_text(block, ".//md-select[@ng-model='$ctrl.liability.name']"),
+                            "BSB": get_input_value(block, ".//input[@ng-model='$ctrl.liability.bsb']"),
+                            "Account Number": get_input_value(block, ".//input[@ng-model='$ctrl.liability.accountNumber']"),
+                            "Interest Rate": get_input_value(block, ".//input[@ng-model='$ctrl.liability.interestRate']"),
+                            "Net Amount Financed": get_input_value(block, ".//input[@ng-model='$ctrl.liability.limit']"),
+                            "Balance": get_input_value(block, ".//input[@ng-model='$ctrl.liability.balance']"),
+                            "Repayment Monthly": get_input_value(block, ".//input[@ng-model='$ctrl.liability.repayment']"),
+                            "Loan Term Expiry Date": get_input_value(block, ".//input[contains(@placeholder, 'MM/YYYY')]"),
+                            "Ownership": get_ownership(block)
+                        }
+                        liabilities.append(personal_loan_data)
+                    
+                    elif label == "SMSF loan":
+                        smsf_loan_data = {
+                            "Label": label,
+                            "Lender": get_select_text(block, ".//md-select[@ng-model='$ctrl.liability.name']"),
+                            "BSB": get_input_value(block, ".//input[@ng-model='$ctrl.liability.bsb']"),
+                            "Account Number": get_input_value(block, ".//input[@ng-model='$ctrl.liability.accountNumber']"),
+                            "Interest Rate": get_input_value(block, ".//input[@ng-model='$ctrl.liability.interestRate']"),
+                            "Net Amount Financed": get_input_value(block, ".//input[@ng-model='$ctrl.liability.limit']"),
+                            "Balance": get_input_value(block, ".//input[@ng-model='$ctrl.liability.balance']"),
+                            "Repayment Monthly": get_input_value(block, ".//input[@ng-model='$ctrl.liability.repayment']"),
+                            "Loan Term Expiry Date": get_input_value(block, ".//input[@placeholder='MM/YYYY']"),
+                            "Repayment Type": get_select_text(block, ".//select[@ng-model='$ctrl.liability.repaymentType']"),
+                            "Linked Asset": get_select_text(block, ".//select[@ng-model='$ctrl.liability.idAsset']"),
+                            "Fixed Expiry Date": get_input_value(block, ".//input[@placeholder='DD/MM/YYYY']"),
+                            "Ownership": get_ownership(block)
+                        }
+                        liabilities.append(smsf_loan_data)
+
+                    elif label == "Student loan":
+                        student_loan_data = {
+                            "Label": label,
+                            "Details": get_input_value(block, ".//input[@ng-model='$ctrl.liability.name']"),
+                            "Balance": get_input_value(block, ".//input[@ng-model='$ctrl.liability.balance']"),
+                            "Repayment Monthly": get_input_value(block, ".//input[@ng-model='$ctrl.liability.repayment']"),
+                            "Ownership": get_ownership(block)
+                        }
+                        liabilities.append(student_loan_data)
+
+                    elif label == "Balance sheet":
+                        balance_sheet_data = {
+                            "Label": label,
+                            "Name": get_input_value(block, ".//input[@ng-model='$ctrl.liability.name']"),
+                            "Balance": get_input_value(block, ".//input[@ng-model='$ctrl.liability.balance']"),
+                            "Repayment Monthly": get_input_value(block, ".//input[@ng-model='$ctrl.liability.repayment']"),
+                            "As At Date": get_input_value(block, ".//input[contains(@class, 'md-datepicker-input')]"),
+                            "Ownership": get_ownership(block)
+                        }
+                        liabilities.append(balance_sheet_data)
+                except Exception as e:
+                    print(f"Error processing liabilities block: {e}")
+
+            try:
+                total_liabilities_block = active_driver.find_element(By.XPATH, "//em[text()='Total liability']/ancestor::st-block")
+                contact_blocks = total_liabilities_block.find_elements(By.XPATH, ".//div[@ng-repeat='contact in $ctrl.contacts']")
+                for contact_block in contact_blocks:
+                    try:
+                        name = contact_block.find_element(By.XPATH, ".//strong").text.strip()
+                        balance = contact_block.find_element(By.XPATH, ".//label[contains(text(), 'Total balance')]/following-sibling::input").get_attribute("value") or ""
+                        repayment = contact_block.find_element(By.XPATH, ".//label[contains(text(), 'Total repayment monthly')]/following-sibling::input").get_attribute("value") or ""
+
+                        liabilities.append({
+                            "Label": "Total liability",
+                            "Contact": name,
+                            "Total Balance": balance.strip(),
+                            "Total Repayment Monthly": repayment.strip()
+                        })
+                    except Exception as e:
+                        print(f"Error processing total liability for contact {name}: {e}")
+            except Exception as e:
+                print(f"Error locating total liability block: {e}")
+
+        except Exception as e:
+            logger.error(f"Error extracting liabilities data: {str(e)}")
+            liabilities = []
 
         fact_find_data = {
             "Personal Data": personal_data,
             "Income": income,
-            "Expenses": expense
+            "Expenses": expense,
+            "Assets": assets,
+            "Liabilities": liabilities,
         }
 
         logger.info("Successfully extracted fact find data")
-        logger.info(fact_find_data)
+
+        send_to_n8n(fact_find_data)
+
         return fact_find_data
 
     except Exception as e:
@@ -579,5 +884,7 @@ def extract_fact_find(active_driver):
         return {
             "Personal Data": [],
             "Income": [],
-            "Expenses": {"Contact": []}
+            "Expenses": [],
+            "Assets": [],
+            "Liabilities": []
         }

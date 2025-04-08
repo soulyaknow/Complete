@@ -1624,7 +1624,6 @@ def process_url():
               
         except TimeoutException as e:
             logging.error("Broker tools not found or failed to load. Proceeding to post data.")
-            raise
 
         # POST the data to the apitable endpoint
         applicant_api_url = os.getenv("APPLICANT_HUB_URL")
@@ -1698,9 +1697,6 @@ def process_url():
         print(f"Error occurred: {str(e)}")
         cleanup_previous_process()
         return jsonify({"message": "URL processed unsuccessfully!"}), 500
-
-    finally:
-        active_driver.quit()
             
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=2500, debug=True)
