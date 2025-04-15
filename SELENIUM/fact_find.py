@@ -2,6 +2,7 @@ import os
 import time
 import requests
 import logging
+import re
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from selenium import webdriver
@@ -17,6 +18,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 from selenium.common.exceptions import StaleElementReferenceException, TimeoutException, NoSuchElementException
 from dotenv import load_dotenv
+
 
 # Configure logging
 logging.basicConfig(
@@ -174,21 +176,15 @@ def get_ownership(block):
         pass
     return ownership_data
 
-def send_to_n8n(data):
-    url = os.getenv("N8N_FACT_FIND_URL")
-    if not url:
-        logger.error("N8N_FACT_FIND_URL is not set in environment variables.")
-        return False
-
+def clean_currency(value):
+    if not value:
+        return 0
+    # Remove $ and commas
+    cleaned = re.sub(r'[^\d.]', '', value)
     try:
-        response = requests.post(url, json=data)
-        response.raise_for_status()
-        logger.info("Successfully sent fact find data to n8n webhook")
-        return True
-    except requests.exceptions.RequestException as e:
-        logger.error(f"Failed to send data to n8n: {e}")
-        logging.error(f"Response: {response.text}")
-        return False
+        return float(cleaned)
+    except ValueError:
+        return 0
 
 def extract_fact_find(active_driver):
     try:
@@ -221,17 +217,21 @@ def extract_fact_find(active_driver):
             # Get dependents information
             dependents = []
             age_containers = active_driver.find_elements(By.XPATH, "//md-input-container[label[contains(text(), 'Age of dependant')]]")
-            
+
             for d_idx in range(num_dependents):
                 name_xpath = f"(//input[@ng-model='dependent.name'])[{d_idx + 1}]"
+                dob_xpath = f"(//md-datepicker[contains(@ng-model, 'getSetDependentDateOfBirth')]/div[@class='md-datepicker-input-container']//input[contains(@class, 'md-datepicker-input')])[{d_idx + 1}]"
+
                 name = get_input_value(active_driver, name_xpath)
-                
+                dob = get_input_value(active_driver, dob_xpath)
+
                 try:
                     age_input = age_containers[d_idx].find_element(By.TAG_NAME, "input")
                     age = age_input.get_attribute("value")
-                    
+
                     dependents.append({
                         "Name": name,
+                        "Date of Birth": dob,
                         "Age": age
                     })
                 except Exception:
@@ -603,7 +603,9 @@ def extract_fact_find(active_driver):
 
             assets = []
             asset_blocks = active_driver.find_elements(By.XPATH, "//st-block[contains(@ng-repeat, 'asset in')]")
-        
+            total_vehicle_value = 0
+            total_home_content_value = 0
+
             for block in asset_blocks:
                 try:
                     label = block.find_element(By.XPATH, ".//em").text.strip()
@@ -629,17 +631,10 @@ def extract_fact_find(active_driver):
                         assets.append(asset_data)
 
                     elif label == "Vehicle make and model":
-                        vehicle_data = {
-                            "Label": label,
-                            "Vehicle Type": get_select_text(block, ".//select[@ng-model='$ctrl.asset.vehicleType']"),
-                            "Make and Model": get_input_value(block, ".//input[@ng-model='$ctrl.asset.name']"),
-                            "Compliance Date": get_input_value(block, ".//input[contains(@class, 'md-datepicker-input')]"),
-                            "Value": get_input_value(block, ".//input[@ng-model='$ctrl.asset.value']"),
-                            "Ownership": get_ownership(block)
-                        }
-                        assets.append(vehicle_data)
+                        value = get_input_value(block, ".//input[@ng-model='$ctrl.asset.value']")
+                        total_vehicle_value += clean_currency(value)
                     
-                    elif label == "Bank account":
+                    elif label == "Bank accounts":
                         bank_data = {
                             "Label": label,
                             "Bank": get_select_text(block, ".//md-select[@ng-model='$ctrl.asset.name']"),
@@ -651,14 +646,9 @@ def extract_fact_find(active_driver):
                         }
                         assets.append(bank_data)
                     
-                    elif label == "Home content":
-                        home_content_data = {
-                            "Label": label,
-                            "Description": get_input_value(block, ".//input[@ng-model='$ctrl.asset.name']"),
-                            "Value": get_input_value(block, ".//input[@ng-model='$ctrl.asset.value']"),
-                            "Ownership": get_ownership(block)
-                        }
-                        assets.append(home_content_data)
+                    elif label == "Home contents":
+                        value = get_input_value(block, ".//input[@ng-model='$ctrl.asset.value']")
+                        total_home_content_value += clean_currency(value)
                     
                     elif label == "Super fund institution":
                         super_data = {
@@ -699,6 +689,19 @@ def extract_fact_find(active_driver):
                         assets.append(balance_sheet_data)
                 except Exception as e:
                     print(f"Error processing asset block: {e}")
+
+            # Append the total values
+            if total_vehicle_value > 0:
+                assets.append({
+                    "Label": "Vehicle make and model",
+                    "Total Value": f"${total_vehicle_value:,.2f}"
+                })
+
+            if total_home_content_value > 0:
+                assets.append({
+                    "Label": "Home content",
+                    "Total Value": f"${total_home_content_value:,.2f}"
+                })
 
             try:
                 total_assets_block = active_driver.find_element(By.XPATH, "//em[text()='Total assets']/ancestor::st-block")
@@ -874,8 +877,6 @@ def extract_fact_find(active_driver):
         }
 
         logger.info("Successfully extracted fact find data")
-
-        send_to_n8n(fact_find_data)
 
         return fact_find_data
 

@@ -811,7 +811,7 @@ def cleanup_previous_process():
         finally:
             active_driver = None
 
-def process_applicants(applicant_details, lender_details, applicant_api_url, lender_api_url, headers):
+def process_applicants(applicant_details, lender_details, extracted_fact_find, applicant_api_url, lender_api_url, n8n_api_url, headers):
     global active_gui_process
     try:
         # Clean up any existing process
@@ -859,7 +859,6 @@ def process_applicants(applicant_details, lender_details, applicant_api_url, len
 
                         print(existing_lender)
                         
-
             # Create application record
             if new_applicant_recordIDs:
                 application_hub_api = os.getenv("APPLICATION_HUB_URL")
@@ -889,6 +888,14 @@ def process_applicants(applicant_details, lender_details, applicant_api_url, len
                         logging.info(f"Application records created: {len(application_recordIDs)}")
                     else:
                         logging.warning("No records found in application response")
+            
+            # Sending n8n
+            fact_find = {
+                "applicant_recordIDs": [record.get("recordId") for record in all_applicant_details if "recordId" in record],
+                "application_recordIDs": application_recordIDs,
+                "fact_find_data": extracted_fact_find
+            }
+            process_n8n_fact_find(n8n_api_url,fact_find)
 
         # Add Application_ID to group applicants
         application_id = time.strftime("%Y%m%d%H%M%S")
@@ -938,7 +945,104 @@ def process_applicants(applicant_details, lender_details, applicant_api_url, len
             "applicant_count": 0
         }
 
-# ... [Rest of the code remains unchanged] ...
+# Function for APITable
+def get_existing_lender(lender_name, lender_api_url, headers):
+    """Look up existing lender in Lender Hub"""
+    try:
+        # Create filter formula to search by Company Name
+        filter_formula = f"FIND('{lender_name}', {{Company Name}})"
+        search_url = f"{lender_api_url}?filterByFormula={filter_formula}"
+        
+        # Send GET request to search for lender
+        response = requests.get(search_url, headers=headers)
+        
+        if response.status_code == 200:
+            data = response.json()
+            records = data.get("data", {}).get("records", [])
+            if records:
+                logging.info(f"Found existing lender: {lender_name}")
+                return records
+            else:
+                logging.info(f"No existing lender found for: {lender_name}")
+                return []
+        else:
+            logging.error(f"Failed to search for lender. Status Code: {response.status_code}")
+            return []
+    except Exception as e:
+        logging.error(f"Error searching for lender: {str(e)}")
+        return []
+
+def get_existing_applicants(applicant_api_url, headers):
+    try:
+        # Send a GET request to the API
+        response = requests.get(applicant_api_url, headers=headers) 
+        if response.status_code == 200:
+            data = response.json()
+            return data.get("data", {}).get("records", [])
+        else:
+            print(f"Failed to fetch existing applicants. Status Code: {response.status_code}")
+            return []
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching existing applicants: {str(e)}")
+        return []
+
+def post_to_apitable(api_url, headers, data, data_type):
+    try:
+        response = requests.post(api_url, headers=headers, json=data)
+
+        if response.status_code in (200, 201):
+            if data_type != "Lender Hub":
+                print(f"{data_type} data successfully posted.")
+            
+            response_data = response.json()
+
+            # Parse the response to extract IDs and applicant details (name, etc.)
+            if response_data.get("success") and "records" in response_data["data"] and data_type != "Lender Hub":
+                records = response_data["data"]["records"]
+                processed_records = []
+                
+                print(records)
+
+                for record in records:
+                    record_id = record.get("recordId")
+                    applicant_id = record["fields"].get("Applicant_ID")
+                    first_name = record["fields"].get("First Name")
+                    last_name = record["fields"].get("Last Name")
+
+                    if record_id and applicant_id and first_name and last_name:
+                        processed_records.append({
+                            "Applicant_ID": applicant_id,
+                            "recordId": record_id,
+                            "First Name": first_name,
+                            "Last Name": last_name
+                        })
+
+                return processed_records  # Return processed records for the current applicant
+            elif data_type != "Lender Hub":
+                print(f"No valid records found in {data_type} response.")
+                return []
+        else:
+            if data_type != "Lender Hub":
+                print(f"Failed to post {data_type} data. Status: {response.status_code}, Response: {response.text}")
+            return []
+    except requests.exceptions.RequestException as e:
+        if data_type != "Lender Hub":
+            print(f"Network error while posting {data_type} data: {str(e)}")
+        return []
+
+# Function to send n8n
+def process_n8n_fact_find(n8n_url,data):
+    try:
+        response = requests.post(n8n_url, json=data)
+        response.raise_for_status()
+        logging.info("Successfully sent fact find data to n8n webhook")
+        return True
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Failed to send data to n8n: {e}")
+        logging.error(f"Response: {response.text}")
+        return False
+     
+# Functions
 def get_file_metadata(file_path):
     """Get file metadata including MIME type"""
     file_name = os.path.basename(file_path)
@@ -995,91 +1099,6 @@ def is_applicant_existing(applicant_data, existing_applicants):
     except KeyError as e:
         print(f"KeyError occurred: {str(e)}")
         return [], 404
-
-# Function for APITable
-def get_existing_lender(lender_name, lender_api_url, headers):
-    """Look up existing lender in Lender Hub"""
-    try:
-        # Create filter formula to search by Company Name
-        filter_formula = f"FIND('{lender_name}', {{Company Name}})"
-        search_url = f"{lender_api_url}?filterByFormula={filter_formula}"
-        
-        # Send GET request to search for lender
-        response = requests.get(search_url, headers=headers)
-        
-        if response.status_code == 200:
-            data = response.json()
-            records = data.get("data", {}).get("records", [])
-            if records:
-                logging.info(f"Found existing lender: {lender_name}")
-                return records
-            else:
-                logging.info(f"No existing lender found for: {lender_name}")
-                return []
-        else:
-            logging.error(f"Failed to search for lender. Status Code: {response.status_code}")
-            return []
-    except Exception as e:
-        logging.error(f"Error searching for lender: {str(e)}")
-        return []
-
-def post_to_apitable(api_url, headers, data, data_type):
-    try:
-        response = requests.post(api_url, headers=headers, json=data)
-
-        if response.status_code in (200, 201):
-            if data_type != "Lender Hub":
-                print(f"{data_type} data successfully posted.")
-            
-            response_data = response.json()
-
-            # Parse the response to extract IDs and applicant details (name, etc.)
-            if response_data.get("success") and "records" in response_data["data"] and data_type != "Lender Hub":
-                records = response_data["data"]["records"]
-                processed_records = []
-                
-                print(records)
-
-                for record in records:
-                    record_id = record.get("recordId")
-                    applicant_id = record["fields"].get("Applicant_ID")
-                    first_name = record["fields"].get("First Name")
-                    last_name = record["fields"].get("Last Name")
-
-                    if record_id and applicant_id and first_name and last_name:
-                        processed_records.append({
-                            "Applicant_ID": applicant_id,
-                            "recordId": record_id,
-                            "First Name": first_name,
-                            "Last Name": last_name
-                        })
-
-                return processed_records  # Return processed records for the current applicant
-            elif data_type != "Lender Hub":
-                print(f"No valid records found in {data_type} response.")
-                return []
-        else:
-            if data_type != "Lender Hub":
-                print(f"Failed to post {data_type} data. Status: {response.status_code}, Response: {response.text}")
-            return []
-    except requests.exceptions.RequestException as e:
-        if data_type != "Lender Hub":
-            print(f"Network error while posting {data_type} data: {str(e)}")
-        return []
-
-def get_existing_applicants(applicant_api_url, headers):
-    try:
-        # Send a GET request to the API
-        response = requests.get(applicant_api_url, headers=headers) 
-        if response.status_code == 200:
-            data = response.json()
-            return data.get("data", {}).get("records", [])
-        else:
-            print(f"Failed to fetch existing applicants. Status Code: {response.status_code}")
-            return []
-    except requests.exceptions.RequestException as e:
-        print(f"Error fetching existing applicants: {str(e)}")
-        return []
 
 def scroll_down_until_bottom(driver, scroll_element):
     """Enhanced scrolling with better stability and error handling"""
@@ -1572,44 +1591,45 @@ def process_url():
         except Exception as e:
             deal_owner = None
         
-        try:
-            logging.info("Starting document processing...")
+        # try:
+        #     logging.info("Starting document processing...")
             
-            # Find the scrollable container with retry mechanism
-            max_attempts = 3
-            scroll_container = None
+        #     # Find the scrollable container with retry mechanism
+        #     max_attempts = 3
+        #     scroll_container = None
             
-            for attempt in range(max_attempts):
-                try:
-                    scroll_container = wait.until(
-                        EC.presence_of_element_located((By.CSS_SELECTOR, "md-content[md-scroll-y]"))
-                    )
-                    break
-                except Exception as e:
-                    if attempt == max_attempts - 1:
-                        raise Exception("Failed to find scrollable container")
-                    time.sleep(2)
+        #     for attempt in range(max_attempts):
+        #         try:
+        #             scroll_container = wait.until(
+        #                 EC.presence_of_element_located((By.CSS_SELECTOR, "md-content[md-scroll-y]"))
+        #             )
+        #             break
+        #         except Exception as e:
+        #             if attempt == max_attempts - 1:
+        #                 raise Exception("Failed to find scrollable container")
+        #             time.sleep(2)
             
-            # Perform scrolling with enhanced stability
-            if scroll_container:
-                if scroll_down_until_bottom(active_driver, scroll_container):
-                    # Process timeline events if scrolling was successful
-                    if not process_timeline_events(active_driver):
-                        raise Exception("Failed to process timeline events")
+        #     # Perform scrolling with enhanced stability
+        #     if scroll_container:
+        #         if scroll_down_until_bottom(active_driver, scroll_container):
+        #             # Process timeline events if scrolling was successful
+        #             if not process_timeline_events(active_driver):
+        #                 raise Exception("Failed to process timeline events")
                     
-                    # Wait for downloads to complete
-                    if not wait_for_downloads(DOWNLOAD_PATH):
-                        logging.warning("Some downloads may not have completed")
-                else:
-                    raise Exception("Failed to scroll the page")
-            else:
-                raise Exception("Could not locate scrollable container")
+        #             # Wait for downloads to complete
+        #             if not wait_for_downloads(DOWNLOAD_PATH):
+        #                 logging.warning("Some downloads may not have completed")
+        #         else:
+        #             raise Exception("Failed to scroll the page")
+        #     else:
+        #         raise Exception("Could not locate scrollable container")
             
-        except Exception as e:
+        # except Exception as e:
             logging.error(f"Document processing failed: {str(e)}")
             raise
 
         # Check if there is a brooker tools button if not then skip
+        extracted_fact_find = {}
         try:
             # Click "Broker tools" button
             active_driver.find_element(By.XPATH, "//button[@ng-click='gotToHomeLoanTools()']").click()
@@ -1620,7 +1640,7 @@ def process_url():
                 EC.presence_of_element_located((By.CLASS_NAME, "group-items"))
             )
 
-            extract_fact_find(active_driver)
+            extracted_fact_find = extract_fact_find(active_driver)
               
         except TimeoutException as e:
             logging.error("Broker tools not found or failed to load. Proceeding to post data.")
@@ -1628,6 +1648,7 @@ def process_url():
         # POST the data to the apitable endpoint
         applicant_api_url = os.getenv("APPLICANT_HUB_URL")
         lender_api_url = os.getenv("LENDER_HUB_URL")
+        n8n_api_url = os.getenv("N8N_FACT_FIND_URL")
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {os.getenv('API_KEY')}"
@@ -1689,7 +1710,7 @@ def process_url():
             
             lender_details.append(lender_data)
 
-        process_applicants(applicant_details, lender_details, applicant_api_url, lender_api_url, headers)
+        process_applicants(applicant_details, lender_details, extracted_fact_find, applicant_api_url, lender_api_url, n8n_api_url, headers)
 
         return jsonify({"message": "URL processed successfully!"}), 200
 
