@@ -842,6 +842,7 @@ def process_applicants(applicant_details, lender_details, extracted_fact_find, a
                     applicant_data, 
                     "Applicant Hub"
                 )
+
                 if response_data:
                     all_applicant_details.extend(response_data)
                     new_applicant_recordIDs.extend(
@@ -850,6 +851,7 @@ def process_applicants(applicant_details, lender_details, extracted_fact_find, a
                     )
 
             # Lookup lender data
+            lender_recordId = {}
             for lender_data in lender_details:
                 if lender_data and "records" in lender_data:
                     lender_name = lender_data["records"][0]["fields"].get("Company Name")
@@ -857,8 +859,11 @@ def process_applicants(applicant_details, lender_details, extracted_fact_find, a
                         # Look up existing lender
                         existing_lender = get_existing_lender(lender_name, lender_api_url, headers)
 
-                        print(existing_lender)
-                        
+                        if existing_lender and isinstance(existing_lender, list) and "recordId" in existing_lender[0]:
+                            lender_recordId[lender_name] = existing_lender[0]["recordId"]
+            
+            logging.info(lender_recordId)
+
             # Create application record
             if new_applicant_recordIDs:
                 application_hub_api = os.getenv("APPLICATION_HUB_URL")
@@ -866,6 +871,7 @@ def process_applicants(applicant_details, lender_details, extracted_fact_find, a
                     "records": [{
                         "fields": {
                             "Applicants": new_applicant_recordIDs,
+                            "Broker": ["reclqI0K1i4qO"],
                             "Status": "New"
                         }
                     }],
@@ -1537,23 +1543,6 @@ def process_url():
         except Exception as e:
             lender = None
 
-        # Get loan security addresses
-        loan_security_addresses = None  # Initialize as None
-        try:
-            address_elements = active_driver.find_elements(By.XPATH, 
-                "//ticket-basic-info-value//span[@ng-repeat='security in Model.currentHomeLoan.securityDetails.securitySplits']")
-            addresses = []  # Temporary list to hold the addresses
-            for address_elem in address_elements:
-                address_text = address_elem.get_attribute("innerText").strip()
-                if address_text:
-                    addresses.append(address_text)
-            
-            # Join addresses into a single string separated by commas (or any other delimiter)
-            if addresses:
-                loan_security_addresses = ", ".join(addresses)
-        except Exception as e:
-            loan_security_addresses = None
-   
         deal_value = None
         try:
             deal_value_element = active_driver.find_element(By.XPATH, 
@@ -1591,6 +1580,7 @@ def process_url():
         except Exception as e:
             deal_owner = None
         
+        # Document processing
         # try:
         #     logging.info("Starting document processing...")
             
@@ -1646,71 +1636,54 @@ def process_url():
             logging.error("Broker tools not found or failed to load. Proceeding to post data.")
 
         # POST the data to the apitable endpoint
-        applicant_api_url = os.getenv("APPLICANT_HUB_URL")
-        lender_api_url = os.getenv("LENDER_HUB_URL")
-        n8n_api_url = os.getenv("N8N_FACT_FIND_URL")
-        headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {os.getenv('API_KEY')}"
-        }
+        # applicant_api_url = os.getenv("APPLICANT_HUB_URL")
+        # lender_api_url = os.getenv("LENDER_HUB_URL")
+        # n8n_api_url = os.getenv("N8N_FACT_FIND_URL")
+        # headers = {
+        #     "Content-Type": "application/json",
+        #     "Authorization": f"Bearer {os.getenv('API_KEY')}"
+        # }
 
-        applicant_details = []
-        lender_details = []
+        # applicant_details = []
+        # lender_details = []
 
-        # Loop over each applicant
-        for applicant in applicants:
-            # Create JSON structure for each applicant
-            applicant_data = {
-                "records": [
-                    {
-                        "fields": {
-                            "Application Hub": None,
-                            "Title": None,
-                            "First Name": applicant["applicant_name"].split()[0] if applicant.get("applicant_name") else None,
-                            "Middle Name": applicant["applicant_name"].split()[1] if len(applicant["applicant_name"].split()) > 2 else None,
-                            "Last Name": applicant["applicant_name"].split()[-1] if applicant.get("applicant_name") else None,
-                            "Date of Birth": None,
-                            "Residential Address": loan_security_addresses if loan_security_addresses else None,
-                            "Primary Contact Number": applicant.get("contact_number") if applicant.get("contact_number") else None,
-                            "Secondary Contact Number": None,
-                            "Email Address": applicant.get("email") if applicant.get("email") else None,
-                            "Marital Status": None,
-                            "Savings": None,
-                            "Income": None,
-                            "Housing Loans": None,
-                            "Vehicle Loans": None,
-                            "Personal Loans": None,
-                            "Total Liabilities": None,
-                            "Employment Status": None,
-                            "Employer": None
-                        }
-                    }
-                ],
-                "fieldKey": "name"
-            }
+        # # Loop over each applicant
+        # for applicant in applicants:
+        #     # Create JSON structure for each applicant
+        #     applicant_data = {
+        #         "records": [
+        #             {
+        #                 "fields": {
+        #                     "First Name": applicant["applicant_name"].split()[0] if applicant.get("applicant_name") else None,
+        #                     "Middle Name": applicant["applicant_name"].split()[1] if len(applicant["applicant_name"].split()) > 2 else None,
+        #                     "Last Name": applicant["applicant_name"].split()[-1] if applicant.get("applicant_name") else None,
+        #                     "Primary Contact Number": applicant.get("contact_number") if applicant.get("contact_number") else None,
+        #                     "Email Address": applicant.get("email") if applicant.get("email") else None,
+        #                 }
+        #             }
+        #         ],
+        #         "fieldKey": "name"
+        #     }
 
-            applicant_details.append(applicant_data)
+        #     applicant_details.append(applicant_data)
 
-            lender_data = {}
-            # Post lender data only once
-            if lender:
-                lender_data = {
-                    "records": [
-                        {
-                            "fields": {
-                                "Company Name": lender,
-                                "Contact": None,
-                                "Website": None,
-                                "Phone Number": None,
-                            }
-                        }
-                    ],
-                    "fieldKey": "name"
-                }
+        #     lender_data = {}
+        #     # Post lender data only once
+        #     if lender:
+        #         lender_data = {
+        #             "records": [
+        #                 {
+        #                     "fields": {
+        #                         "Company Name": lender,
+        #                     }
+        #                 }
+        #             ],
+        #             "fieldKey": "name"
+        #         }
             
-            lender_details.append(lender_data)
+        #     lender_details.append(lender_data)
 
-        process_applicants(applicant_details, lender_details, extracted_fact_find, applicant_api_url, lender_api_url, n8n_api_url, headers)
+        # process_applicants(applicant_details, lender_details, extracted_fact_find, applicant_api_url, lender_api_url, n8n_api_url, headers)
 
         return jsonify({"message": "URL processed successfully!"}), 200
 

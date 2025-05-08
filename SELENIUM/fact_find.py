@@ -49,6 +49,15 @@ def get_input_value(root, xpath):
     except Exception:
         return None
 
+def get_element_text(root, xpath):
+    try:
+        element = root.find_element(By.XPATH, xpath)
+        return element.text.strip()
+    except NoSuchElementException:
+        return None
+    except Exception:
+        return None
+
 def get_select_text_with_index(root, xpath, index):
     try:
         elements = root.find_elements(By.XPATH, xpath)
@@ -867,6 +876,456 @@ def extract_fact_find(active_driver):
         except Exception as e:
             logger.error(f"Error extracting liabilities data: {str(e)}")
             liabilities = []
+        
+        # Extract Needs and Objectives
+        try:
+            needs_button = active_driver.find_element(By.XPATH, "//button[.//span[contains(., 'Needs and objectives')]]")
+            needs_button.click()
+
+            time.sleep(15)
+
+            wait.until(
+                EC.visibility_of_element_located((By.XPATH, "//label[./em[text()='Needs and objectives']]"))
+            )
+
+            needs = []
+            try:
+                needs_data = {
+                    "Purchase_property": get_input_value(active_driver,"//input[@ng-model='$ctrl.objectives.requirementsAndObjectives.purposeDetails.purchasePropertyAmount']"),
+                    "Construction": get_input_value(active_driver,"//input[@ng-model='$ctrl.objectives.requirementsAndObjectives.purposeDetails.constructionAmount']"),
+                    "Renovations": get_input_value(active_driver,"//input[@ng-model='$ctrl.objectives.requirementsAndObjectives.purposeDetails.renovationsAmount']"),
+                    "Investment_purposes": get_input_value(active_driver,"//input[@ng-model='$ctrl.objectives.requirementsAndObjectives.purposeDetails.investmentPurposesAmount']"),
+                    "Purchase_vehicle": get_input_value(active_driver,"//input[@ng-model='$ctrl.objectives.requirementsAndObjectives.purposeDetails.purchaseAssetAmount']"),
+                    "Refinance": get_input_value(active_driver,"//input[@ng-model='$ctrl.objectives.requirementsAndObjectives.purposeDetails.refinanceAmount']"),
+                    "Debt_consolidation": get_input_value(active_driver,"//input[@ng-model='$ctrl.objectives.requirementsAndObjectives.purposeDetails.debtConsolidationAmount']"),
+                    "Other_purposes": get_input_value(active_driver,"//input[@ng-model='$ctrl.objectives.requirementsAndObjectives.purposeDetails.otherAmount']"),
+                    "Total": get_input_value(active_driver,"//input[@ng-model='$ctrl.objectives.requirementsAndObjectives.purposeDetails.totalAmount']")
+                }
+                needs.append(needs_data)
+
+            except Exception as e:
+                print(f"Error locating needs: {e}")
+                needs = []
+
+        except Exception as e:
+            logger.error(f"Error extracting needs data: {str(e)}")
+            needs = []
+
+        # Extract Product requirements
+        try:
+            products_button = active_driver.find_element(By.XPATH, "//button[.//span[contains(., 'Product requirements')]]")
+            products_button.click()
+
+            wait.until(
+                EC.visibility_of_element_located((By.XPATH, "//label[./em[normalize-space() = 'BID process steps']]"))
+            )
+
+            product_requirements = []
+            # try:
+
+            # except Exception as e:
+            #     print(f"Error locating products requirements: {e}")
+            #     product_requirements = []
+
+        except Exception as e:
+            logger.error(f"Error extracting product requirements data: {str(e)}")
+            product_requirements = []
+
+        # Extract Security Details
+        try:
+            security_button = active_driver.find_element(By.XPATH, "//button[contains(@class, 'md-button') and .//span[text()='Security details']]")
+            security_button.click()
+
+            wait.until(EC.visibility_of_element_located((By.XPATH, "//label[.//em[normalize-space(text())='Security details']]")))
+
+            security = []
+
+            # Extract security blocks
+            security_blocks = active_driver.find_elements(By.XPATH, "//st-block[contains(@ng-if, '$ctrl.securityDetails.securitySplits')]")
+            for block in security_blocks:
+                try:
+                    security_details = []
+                    contact_details = []
+                    title_details = []
+                    other_details = []
+
+                    label_element = block.find_element(By.XPATH, ".//em[contains(text(), 'Security')]")
+                    label = label_element.text.strip()
+
+                    if label and "Security" in label:
+                        security_data = {
+                            "street_number": get_input_value(block, ".//input[@ng-model='$ctrl.address.streetNumber']"),
+                            "street_name": get_input_value(block, ".//input[@ng-model='$ctrl.address.street']"),
+                            "street_type": get_input_value(block, ".//input[@aria-label='Street type']"),
+                            "country": get_select_text(block, ".//select[@ng-model='$ctrl.address.country']"),
+                            "town": get_input_value(block, ".//input[@ng-model='$ctrl.address.suburb']"),
+                            "state": get_select_text(block, ".//select[@ng-model='$ctrl.address.state']"),
+                            "postal_code": get_input_value(block, ".//input[@ng-model='$ctrl.address.postCode']"),
+                            "security_value": get_input_value(block, ".//input[@ng-model='security.value']"),
+                            "property_value": get_select_text(block, ".//select[@ng-model='security.propertyType']"),
+                            "zoning": get_select_text(block, ".//select[@ng-model='security.zoning']"),
+                            "valuation": get_select_text(block, ".//select[@ng-model='security.valuation']"),
+                            "owner_type": get_select_text(block, ".//select[@ng-model='security.ownershipType']"),
+                            "ownership": get_ownership(block)
+                        }
+                        security_details.append(security_data)
+
+                    # Extract Contact for valuation blocks
+                    contact_blocks = active_driver.find_elements(By.XPATH, "//st-block[contains(@ng-if, '$ctrl.securityDetails.contactsForValuation')]")
+                    for contact_block in contact_blocks:
+                        contact_data = {
+                            "loan_party": get_select_text(contact_block, ".//select[@ng-model='contact.loanParty']"),
+                            "unit_number": get_input_value(contact_block, ".//input[@ng-model='$ctrl.address.suiteNumber']"),
+                            "street_number": get_input_value(contact_block, ".//input[@ng-model='$ctrl.address.streetNumber']"),
+                            "street_name": get_input_value(contact_block, ".//input[@ng-model='$ctrl.address.street']"),
+                            "street_type": get_input_value(contact_block, ".//input[@ng-model='$mdAutocompleteCtrl.scope.searchText']"),
+                            "country": get_select_text(contact_block, ".//select[@ng-model='$ctrl.address.country']")
+                        }
+                        contact_details.append(contact_data)
+
+                    # Extract Title details blocks
+                    title_blocks = active_driver.find_elements(By.XPATH, "//st-block[contains(@ng-if, '$ctrl.securityDetails.titleDetails')]")
+                    for title_block in title_blocks:
+                        title_data = {
+                            "title_type": get_select_text(title_block, ".//select[@ng-model='title.titleType']"),
+                            "title": get_select_text(title_block, ".//select[@ng-model='title.title']"),
+                            "lot": get_input_value(title_block, ".//input[@ng-model='title.lot']"),
+                            "plan": get_input_value(title_block, ".//input[@ng-model='title.plan']"),
+                            "volume": get_input_value(title_block, ".//input[@ng-model='title.volume']"),
+                            "folio": get_input_value(title_block, ".//input[@ng-model='title.folio']")
+                        }
+                        title_details.append(title_data)
+
+                    # Extract Other mortgages blocks
+                    other_blocks = active_driver.find_elements(By.XPATH, "//st-block[contains(@ng-if, '$ctrl.securityDetails.otherMortgages')]")
+                    for other_block in other_blocks:
+                        other_data = {
+                            "lender": None,
+                            "balance": get_input_value(other_block, ".//input[@ng-model='mortgage.balance']"),
+                            "limit": get_input_value(other_block, ".//input[@ng-model='mortgage.limit']"),
+                            "monthly_repayment": get_input_value(other_block, ".//input[@ng-model='mortgage.repayment']"),
+                            "bsb": get_input_value(other_block, ".//input[@ng-model='mortgage.bsb']"),
+                            "account_number": get_input_value(other_block, ".//input[@ng-model='mortgage.accountNumber']"),
+                            "interest_rate": get_input_value(other_block, ".//input[@ng-model='mortgage.interestRate']"),
+                            "repayment_type": get_select_text(other_block, ".//select[@ng-model='mortgage.repaymentType']"),
+                            "ownership": get_ownership(other_block)
+                        }
+                        try:
+                            lender_element = other_block.find_element(By.XPATH, ".//md-select-value/span[1]")
+                            lender_text = lender_element.text.strip() if lender_element else None
+                            if lender_text == "" or lender_text == "\u00a0":  # non-breaking space
+                                lender_text = None
+                            other_data["lender"] = lender_text
+                        except:
+                            other_data["lender"] = None
+
+                        # Optional: skip empty blocks if no lender and no balance
+                        if any(v for k, v in other_data.items() if k != "ownership" and v):
+                            other_details.append(other_data)
+
+                    datas = {
+                        "Security": security_details,
+                        "Contact": contact_details,
+                        "Title": title_details,
+                        "Other": other_details
+                    }
+                    security.append(datas)
+
+                except Exception as e:
+                    print(f"Error processing security block: {e}")
+
+        except Exception as e:
+            logger.error(f"Error extracting security data: {str(e)}")
+            security = []
+
+        # Extract Funding Details
+        try:
+            funding_button = active_driver.find_element(By.XPATH, "//button[contains(@class, 'md-button') and .//span[text()='Funding worksheet']]")
+            funding_button.click()
+
+            wait.until(EC.visibility_of_element_located((By.XPATH, "//label[.//em[normalize-space()='Funding worksheet']]")))
+
+            time.sleep(15)
+
+            funding = []
+
+            # For Funds Required (A)
+            funding_required_a_block = active_driver.find_element(By.XPATH, "//st-block-form-header[label/em[text()='Funds required (A)']]")
+            label_a = funding_required_a_block.find_element(By.XPATH, ".//em").text.strip()
+            if label_a == "Funds required (A)":
+                funding_data_a = {
+                    "Security_address": get_input_value(funding_required_a_block, ".//blank-input[starts-with(@ng-bind, '$ctrl.getSecurity')]"),
+                    "Security_value": get_input_value(funding_required_a_block, ".//input[@ng-model='fundRequired.purposeFunds']"),
+                    "Transaction_type": get_select_text(funding_required_a_block, ".//select[@ng-model='fundRequired.transactionType']"),
+                    "Ownership_type": get_select_text(funding_required_a_block, ".//select[@ng-model='fundRequired.ownershipType']"),
+                    "Property_status": get_select_text(funding_required_a_block, ".//select[@ng-model='fundRequired.propertyStatus']"),
+                    "Existing_loan_balance": get_input_value(funding_required_a_block, ".//input[@ng-model='fundRequired.existingLoanBalance']"),
+                    "Exit_fee": get_input_value(funding_required_a_block, ".//input[@ng-model='fundRequired.exitFee']"),
+                    "LMI_premium_already_paid": get_input_value(funding_required_a_block, ".//input[@ng-model='fundRequired.lmiPremiumAlreadyPaid']"),
+                    "Mortgage_discharge_costs": get_input_value(funding_required_a_block, ".//input[@ng-model='fundRequired.mortgageDischargeCosts']"),
+                    "Mortgage_registration_fees": get_input_value(funding_required_a_block, ".//input[@ng-model='fundRequired.mortgageRegistrationFees']"),
+                    "Lender_fees": get_input_value(funding_required_a_block, ".//input[@ng-model='fundRequired.lenderFees']"),
+                    "Other_fees/Costs": get_input_value(funding_required_a_block, ".//input[@ng-model='fundRequired.otherFees']")
+                }
+                funding.append(funding_data_a)
+
+            # For Funds Available (B)
+            funding_available_b_block = active_driver.find_element(By.XPATH, "//st-block-form-header[label/em[text()='Funds available (B)']]")
+            label_b = funding_available_b_block.find_element(By.XPATH, ".//em").text.strip()
+            if label_b == "Funds available (B)":
+                funding_data_b = {
+                    "Proposed_loan_amount": get_input_value(funding_available_b_block, ".//input[@ng-model='fundAvailable.proposedLoanAmount']"),
+                    "First_home_owners_grant_(FHOG)": get_input_value(funding_available_b_block, ".//input[@ng-model='fundAvailable.firstHomeOwnersGrant']"),
+                    "Sale_proceed_funds": get_input_value(funding_available_b_block, "//input[@ng-model='fundAvailable.saleProceedFunds']"),
+                    "Savings": get_input_value(funding_available_b_block, "//input[@ng-model='fundAvailable.savings']"),
+                    "Equity_from_property": get_input_value(funding_available_b_block, "//input[@ng-model='fundAvailable.equityFromProperty']"),
+                    "Deposit_paid": get_input_value(funding_available_b_block, "//input[@ng-model='fundAvailable.depositPaid']"),
+                    "Gift": get_input_value(funding_available_b_block, "//input[@ng-model='fundAvailable.gift']"),
+                    "Other_funds_available": get_input_value(funding_available_b_block, "//input[@ng-model='fundAvailable.otherFundsAvailable']"),
+                    "Base_LVR": get_input_value(funding_available_b_block, "//input[@ng-model='fundAvailable.baseLvr']"),
+                    "Lender_mortgage_insurance_(LMI)": {
+                        "Value": get_input_value(funding_available_b_block, "//input[@ng-model='fundAvailable.lmi']"),
+                        "Bank": funding_available_b_block.find_element(By.XPATH, "//md-select-value[@class='md-select-value']").text.strip()
+                    },
+                    "Total_LVR": get_input_value(funding_available_b_block, "//input[@ng-model='fundAvailable.totalLvr']"),
+                    "Total_proposed_loan_amount": get_input_value(funding_available_b_block, "//input[@ng-model='fundAvailable.totalProposedLoanAmount']")
+                }
+                funding.append(funding_data_b)
+
+            # For Total Funds
+            total_funds_block = active_driver.find_element(By.XPATH, "//st-block-form-header[label/em[text()='Total funds']]")
+            total_funds_data = {
+                "total_funds_a": get_input_value(total_funds_block, "//input[@ng-model='$ctrl.fundingWorksheets.fundsTotal.required']"),
+                "total_funds_b": get_input_value(total_funds_block, "//input[@ng-model='$ctrl.fundingWorksheets.fundsTotal.available']"),
+                "funds_surplus_a_b": get_input_value(total_funds_block, "//input[@ng-model='$ctrl.fundingWorksheets.fundsTotal.difference']")
+            }
+            funding.append(total_funds_data)
+
+        except Exception as e:
+            logger.error(f"Error extracting funding data: {str(e)}")
+            funding = []
+
+        # Extract Maximum Borrowing
+
+        # Extract Search Loan Products
+        try:
+            loan_button = active_driver.find_element(By.XPATH, "//button[@ng-click=\"showSection('searchLoanProducts')\" and .//span[text()='Search loan products']]")
+            loan_button.click()
+
+            wait.until(EC.visibility_of_element_located((By.XPATH, "//label[.//em[text()='Search loan products']]")))
+
+            loan = []
+            
+            blocks = active_driver.find_element(By.XPATH, "//st-block[@ng-if='$ctrl.isReady']//st-block-form-header")
+            
+            loan_data = {
+                "selected_lender": active_driver.find_element(By.XPATH, "//md-select-value//span[@class='ng-binding']").text,
+                "loan_ammount": get_input_value(blocks, "//input[@ng-model='$ctrl.searchFields.loanAmount']"),
+                "lvr": get_input_value(blocks, "//input[@ng-model='$ctrl.searchFields.lvr']"),
+                "loan_term": get_select_text(blocks, "//select[@ng-model='$ctrl.searchFields.loanTerm']"),
+                "loan_type": get_select_text(blocks, "//select[@ng-model='$ctrl.searchFields.loanType']"),
+                "repayment_type": get_select_text(blocks, "//select[@ng-model='$ctrl.searchFields.repaymentType']"),
+                "rate_type": get_select_text(blocks, "//select[@ng-model='$ctrl.searchFields.rateType']"),
+                "property_use": get_select_text(blocks, "//select[@ng-model='$ctrl.searchFields.propertyUse']"),
+                "construction": get_select_text(blocks, "//select[@ng-model='$ctrl.searchFields.construction']"),
+                "redraw_facility": get_select_text(blocks, "//select[@ng-model='$ctrl.searchFields.redrawFacility']"),
+                "offset": get_select_text(blocks, "//select[@ng-model='$ctrl.searchFields.offset']"),
+                "line_of_credit": get_select_text(blocks, "//select[@ng-model='$ctrl.searchFields.lineOfCredit']"),
+                "smsf": get_select_text(blocks, "//select[@ng-model='$ctrl.searchFields.smsf']"),
+                "additional_repayment": get_select_text(blocks, "//select[@ng-model='$ctrl.searchFields.additionalRepayments']"),
+                "ability_loan_split": get_select_text(blocks, "//select[@ng-model='$ctrl.searchFields.abilityToSplitLoan']"),
+                "lmi_capitalization": get_select_text(blocks, "//select[@ng-model='$ctrl.searchFields.lmiCapitalization']"),
+                "rewards": get_select_text(blocks, "//select[@ng-model='$ctrl.searchFields.rewards']")
+            }
+            loan.append(loan_data)
+
+        except Exception as e:
+            logger.error(f"Error extracting loan data: {str(e)}")
+            loan = []
+
+        # Extract Review loan products
+        try:
+            loan_product_button = active_driver.find_element(By.XPATH, "//button[@ng-click=\"showSection('reviewLoanProducts')\"]/span[contains(text(), 'Review loan products')]")
+            loan_product_button.click()
+
+            wait.until(EC.visibility_of_element_located((By.XPATH, "//label[./em[text()='Review loan products']]")))
+
+            time.sleep(15)
+
+            loan_product = []
+            blocks = active_driver.find_elements(By.XPATH, "//st-block[@ng-repeat='reviewProduct in $ctrl.reviewProducts track by reviewProduct.id']")
+
+            for block in blocks:
+                product_data = {
+                    "lender_name": block.find_element(By.XPATH, ".//span[@class='truncate ng-binding']").text,
+                    "product_name": block.find_element(By.XPATH, ".//span[@class='truncate ng-binding' and @ng-bind='::productSplit.productName']").text,
+                    "loan_amount": get_input_value(block, ".//input[@ng-model='productSplit.totalLoanAmount']"),
+                    "lmi": get_input_value(block, ".//input[@ng-model='productSplit.lmi']"),
+                    "total_loan_amount": get_input_value(block, ".//input[@ng-model='productSplit.totalLoanAmountWithLmi']"),
+                    "maximum_borrowing": get_input_value(block, ".//input[@ng-model='productSplit.maximumBorrowing']"),
+                    "interest_rate": get_input_value(block, ".//input[@ng-model='productSplit.interestRate']"),
+                    "interest_rate_discount": get_input_value(block, ".//input[@ng-model='productSplit.interestRateDiscount']"),
+                    "interest_rate_product": get_input_value(block, ".//input[@ng-model='productSplit.interestRateOfProduct']"),
+                    "revert_rate": get_input_value(block, ".//input[@ng-model='productSplit.revertRate']"),
+                    "revert_rate_discount": get_input_value(block, ".//input[@ng-model='productSplit.revertRateDiscount']"),
+                    "revert_rate_product": get_input_value(block, ".//input[@ng-model='productSplit.revertRateOfProduct']"),
+                    "loan_term_years": get_select_text(block, ".//select[@ng-model='productSplit.loanTerm']"),
+                    "initial_offset_balance": get_input_value(block, ".//input[@ng-model='productSplit.offsetBalance']"),
+                    "monthly_offset_contribution": get_input_value(block, ".//input[@ng-model='productSplit.monthlyOffsetContribution']"),
+                    "cashback_discount": get_input_value(block, ".//input[@ng-model='productSplit.cashback']"),
+                    "abs_lending_purpose_code": block.find_element(By.XPATH, ".//md-select[@ng-model='productSplit.absLendingPurposeCode']").text
+                }
+                loan_product.append(product_data)
+
+        except Exception as e:
+            logger.error(f"Error extracting loan data: {str(e)}")
+            loan_product = []
+
+        # Extract Compare loan products
+        try:
+            compare_product_button = active_driver.find_element(By.XPATH, "//button[@ng-click=\"showSection('compareLoanProducts')\"]/span[contains(text(), 'Compare loan products')]")
+            compare_product_button.click()
+
+            wait.until(EC.visibility_of_element_located((By.XPATH, "//label[./em[text()='Compare loan products']]")))
+
+            time.sleep(10)
+
+            product_details_button = active_driver.find_element(By.XPATH, "//button[@ng-click='showProductDetails$index = !showProductDetails$index' and @aria-label='Show Fees']")
+            product_details_button.click()
+
+            time.sleep(10)
+
+            compare_product = []
+            blocks = active_driver.find_elements(By.XPATH, "//st-block[@ng-repeat='compare in $ctrl.compareProducts']")
+
+            for block in blocks:
+                try:
+                    compare_product_data = {
+                        "lender": get_element_text(block, ".//span[@class='truncate ng-binding']"),
+                        "product_details": {
+                            "product_name": get_element_text(block, ".//span[@ng-bind='productSplit.productName']"),
+                            "loan_amount": clean_currency(get_element_text(block, ".//span[@ng-bind='productSplit.totalLoanAmount.formatWithCurrency($ctrl.currentCurrency)']")),
+                            "total_loan_amount": clean_currency(get_element_text(block, ".//span[@ng-bind='$ctrl.getTotalLoanAmountWithLmi({ id: compare.id }).formatWithCurrency($ctrl.currentCurrency)']")),
+                            "loan_term": get_element_text(block, ".//span[contains(@ng-bind, 'productSplit.loanTerm')]"),
+                            "interest_rate": get_element_text(block, ".//span[@ng-bind='productSplit.interestRate.toFixed(2) + \"%\"']"),
+                            "revert_rate": get_element_text(block, ".//span[@ng-bind='productSplit.revertRate.toFixed(2) + \"%\"']"),
+                            "comparison_rate": get_element_text(block, ".//span[@ng-bind='productSplit.comparisonRate.toFixed(2) + \"%\"']"),
+                            "abs_lending_purpose_code": get_element_text(block, ".//span[@ng-bind='productSplit.absLendingPurposeCode.id || \"N/A\"']"),
+                            "repayment": clean_currency(get_element_text(block, ".//span[@ng-bind='productSplit.repayment1.formatWithCurrency($ctrl.currentCurrency)']"))
+                        },
+                        "monthly_cost": {
+                            "initial_monthly_repayment": clean_currency(get_element_text(block, ".//span[@ng-bind='compare.repayments.initialMonthlyRepayment.formatWithCurrency($ctrl.currentCurrency)']")),
+                            "ongoing_monthly_repayment": clean_currency(get_element_text(block, ".//span[@ng-bind='compare.repayments.ongoingMonthlyRepayment.formatWithCurrency($ctrl.currentCurrency)']")),
+                            "upfront_fees": clean_currency(get_element_text(block, ".//span[@ng-bind='compare.repayments.upfrontFees.formatWithCurrency($ctrl.currentCurrency)']")),
+                            "monthly_fees": clean_currency(get_element_text(block, ".//span[@ng-bind='compare.repayments.monthlyFees.formatWithCurrency($ctrl.currentCurrency)']")),
+                            "annual_fees": clean_currency(get_element_text(block, ".//span[@ng-bind='compare.repayments.annualFees.formatWithCurrency($ctrl.currentCurrency)']"))
+                        },
+                        "servicing": {
+                            "maximum_borrowing": clean_currency(get_element_text(block, ".//span[@ng-bind='compare.productSplits[0].maximumBorrowing ? compare.productSplits[0].maximumBorrowing.formatWithCurrency($ctrl.currentCurrency) : (0).formatWithCurrency($ctrl.currentCurrency)']"))
+                        },
+                        "Total_cost_(short_term_3_years)": {
+                            "total_costs": clean_currency(get_element_text(block, ".//span[@ng-bind='compare.shortTotalCosts ? compare.shortTotalCosts.formatWithCurrency($ctrl.currentCurrency) : (0).formatWithCurrency($ctrl.currentCurrency)']"))
+                        },
+                        "Total_cost_(full_term_28_years)": {
+                            "total_principal_a": clean_currency(get_element_text(block, ".//span[@ng-bind='compare.costs.principal.formatWithCurrency($ctrl.currentCurrency)']")),
+                            "total_interest_b": clean_currency(get_element_text(block, ".//span[@ng-bind='compare.costs.interest.formatWithCurrency($ctrl.currentCurrency)']")),
+                            "total_fees_c": clean_currency(get_element_text(block, ".//span[@ng-bind='compare.costs.fees.formatWithCurrency($ctrl.currentCurrency)']")),
+                            "interest_offset_savings_d": clean_currency(get_element_text(block, ".//span[@ng-bind='compare.costs.interestOffsetSavings.formatWithCurrency($ctrl.currentCurrency)']")),
+                            "total_cashback_e": clean_currency(get_element_text(block, ".//span[@ng-bind='compare.costs.cashback.formatWithCurrency($ctrl.currentCurrency)']")),
+                            "total_cost": clean_currency(get_element_text(block, ".//span[@ng-bind='compare.costs.total.formatWithCurrency($ctrl.currentCurrency)']"))
+                        },
+                        "Total": {
+                            "maximum_upfront": clean_currency(get_element_text(block, ".//span[@ng-bind='compare.commissionsPayable.upfront.formatWithCurrency($ctrl.currentCurrency)']")),
+                            "maximum_monthly_trail": clean_currency(get_element_text(block, ".//span[@ng-bind='compare.commissionsPayable.trail.formatWithCurrency($ctrl.currentCurrency)']"))
+                        }
+                    }
+
+                    compare_product.append(compare_product_data)
+
+                except Exception as e:
+                    logger.error(f"Error extracting data for block: {str(e)}")
+
+        except Exception as e:
+            logger.error(f"Error extracting loan data: {str(e)}")
+            compare_product = []
+
+        # Extract Compliance comments
+        try:
+            compliance_button = active_driver.find_element(By.XPATH, "//button[contains(., 'Compliance comments and documents')]")
+            compliance_button.click()
+
+            wait.until(EC.visibility_of_element_located((By.XPATH, "//label[./em[text()='Compliance comments and documents']]")))
+
+            compliance = []
+            blocks = active_driver.find_elements(By.XPATH, "//st-block[@ng-if=\"$ctrl.isReady && $ctrl.compliance\"]")
+            for block in blocks:
+                try:
+                    monthly_financial_position_data = {
+                        "net_income": {
+                            "current_position": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.netIncome.currentPosition']"),
+                            "proposed_position": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.netIncome.proposedPosition']"),
+                            "proposed_position_buffer": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.netIncome.proposedPositionAtBufferRate']"),
+                        },
+                        "less_total_current_repayment": {
+                            "current_position": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.lessTotalCurrentRepayment.currentPosition']"),
+                            "proposed_position": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.lessTotalCurrentRepayment.proposedPosition']"),
+                            "proposed_position_buffer": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.lessTotalCurrentRepayment.proposedPositionAtBufferRate']"),
+                        },
+                        "less_total_proposed_repayment": {
+                            "current_position": get_input_value(block, "//md-input-container[label[text()='Current position']]/input"),
+                            "proposed_position": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.lessTotalProposedRepayment.proposedPosition']"),
+                            "proposed_position_buffer": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.lessTotalProposedRepayment.proposedPositionAtBufferRate']"),
+                        },
+                        "less_total_current_expenses": {
+                            "current_position": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.lessTotalCurrentExpenses.currentPosition']"),
+                            "proposed_position": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.lessTotalCurrentExpenses.proposedPosition']"),
+                            "proposed_position_buffer": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.lessTotalCurrentExpenses.proposedPositionAtBufferRate']"),
+                        },
+                        "add_debt_commitments_ceasing": {
+                            "current_position": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.foreseeableFinancialChanges.debtCommitmentsCeasing.currentPosition']"),
+                            "proposed_position": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.foreseeableFinancialChanges.debtCommitmentsCeasing.proposedPosition']"),
+                            "proposed_position_buffer": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.foreseeableFinancialChanges.debtCommitmentsCeasing.proposedPositionAtBufferRate']"),
+                        },
+                        "add_income_increasing": {
+                            "current_position": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.foreseeableFinancialChanges.debtCommitmentsCeasing.currentPosition']"),
+                            "proposed_position": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.foreseeableFinancialChanges.debtCommitmentsCeasing.proposedPosition']"),
+                            "proposed_position_buffer": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.foreseeableFinancialChanges.debtCommitmentsCeasing.proposedPositionAtBufferRate']"),
+                        },
+                        "add_expense_decreasing": {
+                            "current_position": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.foreseeableFinancialChanges.expenseDecreasing.currentPosition']"),
+                            "proposed_position": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.foreseeableFinancialChanges.expenseDecreasing.proposedPosition']"),
+                            "proposed_position_buffer": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.foreseeableFinancialChanges.expenseDecreasing.proposedPositionAtBufferRate']"),
+                        },
+                        "new_debt_commitments": {
+                            "current_position": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.foreseeableFinancialChanges.newDebtCommitments.currentPosition']"),
+                            "proposed_position": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.foreseeableFinancialChanges.newDebtCommitments.proposedPosition']"),
+                            "proposed_position_buffer": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.foreseeableFinancialChanges.newDebtCommitments.proposedPositionAtBufferRate']"),
+                        },
+                        "income_decreasing": {
+                            "current_position": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.foreseeableFinancialChanges.incomeDecreasing.currentPosition']"),
+                            "proposed_position": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.foreseeableFinancialChanges.incomeDecreasing.proposedPosition']"),
+                            "proposed_position_buffer": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.foreseeableFinancialChanges.incomeDecreasing.proposedPositionAtBufferRate']"),
+                        },
+                        "expense_increasing": {
+                            "current_position": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.foreseeableFinancialChanges.expenseIncreasing.currentPosition']"),
+                            "proposed_position": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.foreseeableFinancialChanges.expenseIncreasing.proposedPosition']"),
+                            "proposed_position_buffer": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.foreseeableFinancialChanges.expenseIncreasing.proposedPositionAtBufferRate']"),
+                        },
+                        "surplus_deficit": {
+                            "current_position": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.surplusDeficit.currentPosition']"),
+                            "proposed_position": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.surplusDeficit.proposedPosition']"),
+                            "proposed_position_buffer": get_input_value(block, "//input[@ng-model='$ctrl.compliance.monthlyFinancialPosition.surplusDeficit.proposedPositionAtBufferRate']"),
+                        }
+                    }
+                    compliance.append(monthly_financial_position_data)
+                except Exception as e:
+                    logger.error(f"Error extracting data for block: {str(e)}")
+
+        except Exception as e:
+            logger.error(f"Error extracting loan data: {str(e)}")
+            compliance = []
+
+        # logger.info(f"Extracted funding data: {needs}")
 
         fact_find_data = {
             "Personal Data": personal_data,
@@ -874,6 +1333,14 @@ def extract_fact_find(active_driver):
             "Expenses": expense,
             "Assets": assets,
             "Liabilities": liabilities,
+            "Needs": needs,
+            "Product Requirements": product_requirements,
+            "Security": security,
+            "Funding": funding,
+            "Search Loan": loan,
+            "Review Loan Product": loan_product,
+            "Compare Loan Product": compare_product,
+            "Compliance": compliance
         }
 
         logger.info("Successfully extracted fact find data")
@@ -887,5 +1354,13 @@ def extract_fact_find(active_driver):
             "Income": [],
             "Expenses": [],
             "Assets": [],
-            "Liabilities": []
+            "Liabilities": [],
+            "Needs": [],
+            "Product Requirements": [],
+            "Security": [],
+            "Funding": [],
+            "Search Loan": [],
+            "Review Loan Product": [],
+            "Compare Loan Product": [],
+            "Compliance": []
         }
