@@ -49,6 +49,11 @@ def get_input_value(root, xpath):
     except Exception:
         return None
 
+def get_radio_value(driver,group_xpath):
+    group = driver.find_element(By.XPATH, group_xpath)
+    selected = group.find_element(By.XPATH, ".//md-radio-button[@aria-checked='true']")
+    return selected.find_element(By.XPATH, ".//span").text.strip()
+
 def get_element_text(root, xpath):
     try:
         element = root.find_element(By.XPATH, xpath)
@@ -913,19 +918,54 @@ def extract_fact_find(active_driver):
 
         # Extract Product requirements
         try:
+            # Click the product requirements button
             products_button = active_driver.find_element(By.XPATH, "//button[.//span[contains(., 'Product requirements')]]")
             products_button.click()
 
-            wait.until(
-                EC.visibility_of_element_located((By.XPATH, "//label[./em[normalize-space() = 'BID process steps']]"))
-            )
+            # Wait for the required element to be visible
+            wait.until(EC.visibility_of_element_located((By.XPATH, "//label[./em[normalize-space() = 'BID process steps']]")))
 
             product_requirements = []
-            # try:
+            try:
+                # Extract values for various radio groups
+                rate_type_value = get_radio_value(active_driver, "//md-radio-group")
+                variable_value = get_radio_value(active_driver, "//md-radio-group[contains(@ng-model, 'rateType.variable')]")
+                fixed_variable_value = get_radio_value(active_driver, "//md-radio-group[contains(@ng-model, '$ctrl.objectives.rateType.fixedAndVariable.type')]")
+                repayment_value = get_radio_value(active_driver, "//md-radio-group[contains(@ng-model, '$ctrl.objectives.repaymentType.principalAndInterest.type')]")
+                repayment_frequency_value = get_radio_value(active_driver, "//md-radio-group[contains(@ng-model, '$ctrl.objectives.repaymentType.principalAndInterest.preferredPaymentFrequency')]")
+                product_type_value = get_radio_value(active_driver, "//md-radio-group[contains(@ng-model, '$ctrl.objectives.productType.offsetAccount.type')]")
+                redraw_value = get_radio_value(active_driver, "//md-radio-group[contains(@ng-model, '$ctrl.objectives.productType.redraw.type')]")
+                
+                # Extract dropdown values using the provided helper function
+                term_of_credit_years = get_select_text(active_driver, "//select[contains(@ng-model, 'termOfCreditSought.years')]")
+                term_of_credit_months = get_select_text(active_driver, ".//select[@ng-model='$ctrl.objectives.termOfCreditSought.months']")
+                
+                # Extract input field values using the provided helper function
+                preferred_lenders = get_input_value(active_driver, "ng-model='$ctrl.objectives.termOfCreditSought.preferredLenders'")
+                any_lenders = get_input_value(active_driver, ".//input[@ng-model='$ctrl.objectives.termOfCreditSought.notLenders']")
 
-            # except Exception as e:
-            #     print(f"Error locating products requirements: {e}")
-            #     product_requirements = []
+                # Prepare the data
+                requirements_data = {
+                    "Rate Type": rate_type_value,
+                    "Variable Rate": variable_value,
+                    "Fixed and Variable Rate": fixed_variable_value,
+                    "Repayment Type": repayment_value,
+                    "Repayment Frequency": repayment_frequency_value,
+                    "Product Type": product_type_value,
+                    "Redraw": redraw_value,
+                    "Term of credit sought": {
+                        "Years": term_of_credit_years,
+                        "Month": term_of_credit_months,
+                        "Preferred Lenders": preferred_lenders,
+                        "Any Lenders": any_lenders
+                    }
+                }
+
+                product_requirements.append(requirements_data)
+
+            except Exception as e:
+                print(f"Error locating product requirements: {e}")
+                product_requirements = []
 
         except Exception as e:
             logger.error(f"Error extracting product requirements data: {str(e)}")
@@ -1325,7 +1365,7 @@ def extract_fact_find(active_driver):
             logger.error(f"Error extracting loan data: {str(e)}")
             compliance = []
 
-        # logger.info(f"Extracted funding data: {needs}")
+        logger.info(f"Extracted funding data: {product_requirements}")
 
         fact_find_data = {
             "Personal Data": personal_data,

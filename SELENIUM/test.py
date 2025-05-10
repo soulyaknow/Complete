@@ -871,7 +871,7 @@ def process_applicants(applicant_details, lender_details, extracted_fact_find, a
                     "records": [{
                         "fields": {
                             "Applicants": new_applicant_recordIDs,
-                            "Broker": ["reclqI0K1i4qO"],
+                            "Broker": ["recanrwraMjrF"],
                             "Status": "New"
                         }
                     }],
