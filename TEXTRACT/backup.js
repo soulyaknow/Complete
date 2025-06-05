@@ -103,8 +103,8 @@ const classifiedDocuments = {
     "sort code",
   ],
   drivers_license: ["license", "driver", "driving", "licence"],
+  passport_id: ["passport"],
   national_id: [
-    "passport",
     "national",
     "id",
     "identification",
@@ -362,16 +362,20 @@ const sendToExpenditure = async (classifyData, applicants, extractedId) => {
     console.log("Sending data to expenditure endpoint...");
 
     // ✅ Handle multiple applicants correctly
-    let applicantIdsArray, recordIdsArray;
+    let applicantIdsArray, recordIdsArray, applicationRecordIdsArray;
 
     if (Array.isArray(applicants)) {
       // If multiple applicants, extract IDs and record IDs as an array
       applicantIdsArray = applicants.map((applicant) => applicant.applicant_id);
       recordIdsArray = applicants.map((applicant) => applicant.record_id);
+      applicationRecordIdsArray = applicants.map(
+        (applicant) => applicant.application_recordId
+      );
     } else {
       // If single applicant, wrap in an array
       applicantIdsArray = [applicants.applicant_id];
       recordIdsArray = [applicants.record_id];
+      applicationRecordIdsArray = [applicants.application_recordId];
     }
 
     // ✅ Format headers correctly
@@ -386,6 +390,10 @@ const sendToExpenditure = async (classifyData, applicants, extractedId) => {
           ? JSON.stringify(recordIdsArray)
           : recordIdsArray[0],
       extracted_bank_id: extractedId,
+      application_record_id:
+        applicationRecordIdsArray.length > 1
+          ? JSON.stringify(applicationRecordIdsArray)
+          : applicationRecordIdsArray[0],
     };
 
     // ✅ Send data to n8n
@@ -630,6 +638,7 @@ const classification = async (extractedId, applicantData) => {
         name: key,
         applicant_id: applicants[key].Applicant_ID,
         record_id: applicants[key].recordId,
+        application_recordId: applicants[key].application_recordId, // Changed from application_recordID to application_recordId
       };
     });
 

@@ -22,10 +22,12 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.ui import Select
 from webdriver_manager.chrome import ChromeDriverManager
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
 from dotenv import load_dotenv
+from fact_find import extract_fact_find
 
 load_dotenv()
 
@@ -48,7 +50,7 @@ active_gui_process = None
 active_driver = None
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
-DOWNLOAD_PATH = r"C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs"
+DOWNLOAD_PATH = r"C:\Users\user\Desktop\Complete\SELENIUM\docs"
 
 classified_documents = {
     "bank_statement": [
@@ -809,7 +811,7 @@ def cleanup_previous_process():
         finally:
             active_driver = None
 
-def process_applicants(applicant_details,lender_details,applicant_api_url,lender_api_url,headers):
+def process_applicants(applicant_details, lender_details, applicant_api_url, lender_api_url, headers):
     global active_gui_process
     try:
         # Clean up any existing process
@@ -847,15 +849,16 @@ def process_applicants(applicant_details,lender_details,applicant_api_url,lender
                         if 'recordId' in record
                     )
 
-            # Process lender data
+            # Lookup lender data
             for lender_data in lender_details:
-                if lender_data:
-                    post_to_apitable(
-                        lender_api_url, 
-                        headers, 
-                        lender_data, 
-                        "Lender Hub"
-                    )
+                if lender_data and "records" in lender_data:
+                    lender_name = lender_data["records"][0]["fields"].get("Company Name")
+                    if lender_name:
+                        # Look up existing lender
+                        existing_lender = get_existing_lender(lender_name, lender_api_url, headers)
+
+                        print(existing_lender)
+                        
 
             # Create application record
             if new_applicant_recordIDs:
@@ -935,6 +938,7 @@ def process_applicants(applicant_details,lender_details,applicant_api_url,lender
             "applicant_count": 0
         }
 
+# ... [Rest of the code remains unchanged] ...
 def get_file_metadata(file_path):
     """Get file metadata including MIME type"""
     file_name = os.path.basename(file_path)
@@ -993,6 +997,32 @@ def is_applicant_existing(applicant_data, existing_applicants):
         return [], 404
 
 # Function for APITable
+def get_existing_lender(lender_name, lender_api_url, headers):
+    """Look up existing lender in Lender Hub"""
+    try:
+        # Create filter formula to search by Company Name
+        filter_formula = f"FIND('{lender_name}', {{Company Name}})"
+        search_url = f"{lender_api_url}?filterByFormula={filter_formula}"
+        
+        # Send GET request to search for lender
+        response = requests.get(search_url, headers=headers)
+        
+        if response.status_code == 200:
+            data = response.json()
+            records = data.get("data", {}).get("records", [])
+            if records:
+                logging.info(f"Found existing lender: {lender_name}")
+                return records
+            else:
+                logging.info(f"No existing lender found for: {lender_name}")
+                return []
+        else:
+            logging.error(f"Failed to search for lender. Status Code: {response.status_code}")
+            return []
+    except Exception as e:
+        logging.error(f"Error searching for lender: {str(e)}")
+        return []
+
 def post_to_apitable(api_url, headers, data, data_type):
     try:
         response = requests.post(api_url, headers=headers, json=data)
@@ -1579,6 +1609,22 @@ def process_url():
             logging.error(f"Document processing failed: {str(e)}")
             raise
 
+        # Check if there is a brooker tools button if not then skip
+        try:
+            # Click "Broker tools" button
+            active_driver.find_element(By.XPATH, "//button[@ng-click='gotToHomeLoanTools()']").click()
+            logging.info("Navigating to Broker tools...")
+
+            # Wait for the section to load
+            WebDriverWait(active_driver, 10).until(
+                EC.presence_of_element_located((By.CLASS_NAME, "group-items"))
+            )
+
+            extract_fact_find(active_driver)
+              
+        except TimeoutException as e:
+            logging.error("Broker tools not found or failed to load. Proceeding to post data.")
+
         # POST the data to the apitable endpoint
         applicant_api_url = os.getenv("APPLICANT_HUB_URL")
         lender_api_url = os.getenv("LENDER_HUB_URL")
@@ -1651,10 +1697,6 @@ def process_url():
         print(f"Error occurred: {str(e)}")
         cleanup_previous_process()
         return jsonify({"message": "URL processed unsuccessfully!"}), 500
-
-    # finally:
-    #     if active_driver and (is_gui_closed):
-    #         active_driver.quit()
             
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=2500, debug=True)

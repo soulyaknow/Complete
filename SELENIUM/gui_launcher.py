@@ -16,7 +16,7 @@ def main():
     from rpa import FileSelectorApp
     
     root = tk.Tk()
-    app = FileSelectorApp(root, data['applicant_details'], data['application_recordIDs'])
+    app = FileSelectorApp(root, data['applicant_details'], data['application_id'])
     root.mainloop()
 
 if __name__ == "__main__":

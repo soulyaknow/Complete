@@ -591,10 +591,10 @@ class AIBrokerApp:
     def start_multiple_rpa(self):
         if not self.script_processes:
             try:
-                python_executable = r"C:\Users\Hello World!\AppData\Local\Programs\Python\Python312\pythonw.exe"
+                python_executable = r"C:\Users\user\AppData\Local\Programs\Python\Python313\pythonw.exe"
                 scripts = {
-                    'rpa': r"C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\test.py",
-                    'notifier': r"C:\Users\Hello World!\Desktop\COMPLETE\AIBROKER-NOTIF\aitable_notifier.py"
+                    'rpa': r"C:\Users\user\Desktop\Complete\SELENIUM\test.py",
+                    'notifier': r"C:\Users\user\Desktop\Complete\AIBROKER-NOTIF\aitable_notifier.py"
                 }
                 
                 for name, script_path in scripts.items():

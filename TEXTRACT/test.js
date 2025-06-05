@@ -103,8 +103,8 @@ const classifiedDocuments = {
     "sort code",
   ],
   drivers_license: ["license", "driver", "driving", "licence"],
+  passport_id: ["passport"],
   national_id: [
-    "passport",
     "national",
     "id",
     "identification",
@@ -367,15 +367,13 @@ const sendToExpenditure = async (classifyData, applicants, extractedId) => {
     if (Array.isArray(applicants)) {
       // If multiple applicants, extract IDs and record IDs as an array
       applicantIdsArray = applicants.map((applicant) => applicant.applicant_id);
-      recordIdsArray = applicants.map((applicant) => applicant.record_id);
       applicationRecordIdsArray = applicants.map(
-        (applicant) => applicant.application_recordId
+        (applicant) => applicant.application_id
       );
     } else {
       // If single applicant, wrap in an array
       applicantIdsArray = [applicants.applicant_id];
-      recordIdsArray = [applicants.record_id];
-      applicationRecordIdsArray = [applicants.application_recordId];
+      applicationRecordIdsArray = [applicants.application_id];
     }
 
     // ✅ Format headers correctly
@@ -385,12 +383,8 @@ const sendToExpenditure = async (classifyData, applicants, extractedId) => {
         applicantIdsArray.length > 1
           ? JSON.stringify(applicantIdsArray)
           : applicantIdsArray[0],
-      record_id:
-        recordIdsArray.length > 1
-          ? JSON.stringify(recordIdsArray)
-          : recordIdsArray[0],
       extracted_bank_id: extractedId,
-      application_record_id:
+      application_id:
         applicationRecordIdsArray.length > 1
           ? JSON.stringify(applicationRecordIdsArray)
           : applicationRecordIdsArray[0],
@@ -440,7 +434,6 @@ const saveDataToDB = async (applicantsData) => {
         CREATE TABLE IF NOT EXISTS applicants (
           id SERIAL PRIMARY KEY,
           applicant_id INT NOT NULL,
-          record_id TEXT UNIQUE NOT NULL,
           full_name TEXT NOT NULL,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
@@ -490,10 +483,10 @@ const saveDataToDB = async (applicantsData) => {
     // Iterate over applicantsData
     console.log(applicantsData);
     for (const applicant of applicantsData) {
-      const { applicant_id, record_id, full_name, extractedData } = applicant;
+      const { applicant_id, full_name, extractedData } = applicant;
 
       // Validate required fields
-      if (!applicant_id || !record_id || !full_name || !extractedData) {
+      if (!applicant_id || !full_name || !extractedData) {
         console.error("❌ Missing required applicant data", applicant);
         continue;
       }
@@ -510,8 +503,8 @@ const saveDataToDB = async (applicantsData) => {
       } else {
         // Insert new applicant
         const result = await client.query(
-          "INSERT INTO applicants (applicant_id, record_id, full_name, created_at) VALUES ($1, $2, $3, NOW()) RETURNING id",
-          [applicant_id, record_id, full_name]
+          "INSERT INTO applicants (applicant_id, full_name, created_at) VALUES ($1, $2, NOW()) RETURNING id",
+          [applicant_id, full_name]
         );
         applicantId = result.rows[0].id;
       }
@@ -631,14 +624,14 @@ const classification = async (extractedId, applicantData) => {
   const client = await pool.connect();
   try {
     const applicants = applicantData;
+    console.log("This is classification stage applicantData: ", applicantData)
 
     // Extract Applicant IDs
     const applicantIds = Object.keys(applicants).map((key) => {
       return {
         name: key,
-        applicant_id: applicants[key].Applicant_ID,
-        record_id: applicants[key].recordId,
-        application_recordId: applicants[key].application_recordId, // Changed from application_recordID to application_recordId
+        applicant_id: applicants[key].applicant_id,
+        application_id: applicants[key].application_id,
       };
     });
 
@@ -820,9 +813,8 @@ const processDocument = async (fileObj, applicants) => {
 
       if (applicantData) {
         formattedData.push({
-          applicant_id: applicantData.Applicant_ID,
-          record_id: applicantData.recordId,
-          full_name: `${applicantData["First Name"]} ${applicantData["Last Name"]}`,
+          applicant_id: applicantData.applicant_id,
+          full_name: `${applicantData["first_name"]} ${applicantData["last_name"]}`,
           extractedData: bankStatement.extractedData,
         });
       }
@@ -928,6 +920,7 @@ app.post("/upload", upload.array("files", 10), async (req, res) => {
   }
 
   console.log(`Received ${req.files.length} files for processing`);
+  console.log(req.body)
 
   // Parse applicant data - handle both singular and plural forms
   let applicants = {};

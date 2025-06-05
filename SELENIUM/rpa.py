@@ -26,6 +26,7 @@ from selenium.webdriver.support.ui import Select
 from webdriver_manager.chrome import ChromeDriverManager
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
+from supabase import create_client, Client
 from dotenv import load_dotenv
 from fact_find import extract_fact_find
 
@@ -50,7 +51,7 @@ active_gui_process = None
 active_driver = None
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
-DOWNLOAD_PATH = r"C:\Users\Hello World!\Desktop\COMPLETE\SELENIUM\docs"
+DOWNLOAD_PATH = r"C:\Users\user\Desktop\Complete\SELENIUM\docs"
 
 classified_documents = {
     "bank_statement": [
@@ -72,6 +73,14 @@ classified_documents = {
 # Ensure the download directory exists
 if not os.path.exists(DOWNLOAD_PATH):
     os.makedirs(DOWNLOAD_PATH)
+
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_KEY")
+
+if not SUPABASE_URL or not SUPABASE_KEY:
+    raise ValueError("Supabase credentials are not set in environment variables.")
+
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 class Windows11Theme:
     """Windows 11 styling for Tkinter"""
@@ -489,7 +498,7 @@ class FileSelectorApp:
         # Find the first applicant in the same application
         current_applicant = next(
             (app for app in self.applicant_details 
-             if f"{app['First Name']} {app['Last Name']}" == self.applicant_var.get()),
+             if f"{app['first_name']} {app['last_name']}" == self.applicant_var.get()),
             None
         )
         
@@ -498,7 +507,7 @@ class FileSelectorApp:
             
         # Use the first applicant's name as the folder name
         first_applicant = self.applicant_details[0]  # Always use the first applicant's name for the folder
-        folder_name = f"{first_applicant['First Name']} {first_applicant['Last Name']}"
+        folder_name = f"{first_applicant['first_name']} {first_applicant['last_name']}"
         
         # Debug information
         print(f"First applicant: {first_applicant}")
@@ -509,7 +518,7 @@ class FileSelectorApp:
     def load_applicants(self):
         """Load applicants into the dropdown"""
         applicant_names = [
-            f"{app['First Name']} {app['Last Name']}"
+            f"{app['first_name']} {app['last_name']}"
             for app in self.applicant_details
         ]
         self.applicant_dropdown['values'] = applicant_names
@@ -634,7 +643,7 @@ class FileSelectorApp:
             # Find applicant details
             applicant = next(
                 (app for app in self.applicant_details 
-                if f"{app['First Name']} {app['Last Name']}" == applicant_name),
+                if f"{app['first_name']} {app['last_name']}" == applicant_name),
                 None
             )
             
@@ -662,7 +671,7 @@ class FileSelectorApp:
                         
                         # Send to Textract middleware
                         response = requests.post(
-                            "https://textractor.korunaassist.com/upload",
+                            "http://localhost:3012/upload",
                             data=multipart_data,
                             headers={"Content-Type": multipart_data.content_type},
                             timeout=30  # Increased timeout for multiple files
@@ -737,11 +746,10 @@ class FileSelectorApp:
         
         # Add applicant data
         fields.append(('applicant', json.dumps({
-            "Applicant_ID": applicant["Applicant_ID"],
-            "First Name": applicant["First Name"],
-            "Last Name": applicant["Last Name"],
-            "recordId": applicant["recordId"],
-            "application_recordId": application_id
+            "applicant_id": applicant["id"],
+            "first_name": applicant["first_name"],
+            "last_name": applicant["last_name"],
+            "application_id": application_id
         })))
         
         # Print debug info
@@ -811,118 +819,95 @@ def cleanup_previous_process():
         finally:
             active_driver = None
 
-def process_applicants(applicant_details, lender_details, applicant_api_url, lender_api_url, headers):
+def process_applicants(applicant_details, lender_details, supabase: Client):
     global active_gui_process
     try:
-        # Clean up any existing process
         cleanup_previous_process()
-        
-        # Initialize tracking variables
-        existing_applicants = get_existing_applicants(applicant_api_url, headers)
-        new_applicants = []
+
         all_applicant_details = []
-        application_recordIDs = []
-        new_applicant_recordIDs = []
+        new_applicant_ids = []
 
-        # Process each applicant
-        for applicant in applicant_details:
-            matching_records, status_code = is_applicant_existing(applicant, existing_applicants)
-            if status_code == 200:
-                all_applicant_details.extend(matching_records)
+        # 1. Insert applicants into Supabase
+        for applicant_data in applicant_details:
+            for record in applicant_data.get("records", []):
+                fields = record.get("fields", {})
+                insert_response = supabase.table("Applicant_Hub").insert(fields).execute()
+
+                if not insert_response.data or not isinstance(insert_response.data, list):
+                    logging.error(f"Failed to insert applicant. Response: {insert_response}")
+                    continue
+
+                inserted = insert_response.data[0]
+                all_applicant_details.append(inserted)
+                new_applicant_ids.append(inserted["id"])
+
+        # 2. Lookup lender data
+        new_lender_id = None
+        if lender_details:
+            lender_data = lender_details[0]
+
+            for record in lender_data.get("records", []):
+                fields = record.get("fields", {})
+                lender = fields.get("company_name")
+
+                if not lender:
+                    logging.warning("Lender company_name missing in fields. Skipping lookup.")
+                    continue
+
+                select_response = supabase.table("Lenders_Hub").select("id").eq("company_name", lender).execute()
+                logging.info(select_response)
+
+                if select_response.data:
+                    new_lender_id = select_response.data[0]["id"]
+                    logging.info(f"Found existing lender: {lender} with ID {new_lender_id}")
+                else:
+                    logging.info(f"Lender '{lender}' not found in Lenders_Hub. Skipping insert.")
+
+        # 3. Create Application record
+        if new_applicant_ids:
+            application_data = {
+                "status": "New"
+                # Optionally include lender_id if needed:
+                # "lender_id": new_lender_id
+            }
+
+            application_insert = supabase.table("Application_Hub").insert(application_data).execute()
+
+            if not application_insert.data:
+                logging.warning(f"Failed to create application: {application_insert.error}")
             else:
-                new_applicants.append(applicant)
+                # Get the auto-generated application ID
+                new_application_id = application_insert.data[0]["id"]
+                logging.info(f"Application created successfully with ID {new_application_id}")
 
-        # Process new applicants
-        if new_applicants:
-            # Create applicant records
-            for applicant_data in new_applicants:
-                response_data = post_to_apitable(
-                    applicant_api_url, 
-                    headers, 
-                    applicant_data, 
-                    "Applicant Hub"
-                )
-                if response_data:
-                    all_applicant_details.extend(response_data)
-                    new_applicant_recordIDs.extend(
-                        record['recordId'] for record in response_data 
-                        if 'recordId' in record
-                    )
+                # ✅ Link each applicant to the application via Application_Applicant join table
+                for applicant_id in new_applicant_ids:
+                    link_response = supabase.table("Application_Applicants").insert({
+                        "application_id": new_application_id,
+                        "applicant_id": applicant_id
+                    }).execute()
 
-            # Lookup lender data
-            for lender_data in lender_details:
-                if lender_data and "records" in lender_data:
-                    lender_name = lender_data["records"][0]["fields"].get("Company Name")
-                    if lender_name:
-                        # Look up existing lender
-                        existing_lender = get_existing_lender(lender_name, lender_api_url, headers)
-
-                        print(existing_lender)
-                        
-
-            # Create application record
-            if new_applicant_recordIDs:
-                application_hub_api = os.getenv("APPLICATION_HUB_URL")
-                application_data = {
-                    "records": [{
-                        "fields": {
-                            "Applicants": new_applicant_recordIDs,
-                            "Status": "New"
-                        }
-                    }],
-                    "fieldKey": "name"
-                }
-                
-                app_response = requests.post(
-                    application_hub_api,
-                    headers=headers,
-                    json=application_data
-                )
-                
-                if app_response.status_code in (200, 201):
-                    response_json = app_response.json()
-                    if "data" in response_json and "records" in response_json["data"]:
-                        application_recordIDs = [
-                            record["recordId"] 
-                            for record in response_json["data"]["records"]
-                        ]
-                        logging.info(f"Application records created: {len(application_recordIDs)}")
+                    if not link_response.data:
+                        logging.warning(f"Failed to link applicant {applicant_id} to application {new_application_id}: {link_response.error}")
                     else:
-                        logging.warning("No records found in application response")
+                        logging.info(f"Linked applicant {applicant_id} to application {new_application_id} in Application_Applicant")
 
-        # Add Application_ID to group applicants
-        application_id = time.strftime("%Y%m%d%H%M%S")
-        for applicant in all_applicant_details:
-            applicant["Application_ID"] = application_id
-
-        # Launch GUI if we have applicant details
+        # 4. Save to temp file for GUI (optional)
         if all_applicant_details:
-            try:
-                # Save applicant details to temporary file
-                temp_data_file = os.path.join(script_dir, "temp_applicant_data.json")
-                with open(temp_data_file, 'w') as f:
-                    json.dump({
-                        'applicant_details': all_applicant_details,
-                        'application_recordIDs': application_recordIDs
-                    }, f, indent=2)
-                
-                # Use existing GUI launcher
-                gui_launcher = os.path.join(script_dir, "gui_launcher.py")
-                
-                # Start GUI process
-                creation_flags = subprocess.CREATE_NEW_PROCESS_GROUP if sys.platform == 'win32' else 0
-                active_gui_process = subprocess.Popen(
-                    [sys.executable, gui_launcher, temp_data_file],
-                    creationflags=creation_flags
-                )
-                
-                logging.info("File selector GUI launched as separate process")
-                
-            except Exception as e:
-                logging.error(f"Error launching file selector GUI: {e}")
-                # Clean up temp file if there was an error
-                if os.path.exists(temp_data_file):
-                    os.remove(temp_data_file)
+            temp_data_file = os.path.join(script_dir, "temp_applicant_data.json")
+            with open(temp_data_file, 'w') as f:
+                json.dump({
+                    'applicant_details': all_applicant_details,
+                    'application_id': new_application_id
+                }, f, indent=2)
+
+            gui_launcher = os.path.join(script_dir, "gui_launcher.py")
+            creation_flags = subprocess.CREATE_NEW_PROCESS_GROUP if sys.platform == 'win32' else 0
+            active_gui_process = subprocess.Popen(
+                [sys.executable, gui_launcher, temp_data_file],
+                creationflags=creation_flags
+            )
+            logging.info("File selector GUI launched")
 
         return {
             "status": "success",
@@ -1572,66 +1557,66 @@ def process_url():
         except Exception as e:
             deal_owner = None
         
-        try:
-            logging.info("Starting document processing...")
+        # try:
+        #     logging.info("Starting document processing...")
             
-            # Find the scrollable container with retry mechanism
-            max_attempts = 3
-            scroll_container = None
+        #     # Find the scrollable container with retry mechanism
+        #     max_attempts = 3
+        #     scroll_container = None
             
-            for attempt in range(max_attempts):
-                try:
-                    scroll_container = wait.until(
-                        EC.presence_of_element_located((By.CSS_SELECTOR, "md-content[md-scroll-y]"))
-                    )
-                    break
-                except Exception as e:
-                    if attempt == max_attempts - 1:
-                        raise Exception("Failed to find scrollable container")
-                    time.sleep(2)
+        #     for attempt in range(max_attempts):
+        #         try:
+        #             scroll_container = wait.until(
+        #                 EC.presence_of_element_located((By.CSS_SELECTOR, "md-content[md-scroll-y]"))
+        #             )
+        #             break
+        #         except Exception as e:
+        #             if attempt == max_attempts - 1:
+        #                 raise Exception("Failed to find scrollable container")
+        #             time.sleep(2)
             
-            # Perform scrolling with enhanced stability
-            if scroll_container:
-                if scroll_down_until_bottom(active_driver, scroll_container):
-                    # Process timeline events if scrolling was successful
-                    if not process_timeline_events(active_driver):
-                        raise Exception("Failed to process timeline events")
+        #     # Perform scrolling with enhanced stability
+        #     if scroll_container:
+        #         if scroll_down_until_bottom(active_driver, scroll_container):
+        #             # Process timeline events if scrolling was successful
+        #             if not process_timeline_events(active_driver):
+        #                 raise Exception("Failed to process timeline events")
                     
-                    # Wait for downloads to complete
-                    if not wait_for_downloads(DOWNLOAD_PATH):
-                        logging.warning("Some downloads may not have completed")
-                else:
-                    raise Exception("Failed to scroll the page")
-            else:
-                raise Exception("Could not locate scrollable container")
+        #             # Wait for downloads to complete
+        #             if not wait_for_downloads(DOWNLOAD_PATH):
+        #                 logging.warning("Some downloads may not have completed")
+        #         else:
+        #             raise Exception("Failed to scroll the page")
+        #     else:
+        #         raise Exception("Could not locate scrollable container")
             
-        except Exception as e:
-            logging.error(f"Document processing failed: {str(e)}")
-            raise
+        # except Exception as e:
+        #     logging.error(f"Document processing failed: {str(e)}")
+        #     raise
 
         # Check if there is a brooker tools button if not then skip
-        try:
-            # Click "Broker tools" button
-            active_driver.find_element(By.XPATH, "//button[@ng-click='gotToHomeLoanTools()']").click()
-            logging.info("Navigating to Broker tools...")
+        # try:
+        #     # Click "Broker tools" button
+        #     active_driver.find_element(By.XPATH, "//button[@ng-click='gotToHomeLoanTools()']").click()
+        #     logging.info("Navigating to Broker tools...")
 
-            # Wait for the section to load
-            WebDriverWait(active_driver, 10).until(
-                EC.presence_of_element_located((By.CLASS_NAME, "group-items"))
-            )
+        #     # Wait for the section to load
+        #     WebDriverWait(active_driver, 10).until(
+        #         EC.presence_of_element_located((By.CLASS_NAME, "group-items"))
+        #     )
 
-            extract_fact_find(active_driver)
+        #     extract_fact_find(active_driver)
               
-        except TimeoutException as e:
-            logging.error("Broker tools not found or failed to load. Proceeding to post data.")
+        # except TimeoutException as e:
+        #     logging.error("Broker tools not found or failed to load. Proceeding to post data.")
 
         # POST the data to the apitable endpoint
-        applicant_api_url = os.getenv("APPLICANT_HUB_URL")
-        lender_api_url = os.getenv("LENDER_HUB_URL")
-        headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {os.getenv('API_KEY')}"
-        }
+        # applicant_api_url = os.getenv("APPLICANT_HUB_URL")
+        # lender_api_url = os.getenv("LENDER_HUB_URL")
+        # headers = {
+        #     "Content-Type": "application/json",
+        #     "Authorization": f"Bearer {os.getenv('API_KEY')}"
+        # }
 
         applicant_details = []
         lender_details = []
@@ -1639,29 +1624,15 @@ def process_url():
         # Loop over each applicant
         for applicant in applicants:
             # Create JSON structure for each applicant
+            name_parts = applicant["applicant_name"].split() if applicant.get("applicant_name") else []
             applicant_data = {
                 "records": [
                     {
                         "fields": {
-                            "Application Hub": None,
-                            "Title": None,
-                            "First Name": applicant["applicant_name"].split()[0] if applicant.get("applicant_name") else None,
-                            "Middle Name": applicant["applicant_name"].split()[1] if len(applicant["applicant_name"].split()) > 2 else None,
-                            "Last Name": applicant["applicant_name"].split()[-1] if applicant.get("applicant_name") else None,
-                            "Date of Birth": None,
-                            "Residential Address": loan_security_addresses if loan_security_addresses else None,
-                            "Primary Contact Number": applicant.get("contact_number") if applicant.get("contact_number") else None,
-                            "Secondary Contact Number": None,
-                            "Email Address": applicant.get("email") if applicant.get("email") else None,
-                            "Marital Status": None,
-                            "Savings": None,
-                            "Income": None,
-                            "Housing Loans": None,
-                            "Vehicle Loans": None,
-                            "Personal Loans": None,
-                            "Total Liabilities": None,
-                            "Employment Status": None,
-                            "Employer": None
+                            "title": None,
+                            "first_name": name_parts[0] if len(name_parts) > 0 else None,
+                            "middle_name": name_parts[1] if len(name_parts) > 2 else None,
+                            "last_name": name_parts[-1] if len(name_parts) > 1 else None,
                         }
                     }
                 ],
@@ -1677,10 +1648,7 @@ def process_url():
                     "records": [
                         {
                             "fields": {
-                                "Company Name": lender,
-                                "Contact": None,
-                                "Website": None,
-                                "Phone Number": None,
+                                "company_name": lender,
                             }
                         }
                     ],
@@ -1689,7 +1657,8 @@ def process_url():
             
             lender_details.append(lender_data)
 
-        process_applicants(applicant_details, lender_details, applicant_api_url, lender_api_url, headers)
+        process_applicants(applicant_details, lender_details, supabase)
+        # process_applicants(applicant_details, lender_details, applicant_api_url, lender_api_url, headers)
 
         return jsonify({"message": "URL processed successfully!"}), 200
 
