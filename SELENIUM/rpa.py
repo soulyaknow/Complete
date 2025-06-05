@@ -671,7 +671,7 @@ class FileSelectorApp:
                         
                         # Send to Textract middleware
                         response = requests.post(
-                            "http://localhost:3012/upload",
+                            "https://textractor.korunaassist.com/upload",
                             data=multipart_data,
                             headers={"Content-Type": multipart_data.content_type},
                             timeout=30  # Increased timeout for multiple files
